@@ -1,37 +1,45 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import Navbar from "./components/Navbar";
-import HeroSection from "./components/HeroSection";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import Navbar from './components/Navbar';
+import HeroSection from './components/HeroSection';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "Ceylon Roots",
-  description: "Ceylon Roots Travel Guide",
+  title: 'CeylonRoots - Authentic Sri Lanka Travel Experiences',
+  description: 'Discover Sri Lanka with expert-curated travel packages, cultural experiences, and personalized itineraries. Explore ancient heritage, pristine beaches, and lush landscapes.',
+  keywords: ['Sri Lanka travel', 'Ceylon tourism', 'cultural experiences', 'custom packages', 'luxury tours'],
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://ceylonroots.com',
+    siteName: 'CeylonRoots',
+    images: [{
+      url: '/og-image.jpg',
+      width: 1200,
+      height: 630,
+    }]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    creator: '@ceylonroots',
+  }
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Navbar/>
-        <HeroSection/>
-        {children}
+      <body className={inter.className}>
+        <Navbar />
+        <HeroSection />
+        <main className="min-h-screen">
+          {children}
+        </main>
       </body>
     </html>
   );
