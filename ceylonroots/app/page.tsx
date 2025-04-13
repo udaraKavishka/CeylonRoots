@@ -1,103 +1,189 @@
-import Image from "next/image";
+// app/page.tsx
+import { Button } from "./components/ui/button";
+import { MapPin,Users, Palmtree, Compass, Camera } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
-export default function Home() {
+export default function HomePage() {
+  const destinations = [
+    { name: "Colombo", image: "https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" },
+    { name: "Kandy", image: "https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" },
+    { name: "Sigiriya", image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" },
+    { name: "Galle", image: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" }
+  ];
+
+  const features = [
+    { 
+      icon: <Compass className="h-10 w-10 text-ceylon-tea" />,
+      title: "Personalized Itineraries",
+      description: "Custom travel plans designed around your interests, timeline, and budget."
+    },
+    { 
+      icon: <Users className="h-10 w-10 text-ceylon-tea" />,
+      title: "Expert Local Guides",
+      description: "Knowledgeable guides who bring Sri Lanka's culture and history to life."
+    },
+    { 
+      icon: <Palmtree className="h-10 w-10 text-ceylon-tea" />,
+      title: "Authentic Experiences",
+      description: "Connect with local communities and traditions beyond typical tourist spots."
+    },
+    { 
+      icon: <Camera className="h-10 w-10 text-ceylon-tea" />,
+      title: "Photographic Journeys",
+      description: "Discover perfect photo opportunities at the island's most scenic locations."
+    }
+  ];
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Why Choose Us Section */}
+      <section className="py-16 bg-white">
+        <div className="ceylon-container">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className=" text-3xl md:text-4xl font-bold mb-6">
+                Discover Sri Lanka With <span className="text-ceylon-tea">Local Experts</span>
+              </h2>
+              <p className="text-gray-600 mb-8">
+                CeylonRoots creates immersive travel experiences that connect you with the authentic heart of Sri Lanka. 
+                Our local expertise and personalized approach ensure your journey is filled with meaningful discoveries.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {features.map((feature, index) => (
+                  <div key={index} className="flex flex-col items-start">
+                    <div className="mb-3">
+                      {feature.icon}
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+                    <p className="text-gray-600 text-sm">{feature.description}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-8">
+                <Button className="ceylon-button-primary" asChild>
+                  <Link href="/about">Learn More About Us</Link>
+                </Button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-4">
+                <div className="rounded-lg overflow-hidden shadow-lg relative aspect-video">
+                  <Image
+                    src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    alt="Sri Lanka Scenery"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="rounded-lg overflow-hidden shadow-lg relative aspect-square">
+                  <Image
+                    src="https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    alt="Sri Lanka Culture"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              </div>
+              <div className="space-y-4 pt-6">
+                <div className="rounded-lg overflow-hidden shadow-lg relative aspect-square">
+                  <Image
+                    src="https://images.unsplash.com/photo-1465379944081-7f47de8d74ac?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    alt="Sri Lanka Wildlife"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="rounded-lg overflow-hidden shadow-lg relative aspect-video">
+                  <Image
+                    src="https://images.unsplash.com/photo-1466442929976-97f336a657be?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    alt="Sri Lanka Temples"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </section>
+
+
+
+      {/* Popular Destinations Section */}
+      <section className="py-16 bg-white">
+        <div className="ceylon-container">
+          <div className="max-w-3xl mx-auto text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Popular Destinations</h2>
+            <p className="text-gray-600">
+              Explore the diverse landscapes and cultural treasures of Sri Lanka
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {destinations.map((destination, index) => (
+              <div key={index} className="ceylon-card group relative overflow-hidden h-72">
+                <Image
+                  src={destination.image}
+                  alt={destination.name}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 p-6 w-full">
+                  <div className="flex items-center mb-2">
+                    <MapPin className="h-4 w-4 text-ceylon-sand mr-1" />
+                    <h3 className="text-xl font-bold text-white">{destination.name}</h3>
+                  </div>
+                  <Link
+                    href={`/destinations/${destination.name.toLowerCase()}`}
+                    className="text-sm text-white underline decoration-2 underline-offset-4 decoration-ceylon-spice hover:decoration-white transition-colors"
+                  >
+                    Explore Destination
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-10">
+            <Button variant="outline" className="border-ceylon-tea text-ceylon-tea hover:bg-ceylon-tea hover:text-white" asChild>
+              <Link href="/destinations">View All Destinations</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-24 bg-ceylon-tea/10">
+        <div className="ceylon-container">
+          <div className="relative">
+            <div className="relative bg-white rounded-xl p-8 md:p-12 shadow-xl text-center max-w-4xl mx-auto overflow-hidden">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Ready to Experience Sri Lanka?
+              </h2>
+              <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
+                Start planning your dream journey today. Our travel experts are ready to craft
+                the perfect itinerary tailored to your interests and preferences.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button size="lg" className="ceylon-button-primary" asChild>
+                  <Link href="/custom-trip">Plan Your Custom Trip</Link>
+                </Button>
+                <Button size="lg" variant="outline" className="border-ceylon-tea text-ceylon-tea hover:bg-ceylon-tea hover:text-white" asChild>
+                  <Link href="/packages">Explore Travel Packages</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+    </>
   );
 }
