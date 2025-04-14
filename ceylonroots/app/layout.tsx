@@ -46,8 +46,8 @@ export default function RootLayout({
             {children}
           </main>
             <Footer />
-            <Toaster />
-            <Sonner />
+            {/* <Toaster /> */}
+            {/* <Sonner /> */}
         </TooltipProvider>
       
     </body>
