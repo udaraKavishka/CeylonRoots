@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import FeaturedPackages from "./components/FeaturedPackages";
 import Testimonials from "./components/Testimonials";
+import BlogPreview from "./components/BlogPreview";
 
 export default function HomePage() {
   const destinations = [
@@ -186,6 +187,8 @@ export default function HomePage() {
       </section>
 
       <Testimonials />
+
+      <BlogPreview />
 
 
     </>
