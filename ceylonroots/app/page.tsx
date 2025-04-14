@@ -4,6 +4,7 @@ import { MapPin,Users, Palmtree, Compass, Camera } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import FeaturedPackages from "./components/FeaturedPackages";
+import Testimonials from "./components/Testimonials";
 
 export default function HomePage() {
   const destinations = [
@@ -183,6 +184,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <Testimonials />
 
 
     </>
