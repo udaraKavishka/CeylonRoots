@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
+import Footer from './components/Footer';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -39,6 +40,7 @@ export default function RootLayout({
         <HeroSection />
         <main className="min-h-screen">
           {children}
+          <Footer />
         </main>
       </body>
     </html>
