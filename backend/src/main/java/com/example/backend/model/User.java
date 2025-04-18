@@ -2,20 +2,28 @@ package com.example.backend.model;
 
 
 import java.util.List;
+import java.util.Set;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
 
     @Id
@@ -23,18 +31,26 @@ public class User {
     private Long id;
     private String firstName;
     private String lastName;
+    
+    @Column(unique = true)
     private String email;
+    
+    
     private String password;  
     private String phoneNumber;
 
     @OneToMany(mappedBy = "user")
     private List<Booking> bookings;
     
+//    @Enumerated(EnumType.STRING)
+//    private Role role;
+    
+    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Set<Role> roles;
 
 	public User(Long id, String firstName, String lastName, String email, String password, String phoneNumber,
-			List<Booking> bookings, Role role) {
+			List<Booking> bookings, Set<Role> roles) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -43,7 +59,7 @@ public class User {
 		this.password = password;
 		this.phoneNumber = phoneNumber;
 		this.bookings = bookings;
-		this.role = role;
+		this.roles = roles;
 	}
 
 	public Long getId() {
@@ -102,14 +118,15 @@ public class User {
 		this.bookings = bookings;
 	}
 
-	public Role getRole() {
-		return role;
+	public Set<Role> getRoles() {
+		return roles;
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
-    
+
+	
     
 
 
