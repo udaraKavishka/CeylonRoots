@@ -1,6 +1,5 @@
 package com.example.backend.controller;
 
-
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +27,8 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
-
 public class AuthController {
-	@Autowired
+    @Autowired
     AuthenticationManager authenticationManager;
 
     @Autowired
@@ -68,7 +66,7 @@ public class AuthController {
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse().setMessage("Error: Email is already in use!"));
+                    .body(new MessageResponse("Error: Email is already in use!"));
         }
 
         // Create new user's account
