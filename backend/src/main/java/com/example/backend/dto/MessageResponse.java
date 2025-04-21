@@ -1,26 +1,22 @@
 package com.example.backend.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class MessageResponse {
-	private String message;
 
-	public MessageResponse(String message) {
-		super();
-		this.message = message;
-	}
+    private String message;
 
-	public String getMessage() {
-		return message;
-	}
+    public MessageResponse(String message) {
+        this.message = message;
+    }
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
-	
+    public MessageResponse() {
+    }
+
+    
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }
