@@ -85,6 +85,11 @@ public User(Long id, String firstName, String lastName, String email, String pas
 	this.roles = roles;
 }
 
+public User() {
+}
+
+
+
 
 public Long getId() {
 	return id;
