@@ -32,7 +32,7 @@ public class TravelPackage {
     private List<String> themes;
     private List<String> highlights;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "travelPackage", cascade = CascadeType.ALL)
     private List<ItineraryDay> itinerary;
 
     @ElementCollection
