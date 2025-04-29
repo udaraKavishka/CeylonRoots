@@ -1,14 +1,16 @@
 package com.example.backend.model;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@DiscriminatorValue("DESTINATION")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Destination extends TravelComponent{
-	private String attractions;
+public class Destination extends TravelComponent {
+    private String attractions;
 }
