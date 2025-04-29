@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/itinerary-days")
-public class ItineraryDayController {
+/
 
     private final ItineraryDayRepository itineraryDayRepository;
 
