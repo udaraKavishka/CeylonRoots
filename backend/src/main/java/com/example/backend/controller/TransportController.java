@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/activity")
+@RequestMapping("/api/transport")
 public class TransportController extends TravelComponentController {
 
     public TransportController(TravelComponentRepository repository) {
