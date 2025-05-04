@@ -2,12 +2,14 @@ package com.example.backend.model;
 
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,8 +28,17 @@ public class Booking {
 	    private String travelPackageId;
 	    private String status; 
 
-	    @OneToMany(cascade = CascadeType.ALL)
-	    private List<TravelComponent> bookedComponents;
+	    @ManyToOne
+	    @JoinColumn(name = "package_id")
+	    private TravelPackage travelPackage;
+
+	    @ManyToMany
+	    @JoinTable(
+	        name = "booking_components",
+	        joinColumns = @JoinColumn(name = "booking_id"),
+	        inverseJoinColumns = @JoinColumn(name = "component_id")
+	    )
+	    private List<TravelComponent> bookedComponents ;
 
 		public Booking(Long id, String customerName, String customerEmail, String bookingDate, String travelPackageId,
 				String status, List<TravelComponent> bookedComponents) {
