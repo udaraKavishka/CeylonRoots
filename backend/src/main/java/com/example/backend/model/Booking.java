@@ -28,4 +28,74 @@ public class Booking {
 
 	    @OneToMany(cascade = CascadeType.ALL)
 	    private List<TravelComponent> bookedComponents;
+
+		public Booking(Long id, String customerName, String customerEmail, String bookingDate, String travelPackageId,
+				String status, List<TravelComponent> bookedComponents) {
+			super();
+			this.id = id;
+			this.customerName = customerName;
+			this.customerEmail = customerEmail;
+			this.bookingDate = bookingDate;
+			this.travelPackageId = travelPackageId;
+			this.status = status;
+			this.bookedComponents = bookedComponents;
+		}
+
+		public Long getId() {
+			return id;
+		}
+
+		public void setId(Long id) {
+			this.id = id;
+		}
+
+		public String getCustomerName() {
+			return customerName;
+		}
+
+		public void setCustomerName(String customerName) {
+			this.customerName = customerName;
+		}
+
+		public String getCustomerEmail() {
+			return customerEmail;
+		}
+
+		public void setCustomerEmail(String customerEmail) {
+			this.customerEmail = customerEmail;
+		}
+
+		public String getBookingDate() {
+			return bookingDate;
+		}
+
+		public void setBookingDate(String bookingDate) {
+			this.bookingDate = bookingDate;
+		}
+
+		public String getTravelPackageId() {
+			return travelPackageId;
+		}
+
+		public void setTravelPackageId(String travelPackageId) {
+			this.travelPackageId = travelPackageId;
+		}
+
+		public String getStatus() {
+			return status;
+		}
+
+		public void setStatus(String status) {
+			this.status = status;
+		}
+
+		public List<TravelComponent> getBookedComponents() {
+			return bookedComponents;
+		}
+
+		public void setBookedComponents(List<TravelComponent> bookedComponents) {
+			this.bookedComponents = bookedComponents;
+		}
+	    
+	    
 }
