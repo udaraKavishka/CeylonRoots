@@ -2,12 +2,13 @@ package com.example.backend.model;
 
 import java.util.List;
 
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,15 +28,21 @@ public class ItineraryDay {
     private String accommodation;
     private String meals;
 
-    @ElementCollection
-    private List<String> activities;
+
+    @ManyToMany
+    @JoinTable(
+        name = "day_activities",
+        joinColumns = @JoinColumn(name = "day_id"),
+        inverseJoinColumns = @JoinColumn(name = "activity_id")
+    )
+    private List<Activity> activities ;
+    
     
     @ManyToOne
     @JoinColumn(name = "travel_package_id")
     private TravelPackage travelPackage;
 
-	public ItineraryDay(Long id, String title, String location, String description, String accommodation, String meals,
-			List<String> activities) {
+	public ItineraryDay(Long id, String title, String location, String description, String accommodation, String meals) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -43,7 +50,7 @@ public class ItineraryDay {
 		this.description = description;
 		this.accommodation = accommodation;
 		this.meals = meals;
-		this.activities = activities;
+
 	}
 
 	public Long getId() {
@@ -94,13 +101,15 @@ public class ItineraryDay {
 		this.meals = meals;
 	}
 
-	public List<String> getActivities() {
+	public List<Activity> getActivities() {
 		return activities;
 	}
 
-	public void setActivities(List<String> activities) {
+	public void setActivities(List<Activity> activities) {
 		this.activities = activities;
 	}
+
+
     
     
 }
