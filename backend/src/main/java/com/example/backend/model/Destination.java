@@ -13,4 +13,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Destination extends TravelComponent {
     private String attractions;
+
+	public Destination(String attractions) {
+		super();
+		this.attractions = attractions;
+	}
+
+	public String getAttractions() {
+		return attractions;
+	}
+
+	public void setAttractions(String attractions) {
+		this.attractions = attractions;
+	}
+    
+    
 }
