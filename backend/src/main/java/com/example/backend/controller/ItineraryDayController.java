@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/itinerary-days")
-/
+public class ItineraryDayController {
 
     private final ItineraryDayRepository itineraryDayRepository;
 
@@ -57,4 +57,3 @@ import java.util.List;
         return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
     }
 }
-
