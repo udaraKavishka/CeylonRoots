@@ -2,12 +2,14 @@ package com.example.backend.model;
 
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.*;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,6 +36,14 @@ public class TravelPackage {
 
     @OneToMany(mappedBy = "travelPackage", cascade = CascadeType.ALL)
     private List<ItineraryDay> itinerary;
+
+    @ManyToMany
+    @JoinTable(
+        name = "package_components",
+        joinColumns = @JoinColumn(name = "package_id"),
+        inverseJoinColumns = @JoinColumn(name = "component_id")
+    )
+    private List<TravelComponent> components ;
 
     @ElementCollection
     private List<String> priceIncludes;
