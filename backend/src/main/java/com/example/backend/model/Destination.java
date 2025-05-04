@@ -1,7 +1,10 @@
 package com.example.backend.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +16,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Destination extends TravelComponent {
     private String attractions;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "details_id")
+    private DestinationDetails details;
 
 	public Destination(String attractions) {
 		super();
