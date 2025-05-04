@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,6 +29,10 @@ public class ItineraryDay {
 
     @ElementCollection
     private List<String> activities;
+    
+    @ManyToOne
+    @JoinColumn(name = "travel_package_id")
+    private TravelPackage travelPackage;
 
 	public ItineraryDay(Long id, String title, String location, String description, String accommodation, String meals,
 			List<String> activities) {
