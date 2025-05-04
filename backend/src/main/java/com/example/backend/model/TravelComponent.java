@@ -29,7 +29,9 @@ public class TravelComponent {
     private double lat;
     private double lng;
     private int duration;
-	public TravelComponent() {
+
+	public TravelComponent(Long id, String name, String description, String location, String image, double price,
+			double lat, double lng, int duration) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -40,6 +42,9 @@ public class TravelComponent {
 		this.lat = lat;
 		this.lng = lng;
 		this.duration = duration;
+	}
+	protected TravelComponent() {
+		
 	}
 	public Long getId() {
 		return id;
