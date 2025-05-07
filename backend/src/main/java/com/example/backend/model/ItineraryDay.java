@@ -41,7 +41,7 @@ public class ItineraryDay {
     
     
     @ManyToOne
-    @JoinColumn(name = "travel_package_id")
+    @JoinColumn(name = "travel_package_id", nullable = false)
     @JsonBackReference
     private TravelPackage travelPackage;
 
