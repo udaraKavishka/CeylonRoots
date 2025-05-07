@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+// API Routes Documented
 @RestController
 @RequestMapping("/api/travel-packages")
 public class TravelPackageController {
