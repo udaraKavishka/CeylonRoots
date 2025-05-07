@@ -2,6 +2,8 @@ package com.example.backend.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -40,6 +42,7 @@ public class ItineraryDay {
     
     @ManyToOne
     @JoinColumn(name = "travel_package_id")
+    @JsonBackReference
     private TravelPackage travelPackage;
 
 	public ItineraryDay(Long id, String title, String location, String description, String accommodation, String meals) {
