@@ -80,6 +80,14 @@ public class TravelPackage {
 		this.priceIncludes = priceIncludes;
 		this.priceExcludes = priceExcludes;
 	}
+	
+	
+
+	public TravelPackage() {
+		super();
+	}
+
+
 
 	public Long getId() {
 		return id;
