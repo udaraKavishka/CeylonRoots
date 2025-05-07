@@ -11,6 +11,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,10 +27,16 @@ public class TravelPackage {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+	
+	@NotBlank(message = "Title is mandatory")
+    @Size(max = 100, message = "Title cannot exceed 100 characters")
     private String title;
     private String description;
     private String image;
+    
+    @Positive(message = "Duration must be a positive integer")
     private int duration;
+    @PositiveOrZero(message = "Price cannot be negative")
     private double price;
     private int rating;
     private int reviewCount;
