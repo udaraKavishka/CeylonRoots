@@ -53,6 +53,10 @@ public class ItineraryDay {
 
 	}
 
+	public ItineraryDay() {
+		super();
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -108,6 +112,16 @@ public class ItineraryDay {
 	public void setActivities(List<Activity> activities) {
 		this.activities = activities;
 	}
+
+	public TravelPackage getTravelPackage() {
+		return travelPackage;
+	}
+
+	public void setTravelPackage(TravelPackage travelPackage) {
+		this.travelPackage = travelPackage;
+	}
+
+
 
 
     
