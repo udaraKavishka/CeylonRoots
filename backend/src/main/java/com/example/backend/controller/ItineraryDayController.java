@@ -16,7 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-
+//API Documentation for Itineary Completed
 
 @RestController
 @RequestMapping("/api/travel-packages/{packageId}/itinerary-days")
@@ -75,14 +75,14 @@ public class ItineraryDayController {
             @PathVariable Long dayId,
             @Valid @RequestBody ItineraryDayRequest request) {
 
-        // 1. Find existing itinerary day
+       
         ItineraryDay existingDay = itineraryDayRepository.findById(dayId)
             .orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND, 
                 "Itinerary day not found with id: " + dayId
             ));
 
-        // 2. Validate parent package relationship
+       
         if (existingDay.getTravelPackage() == null || 
             !existingDay.getTravelPackage().getId().equals(packageId)) {
             throw new ResponseStatusException(
@@ -91,7 +91,7 @@ public class ItineraryDayController {
             );
         }
 
-        // 3. Update fields directly in the method
+    
         if (request.getTitle() != null && !request.getTitle().isBlank()) {
             existingDay.setTitle(request.getTitle().trim());
         }
@@ -108,7 +108,7 @@ public class ItineraryDayController {
             existingDay.setMeals(request.getMeals().trim());
         }
 
-        // 4. Save and return
+      
         ItineraryDay updatedDay = itineraryDayRepository.save(existingDay);
         return ResponseEntity.ok(new ItineraryDayResponse(
             updatedDay.getId(),
