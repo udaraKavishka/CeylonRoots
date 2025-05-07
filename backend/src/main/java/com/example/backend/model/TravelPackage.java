@@ -2,6 +2,8 @@ package com.example.backend.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -44,7 +46,8 @@ public class TravelPackage {
     private List<String> themes;
     private List<String> highlights;
 
-    @OneToMany(mappedBy = "travelPackage", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "travelPackage", cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonManagedReference
     private List<ItineraryDay> itinerary;
 
     @ManyToMany
