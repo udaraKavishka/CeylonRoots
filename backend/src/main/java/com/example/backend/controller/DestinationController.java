@@ -1,27 +1,68 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.Destination;
-import com.example.backend.repository.TravelComponentRepository;
+import com.example.backend.repository.DestinationRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/destination")
-public class DestinationController extends TravelComponentController {
+@RequestMapping("/api/destinations")
+public class DestinationController {
 
-    public DestinationController(TravelComponentRepository repository) {
-        super(repository);
+    private final DestinationRepository destinationRepository;
+
+    public DestinationController(DestinationRepository destinationRepository) {
+        this.destinationRepository = destinationRepository;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Destination create(@RequestBody Destination destination) {
-        return repository.save(destination);
+    public Destination createDestination(@Valid @RequestBody Destination destination) {
+        return destinationRepository.save(destination);
     }
 
     @PutMapping("/{id}")
-    public Destination update(@PathVariable Long id, @RequestBody Destination destination) {
-        destination.setId(id);
-        return repository.save(destination);
+    public Destination updateDestination(
+            @PathVariable Long id,
+            @Valid @RequestBody Destination destination) {
+        return destinationRepository.findById(id)
+                .map(existing -> {
+                    destination.setId(id);
+                    return destinationRepository.save(destination);
+                })
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Destination not found with id: " + id
+                ));
+    }
+
+    @GetMapping
+    public List<Destination> getAllDestinations() {
+        return destinationRepository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Destination getDestinationById(@PathVariable Long id) {
+        return destinationRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Destination not found with id: " + id
+                ));
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteDestination(@PathVariable Long id) {
+        if (!destinationRepository.existsById(id)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Destination not found with id: " + id
+            );
+        }
+        destinationRepository.deleteById(id);
     }
 }
