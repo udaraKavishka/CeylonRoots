@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TravelComponent {
+public abstract class TravelComponent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
