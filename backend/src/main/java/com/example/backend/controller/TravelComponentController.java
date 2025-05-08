@@ -3,12 +3,11 @@ package com.example.backend.controller;
 import com.example.backend.model.TravelComponent;
 import com.example.backend.repository.TravelComponentRepository;
 import jakarta.validation.Valid;
-
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/components")
@@ -36,22 +35,7 @@ public class TravelComponentController {
         return repository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, 
-                        "Component with id " + id + " not found"
-                ));
-    }
-
-    @PutMapping("/{id}")
-    public TravelComponent updateComponent(
-            @PathVariable Long id,
-            @Valid @RequestBody TravelComponent updatedComponent) {
-        return repository.findById(id)
-                .map(existing -> {
-                    updatedComponent.setId(id);
-                    return repository.save(updatedComponent);
-                })
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Component with id " + id + " not found"
+                        "Component not found with id: " + id
                 ));
     }
 
@@ -61,7 +45,7 @@ public class TravelComponentController {
         if (!repository.existsById(id)) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
-                    "Component with id " + id + " not found"
+                    "Component not found with id: " + id
             );
         }
         repository.deleteById(id);
