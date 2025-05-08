@@ -1,27 +1,45 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.Activity;
-import com.example.backend.repository.TravelComponentRepository;
+import com.example.backend.repository.ActivityRepository;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/activity")
-public class ActivityController extends TravelComponentController {
+@RequestMapping("/api/activities")
+public class ActivityController {
 
-    public ActivityController(TravelComponentRepository repository) {
-        super(repository);
+    private final ActivityRepository activityRepository;
+
+    public ActivityController(ActivityRepository activityRepository) {
+        this.activityRepository = activityRepository;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Activity create(@RequestBody Activity activity) {
-        return repository.save(activity);
+    public Activity createActivity(@RequestBody Activity activity) {
+        return activityRepository.save(activity);
     }
 
     @PutMapping("/{id}")
-    public Activity update(@PathVariable Long id, @RequestBody Activity activity) {
+    public Activity updateActivity(
+            @PathVariable Long id,
+            @RequestBody Activity activity) {
         activity.setId(id);
-        return repository.save(activity);
+        return activityRepository.save(activity);
+    }
+
+    @GetMapping
+    public List<Activity> getAllActivities() {
+        return activityRepository.findAll();
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteActivity(@PathVariable Long id) {
+        activityRepository.deleteById(id);
     }
 }
