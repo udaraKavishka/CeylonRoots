@@ -1,31 +1,28 @@
 package com.example.backend.model;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @DiscriminatorValue("ACTIVITY")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Activity extends TravelComponent {
-    private String difficulty;
+    public enum Difficulty { EASY, MODERATE, CHALLENGING }
 
-	public Activity(String difficulty) {
-		super();
-		this.difficulty = difficulty;
-	}
+    @Enumerated(EnumType.STRING)
+    private Difficulty difficulty;
 
-	public String getDifficulty() {
-		return difficulty;
-	}
+    @ManyToMany(mappedBy = "activities")
+    private Set<ItineraryDay> itineraryDays = new HashSet<>();
 
-	public void setDifficulty(String difficulty) {
-		this.difficulty = difficulty;
-	}
-    
-    
+    @ManyToMany
+    @JoinTable(name = "activity_gallery",
+        joinColumns = @JoinColumn(name = "activity_id"),
+        inverseJoinColumns = @JoinColumn(name = "gallery_item_id"))
+    private Set<GalleryItem> galleryItems = new HashSet<>();
 }
