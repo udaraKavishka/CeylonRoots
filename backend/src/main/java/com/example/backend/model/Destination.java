@@ -1,38 +1,30 @@
 package com.example.backend.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @DiscriminatorValue("DESTINATION")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Destination extends TravelComponent {
-    private String attractions;
-    
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "details_id")
+    @ElementCollection
+    @CollectionTable(name = "destination_attractions")
+    private Set<String> attractions = new HashSet<>();
+
+    @OneToOne(mappedBy = "destination", cascade = CascadeType.ALL)
     private DestinationDetails details;
 
-	public Destination(String attractions) {
-		super();
-		this.attractions = attractions;
-	}
+    @ManyToMany(mappedBy = "destinations")
+    private Set<TravelPackage> travelPackages = new HashSet<>();
 
-	public String getAttractions() {
-		return attractions;
-	}
-
-	public void setAttractions(String attractions) {
-		this.attractions = attractions;
-	}
-    
-    
+    @ManyToMany
+    @JoinTable(name = "destination_gallery",
+        joinColumns = @JoinColumn(name = "destination_id"),
+        inverseJoinColumns = @JoinColumn(name = "gallery_item_id"))
+    private Set<GalleryItem> galleryItems = new HashSet<>();
 }
