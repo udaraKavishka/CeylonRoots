@@ -1,15 +1,19 @@
 package com.example.backend.model;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import com.example.backend.converter.LongListConverter;
 
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name = "itinerary_day")
 @Data
 public class ItineraryDay extends BaseEntity {
-    private String title;
+	private String title;
     private String location;
     private String description;
     private String meals;
@@ -18,13 +22,11 @@ public class ItineraryDay extends BaseEntity {
     @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;
 
-    @ManyToMany
-    @JoinTable(name = "itinerary_activities",
-        joinColumns = @JoinColumn(name = "itinerary_day_id"),
-        inverseJoinColumns = @JoinColumn(name = "activity_id"))
-    private Set<Activity> activities = new HashSet<>();
-
+    @Convert(converter = LongListConverter.class)
+    @Column(columnDefinition = "JSON")
+    private List<Long> activityIds;
+    
     @ManyToOne
-    @JoinColumn(name = "travel_package_id")
+    @JoinColumn(name = "package_id")
     private TravelPackage travelPackage;
 }
