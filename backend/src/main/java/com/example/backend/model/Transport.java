@@ -12,21 +12,16 @@ public class Transport extends TravelComponent {
 
     @Enumerated(EnumType.STRING)
     private Mode transportMode;
-    
     private String departureLocation;
     private String arrivalLocation;
     
     @Embedded
-    @AttributeOverrides({
-        @AttributeOverride(name = "lat", column = @Column(name = "departure_lat")),
-        @AttributeOverride(name = "lng", column = @Column(name = "departure_lng"))
-    })
+    @AttributeOverride(name = "lat", column = @Column(name = "departure_lat"))
+    @AttributeOverride(name = "lng", column = @Column(name = "departure_lng"))
     private Coordinates departureCoordinates;
     
     @Embedded
-    @AttributeOverrides({
-        @AttributeOverride(name = "lat", column = @Column(name = "arrival_lat")),
-        @AttributeOverride(name = "lng", column = @Column(name = "arrival_lng"))
-    })
+    @AttributeOverride(name = "lat", column = @Column(name = "arrival_lat"))
+    @AttributeOverride(name = "lng", column = @Column(name = "arrival_lng"))
     private Coordinates arrivalCoordinates;
 }
