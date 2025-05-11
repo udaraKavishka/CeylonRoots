@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.example.backend.converter.StringListConverter;
+
 import jakarta.persistence.*;
 import lombok.*;
 
