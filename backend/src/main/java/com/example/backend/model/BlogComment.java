@@ -6,9 +6,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name = "blog_comment")
 @Data
 public class BlogComment extends BaseEntity {
-    private String author;
+	private String author;
     private String avatarUrl;
     private LocalDateTime commentDate;
     
@@ -16,6 +17,6 @@ public class BlogComment extends BaseEntity {
     private String text;
 
     @ManyToOne
-    @JoinColumn(name = "blog_post_id")
-    private BlogPost blogPost;
+    @JoinColumn(name = "post_id")
+    private BlogPost post;
 }
