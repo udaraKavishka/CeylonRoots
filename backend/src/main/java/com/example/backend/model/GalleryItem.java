@@ -2,15 +2,19 @@ package com.example.backend.model;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import com.example.backend.converter.StringListConverter;
 
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name = "gallery_item")
 @Data
 public class GalleryItem extends BaseEntity {
-    public enum MediaType { IMAGE, VIDEO }
+public enum MediaType { IMAGE, VIDEO }
     
     @Enumerated(EnumType.STRING)
     private MediaType mediaType;
@@ -23,9 +27,9 @@ public class GalleryItem extends BaseEntity {
     @Lob
     private String description;
     
-    @ElementCollection
-    @CollectionTable(name = "gallery_categories")
-    private Set<String> categories = new HashSet<>();
+    @Convert(converter = StringListConverter.class)
+    @Column(columnDefinition = "JSON")
+    private List<String> categories;
     
     private Boolean featured;
     
@@ -33,10 +37,4 @@ public class GalleryItem extends BaseEntity {
     private UserSubmission submittedBy;
     
     private LocalDate dateAdded;
-
-    @ManyToMany(mappedBy = "galleryItems")
-    private Set<Destination> destinations = new HashSet<>();
-
-    @ManyToMany(mappedBy = "galleryItems")
-    private Set<Activity> activities = new HashSet<>();
 }
