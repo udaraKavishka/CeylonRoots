@@ -6,13 +6,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.example.backend.converter.LongListConverter;
+import com.example.backend.converter.StringListConverter;
+
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Data
 public class BlogPost extends BaseEntity {
-    private String title;
+	private String title;
     private String excerpt;
     
     @Lob
@@ -23,16 +26,14 @@ public class BlogPost extends BaseEntity {
     private String author;
     private String category;
     
-    @ElementCollection
-    @CollectionTable(name = "blog_tags")
-    private Set<String> tags = new HashSet<>();
-    
-    @OneToMany(mappedBy = "blogPost", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Convert(converter = StringListConverter.class)
+    @Column(columnDefinition = "JSON")
+    private List<String> tags;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<BlogComment> comments = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(name = "related_posts",
-        joinColumns = @JoinColumn(name = "post_id"),
-        inverseJoinColumns = @JoinColumn(name = "related_post_id"))
-    private Set<BlogPost> relatedPosts = new HashSet<>();
+    @Convert(converter = LongListConverter.class)
+    @Column(columnDefinition = "JSON")
+    private List<Long> relatedPostIds;
 }
