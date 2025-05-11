@@ -9,6 +9,11 @@ import lombok.*;
 @Table(name = "blog_comment")
 @Data
 public class BlogComment extends BaseEntity {
+	public BlogComment(Long id, LocalDateTime createdAt, LocalDateTime updatedAt) {
+		super(id, createdAt, updatedAt);
+		// TODO Auto-generated constructor stub
+	}
+
 	private String author;
     private String avatarUrl;
     private LocalDateTime commentDate;
