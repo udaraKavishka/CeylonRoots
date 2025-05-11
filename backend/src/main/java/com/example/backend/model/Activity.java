@@ -17,12 +17,6 @@ public class Activity extends TravelComponent {
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
 
-    @ManyToMany(mappedBy = "activities")
-    private Set<ItineraryDay> itineraryDays = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(name = "activity_gallery",
-        joinColumns = @JoinColumn(name = "activity_id"),
-        inverseJoinColumns = @JoinColumn(name = "gallery_item_id"))
-    private Set<GalleryItem> galleryItems = new HashSet<>();
+
 }
