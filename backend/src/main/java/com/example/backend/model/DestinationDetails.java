@@ -1,27 +1,31 @@
 package com.example.backend.model;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import com.example.backend.converter.StringListConverter;
 
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name = "destination_details")
 @Data
 public class DestinationDetails extends BaseEntity {
-    private String region;
+	private String region;
     private String topAttraction;
     private String bestTimeToVisit;
     private String recommendedDuration;
     private String culturalTips;
-
-    @ElementCollection
-    @CollectionTable(name = "detail_attractions")
-    private Set<String> attractions = new HashSet<>();
-
-    @ElementCollection
-    @CollectionTable(name = "detail_gallery")
-    private Set<String> galleryImages = new HashSet<>();
+    
+    @Convert(converter = StringListConverter.class)
+    @Column(columnDefinition = "JSON")
+    private List<String> attractions;
+    
+    @Convert(converter = StringListConverter.class)
+    @Column(columnDefinition = "JSON")
+    private List<String> gallery;
 
     @OneToOne
     @JoinColumn(name = "destination_id")
