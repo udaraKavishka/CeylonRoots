@@ -11,12 +11,11 @@ import lombok.*;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Accommodation extends TravelComponent {
-    @ElementCollection
-    @CollectionTable(name = "accommodation_amenities")
+	@Convert(converter = StringListConverter.class)
+    @Column(columnDefinition = "JSON")
     private Set<String> amenities = new HashSet<>();
     
     private Double rating;
 
-    @OneToMany(mappedBy = "accommodation")
-    private Set<ItineraryDay> itineraryDays = new HashSet<>();
+    
 }
