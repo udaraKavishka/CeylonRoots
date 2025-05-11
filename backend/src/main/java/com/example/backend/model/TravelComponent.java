@@ -10,13 +10,11 @@ import lombok.*;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "component_type", discriminatorType = DiscriminatorType.STRING)
-@Data
+@Table(name = "travel_component")
 public abstract class TravelComponent extends BaseEntity {
     public enum ComponentType { 
         ACCOMMODATION, DESTINATION, ACTIVITY, TRANSPORT 
     }
-
-
 
     private String name;
     private String description;
@@ -29,6 +27,7 @@ public abstract class TravelComponent extends BaseEntity {
     
     private Integer duration;
     
-    @ElementCollection
+    @Convert(converter = StringListConverter.class)
+    @Column(columnDefinition = "JSON")
     private Set<String> tags = new HashSet<>();
 }
