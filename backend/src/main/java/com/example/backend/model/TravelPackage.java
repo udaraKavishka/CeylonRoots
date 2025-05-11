@@ -6,13 +6,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.example.backend.converter.StringListConverter;
+
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name = "travel_package")
 @Data
 public class TravelPackage extends BaseEntity {
-    private String title;
+	private String title;
     private String description;
     private String imageUrl;
     private Integer durationDays;
@@ -20,29 +23,33 @@ public class TravelPackage extends BaseEntity {
     private Double rating;
     private Integer reviewCount;
     
-    @ElementCollection
-    private Set<String> regions = new HashSet<>();
+    @Convert(converter = StringListConverter.class)
+    @Column(columnDefinition = "JSON")
+    private List<String> regions;
     
-    @ElementCollection
-    private Set<String> themes = new HashSet<>();
+    @Convert(converter = StringListConverter.class)
+    @Column(columnDefinition = "JSON")
+    private List<String> themes;
     
-    @ElementCollection
-    private Set<String> highlights = new HashSet<>();
+    @Convert(converter = StringListConverter.class)
+    @Column(columnDefinition = "JSON")
+    private List<String> highlights;
 
-    @OneToMany(mappedBy = "travelPackage", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "travelPackage", cascade = CascadeType.ALL)
     private List<ItineraryDay> itinerary = new ArrayList<>();
 
-    @ElementCollection
-    @CollectionTable(name = "price_inclusions")
-    private Set<String> priceIncludes = new HashSet<>();
-
-    @ElementCollection
-    @CollectionTable(name = "price_exclusions")
-    private Set<String> priceExcludes = new HashSet<>();
+    @Convert(converter = StringListConverter.class)
+    @Column(columnDefinition = "JSON")
+    private List<String> priceIncludes;
+    
+    @Convert(converter = StringListConverter.class)
+    @Column(columnDefinition = "JSON")
+    private List<String> priceExcludes;
 
     @ManyToMany
-    @JoinTable(name = "package_destinations",
+    @JoinTable(
+        name = "package_destination",
         joinColumns = @JoinColumn(name = "package_id"),
-        inverseJoinColumns = @JoinColumn(name = "destination_id"))
-    private Set<Destination> destinations = new HashSet<>();
+        inverseJoinColumns = @JoinColumn(name = "component_id"))
+    private List<TravelComponent> destinations = new ArrayList<>();
 }
