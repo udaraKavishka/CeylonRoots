@@ -1,24 +1,39 @@
 package com.example.backend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import com.example.backend.converter.StringListConverter;
+
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@DiscriminatorValue("DESTINATION")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Destination {
+@EqualsAndHashCode(callSuper = true)
+public class Destination extends TravelComponent {
+	@Convert(converter = StringListConverter.class)
+    @Column(columnDefinition = "JSON")
+    private List<String> attractions;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	public Destination(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String name, String description,
+			String location, String imageUrl, BigDecimal price, Coordinates coordinates, Integer duration,
+			Set<String> tags, List<String> attractions) {
+		super(id, createdAt, updatedAt, name, description, location, imageUrl, price, coordinates, duration, tags);
+		this.attractions = attractions;
+	}
 
-    private String name;
-    private String description;
-    private Double price;
+	public List<String> getAttractions() {
+		return attractions;
+	}
+
+	public void setAttractions(List<String> attractions) {
+		this.attractions = attractions;
+	}
+	
+	
 }
