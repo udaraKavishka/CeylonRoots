@@ -1,7 +1,7 @@
 'use client';
 
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+// import Footer from '../components/Footer';
 import { Separator } from "../components/ui/separator";
 
 const CookiePolicy = () => {
@@ -132,7 +132,6 @@ const CookiePolicy = () => {
                     </div>
                 </div>
             </main>
-            <Footer />
         </div>
     );
 };
