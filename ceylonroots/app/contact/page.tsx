@@ -10,7 +10,7 @@ import { Textarea } from "../components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../components/ui/form";
 import { toast } from "sonner";
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+// import Footer from '../components/Footer';
 
 const formSchema = z.object({
     name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -251,7 +251,6 @@ const Contact = () => {
                 </div>
             </main>
 
-            <Footer />
         </div>
     );
 };

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+// import Footer from "../components/Footer";
 import DestinationMap from "../components/destinations/DestinationMap";
 import DestinationCard from "../components/destinations/DestinationCard";
 import { Button } from "../components/ui/button";
@@ -117,7 +117,6 @@ const Destinations = () => {
                     </div>
                 </div>
             </main>
-            <Footer />
         </div>
     );
 };
