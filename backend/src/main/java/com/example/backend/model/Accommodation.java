@@ -13,6 +13,8 @@ import lombok.*;
 @Entity
 @DiscriminatorValue("ACCOMMODATION")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Accommodation extends TravelComponent {
 	@Convert(converter = StringListConverter.class)
