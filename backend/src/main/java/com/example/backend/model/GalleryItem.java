@@ -2,23 +2,22 @@ package com.example.backend.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import com.example.backend.converter.StringListConverter;
 
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "gallery_item")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class GalleryItem extends BaseEntity {
-public enum MediaType { IMAGE, VIDEO }
+    public enum MediaType { IMAGE, VIDEO }
     
     @Enumerated(EnumType.STRING)
-    private MediaType mediaType;
+    private MediaType type;
     
     private String url;
     private String thumbnailUrl;
@@ -28,39 +27,50 @@ public enum MediaType { IMAGE, VIDEO }
     @Lob
     private String description;
     
-    @Convert(converter = StringListConverter.class)
-    @Column(columnDefinition = "JSON")
-    private List<String> categories;
-    
     private Boolean featured;
-    
-    @Embedded
-    private UserSubmission submittedBy;
-    
     private LocalDate dateAdded;
 
-	public GalleryItem(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, MediaType mediaType, String url,
-			String thumbnailUrl, String caption, String location, String description, List<String> categories,
-			Boolean featured, UserSubmission submittedBy, LocalDate dateAdded) {
+    @ManyToMany
+    @JoinTable(
+        name = "destination_gallery",
+        joinColumns = @JoinColumn(name = "gallery_item_id"),
+        inverseJoinColumns = @JoinColumn(name = "destination_id")
+    )
+    private List<Destination> destinations = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "activity_gallery",
+        joinColumns = @JoinColumn(name = "gallery_item_id"),
+        inverseJoinColumns = @JoinColumn(name = "activity_id")
+    )
+    private List<Activity> activities = new ArrayList<>();
+
+	
+
+	
+	public GalleryItem(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, MediaType type, String url,
+			String thumbnailUrl, String caption, String location, String description, Boolean featured,
+			LocalDate dateAdded, List<Destination> destinations, List<Activity> activities) {
 		super(id, createdAt, updatedAt);
-		this.mediaType = mediaType;
+		this.type = type;
 		this.url = url;
 		this.thumbnailUrl = thumbnailUrl;
 		this.caption = caption;
 		this.location = location;
 		this.description = description;
-		this.categories = categories;
 		this.featured = featured;
-		this.submittedBy = submittedBy;
 		this.dateAdded = dateAdded;
+		this.destinations = destinations;
+		this.activities = activities;
 	}
 
-	public MediaType getMediaType() {
-		return mediaType;
+	public MediaType getType() {
+		return type;
 	}
 
-	public void setMediaType(MediaType mediaType) {
-		this.mediaType = mediaType;
+	public void setType(MediaType type) {
+		this.type = type;
 	}
 
 	public String getUrl() {
@@ -103,14 +113,6 @@ public enum MediaType { IMAGE, VIDEO }
 		this.description = description;
 	}
 
-	public List<String> getCategories() {
-		return categories;
-	}
-
-	public void setCategories(List<String> categories) {
-		this.categories = categories;
-	}
-
 	public Boolean getFeatured() {
 		return featured;
 	}
@@ -119,20 +121,28 @@ public enum MediaType { IMAGE, VIDEO }
 		this.featured = featured;
 	}
 
-	public UserSubmission getSubmittedBy() {
-		return submittedBy;
-	}
-
-	public void setSubmittedBy(UserSubmission submittedBy) {
-		this.submittedBy = submittedBy;
-	}
-
 	public LocalDate getDateAdded() {
 		return dateAdded;
 	}
 
 	public void setDateAdded(LocalDate dateAdded) {
 		this.dateAdded = dateAdded;
+	}
+
+	public List<Destination> getDestinations() {
+		return destinations;
+	}
+
+	public void setDestinations(List<Destination> destinations) {
+		this.destinations = destinations;
+	}
+
+	public List<Activity> getActivities() {
+		return activities;
+	}
+
+	public void setActivities(List<Activity> activities) {
+		this.activities = activities;
 	}
     
     
