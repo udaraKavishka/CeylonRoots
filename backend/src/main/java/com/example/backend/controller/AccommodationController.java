@@ -3,6 +3,8 @@ package com.example.backend.controller;
 import com.example.backend.model.Accommodation;
 
 import com.example.backend.service.AccommodationService;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,8 +40,8 @@ public class AccommodationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> deleteAccommodation(@PathVariable Long id) {
+        String message = service.delete(id);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 }
