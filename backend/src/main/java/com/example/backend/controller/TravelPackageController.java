@@ -5,13 +5,14 @@ import com.example.backend.service.TravelPackageService;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/packages")
 public class TravelPackageController {
-    private final TravelPackageService service;
+	private final TravelPackageService service;
 
     public TravelPackageController(TravelPackageService service) {
         this.service = service;
@@ -19,7 +20,7 @@ public class TravelPackageController {
 
     @PostMapping
     public ResponseEntity<TravelPackage> create(@RequestBody TravelPackage travelPackage) {
-        return ResponseEntity.ok(service.create(travelPackage));
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(travelPackage));
     }
 
     @GetMapping("/{id}")
@@ -38,8 +39,7 @@ public class TravelPackageController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        return ResponseEntity.ok(service.delete(id));
     }
 }
