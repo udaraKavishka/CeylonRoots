@@ -5,6 +5,7 @@ import com.example.backend.model.Destination;
 import com.example.backend.repository.DestinationRepository;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -36,7 +37,10 @@ public class DestinationService {
         return repository.save(destination);
     }
 
-    public void delete(Long id) {
-        repository.deleteById(id);
+    @Transactional
+    public String delete(Long id) {
+        Destination destination = getById(id);
+        repository.delete(destination);
+        return "Destination with ID " + id + " was deleted successfully";
     }
 }
