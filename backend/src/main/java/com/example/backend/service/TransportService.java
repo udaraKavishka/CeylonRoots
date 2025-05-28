@@ -5,13 +5,13 @@ import com.example.backend.model.Transport;
 import com.example.backend.repository.TransportRepository;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 public class TransportService {
-
-    private final TransportRepository repository;
+	private final TransportRepository repository;
 
     public TransportService(TransportRepository repository) {
         this.repository = repository;
@@ -31,12 +31,15 @@ public class TransportService {
     }
 
     public Transport update(Long id, Transport transport) {
-        Transport existing = getById(id);
-        transport.setId(existing.getId());
+    	Transport existing = getById(id);
+    	transport.setId(existing.getId());
         return repository.save(transport);
     }
 
-    public void delete(Long id) {
-        repository.deleteById(id);
+    @Transactional
+    public String delete(Long id) {
+    	Transport transport = getById(id);
+        repository.delete(transport);
+        return "Transport with ID " + id + " was deleted successfully";
     }
 }
