@@ -7,10 +7,11 @@ import com.example.backend.repository.TravelPackageRepository;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TravelPackageService {
-    private final TravelPackageRepository repository;
+	private final TravelPackageRepository repository;
 
     public TravelPackageService(TravelPackageRepository repository) {
         this.repository = repository;
@@ -21,7 +22,8 @@ public class TravelPackageService {
     }
 
     public TravelPackage getById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Package not found"));
+        return repository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("TravelPackage not found"));
     }
 
     public List<TravelPackage> getAll() {
@@ -29,12 +31,15 @@ public class TravelPackageService {
     }
 
     public TravelPackage update(Long id, TravelPackage travelPackage) {
-        TravelPackage existing = getById(id);
-        existing.setTitle(travelPackage.getTitle());
-        return repository.save(existing);
+    	TravelPackage existing = getById(id);
+    	travelPackage.setId(existing.getId());
+        return repository.save(travelPackage);
     }
 
-    public void delete(Long id) {
-        repository.deleteById(id);
+    @Transactional
+    public String delete(Long id) {
+    	TravelPackage travelPackage = getById(id);
+        repository.delete(travelPackage);
+        return "TravelPackage with ID " + id + " was deleted successfully";
     }
 }
