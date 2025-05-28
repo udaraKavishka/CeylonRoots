@@ -4,6 +4,7 @@ package com.example.backend.controller;
 import com.example.backend.model.Destination;
 import com.example.backend.service.DestinationService;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +14,7 @@ import java.util.List;
 @RequestMapping("/api/destination")
 public class DestinationController {
 
-    private final DestinationService service;
+	private final DestinationService service;
 
     public DestinationController(DestinationService service) {
         this.service = service;
@@ -21,7 +22,7 @@ public class DestinationController {
 
     @PostMapping
     public ResponseEntity<Destination> create(@RequestBody Destination destination) {
-        return ResponseEntity.ok(service.create(destination));
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(destination));
     }
 
     @GetMapping("/{id}")
@@ -40,8 +41,7 @@ public class DestinationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        return ResponseEntity.ok(service.delete(id));
     }
 }
