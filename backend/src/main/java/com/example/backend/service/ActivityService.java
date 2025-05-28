@@ -3,13 +3,14 @@ package com.example.backend.service;
 import com.example.backend.exception.ResourceNotFoundException;
 import com.example.backend.model.Activity;
 import com.example.backend.repository.ActivityRepository;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
 public class ActivityService {
-
     private final ActivityRepository repository;
 
     public ActivityService(ActivityRepository repository) {
@@ -35,7 +36,10 @@ public class ActivityService {
         return repository.save(activity);
     }
 
-    public void delete(Long id) {
-        repository.deleteById(id);
+    @Transactional
+    public String delete(Long id) {
+        Activity activity = getById(id);
+        repository.delete(activity);
+        return "Activity with ID " + id + " was deleted successfully";
     }
 }
