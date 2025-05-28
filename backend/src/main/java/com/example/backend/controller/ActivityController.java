@@ -2,15 +2,16 @@ package com.example.backend.controller;
 
 import com.example.backend.model.Activity;
 import com.example.backend.service.ActivityService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/activities")
 public class ActivityController {
-
     private final ActivityService service;
 
     public ActivityController(ActivityService service) {
@@ -19,7 +20,7 @@ public class ActivityController {
 
     @PostMapping
     public ResponseEntity<Activity> create(@RequestBody Activity activity) {
-        return ResponseEntity.ok(service.create(activity));
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(activity));
     }
 
     @GetMapping("/{id}")
@@ -38,8 +39,7 @@ public class ActivityController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        return ResponseEntity.ok(service.delete(id));
     }
 }
