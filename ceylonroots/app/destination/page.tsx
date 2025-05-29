@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Navbar from "../components/Navbar";
+// import Navbar from "../components/Navbar";
 // import Footer from "../components/Footer";
 import DestinationMap from "../components/destinations/DestinationMap";
 import DestinationCard from "../components/destinations/DestinationCard";
@@ -35,11 +35,11 @@ const Destinations = () => {
     ];
 
     return (
-        <div className="min-h-screen flex flex-col">
-            <Navbar />
+        <div className="min-h-screen flex flex- ">
+            {/* <Navbar /> */}
             <main className="flex-grow">
                 {/* Hero Section */}
-                <div className="bg-gradient-to-r from-ceylon-tea/20 to-ceylon-spice/10 py-16">
+                <div className="bg-gradient-to-r from-ceylon-tea/20 to-ceylon-spice/10 py-16 mt-10">
                     <div className="ceylon-container">
                         <h1 className="text-4xl md:text-5xl font-bold mb-6">
                             Discover Sri Lanka&apos;s{" "}
