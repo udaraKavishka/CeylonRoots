@@ -86,13 +86,13 @@ const BlogPostPage = ({ params }: { params: { id: string } }) => {
                     <Breadcrumb>
                         <BreadcrumbList>
                             <BreadcrumbItem>
-                                <Link href="/" passHref legacyBehavior>
+                                <Link href="/" >
                                     <BreadcrumbLink>Home</BreadcrumbLink>
                                 </Link>
                             </BreadcrumbItem>
                             <BreadcrumbSeparator />
                             <BreadcrumbItem>
-                                <Link href="/blog" passHref legacyBehavior>
+                                <Link href="/blog" >
                                     <BreadcrumbLink>Travel Blog</BreadcrumbLink>
                                 </Link>
                             </BreadcrumbItem>
