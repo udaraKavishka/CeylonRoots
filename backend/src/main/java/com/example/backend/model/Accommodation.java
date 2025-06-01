@@ -3,9 +3,8 @@ package com.example.backend.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-
-import com.example.backend.converter.StringListConverter;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,21 +12,36 @@ import lombok.*;
 @Entity
 @DiscriminatorValue("ACCOMMODATION")
 @Data
-@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Accommodation extends TravelComponent {
-	@Convert(converter = StringListConverter.class)
-    @Column(columnDefinition = "JSON")
+	@ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+        name = "accommodation_amenities",
+        joinColumns = @JoinColumn(name = "accommodation_id")
+    )
+    @Column(name = "amenity")
     private Set<String> amenities = new HashSet<>();
-    
+
     private Double rating;
 
+	
+	
 	public Accommodation(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String name, String description,
-			String location, String imageUrl, BigDecimal price, Coordinates coordinates, Integer duration,
+			String location, String imageUrl, BigDecimal price, Double lat, Double lng, Integer duration,
 			Set<String> tags, Set<String> amenities, Double rating) {
-		super(id, createdAt, updatedAt, name, description, location, imageUrl, price, coordinates, duration, tags);
+		super(id, createdAt, updatedAt, name, description, location, imageUrl, price, lat, lng, duration, tags);
 		this.amenities = amenities;
 		this.rating = rating;
 	}
+
+
+
+	public Accommodation() {
+		
+	}
+
+
 
 	public Set<String> getAmenities() {
 		return amenities;
@@ -46,6 +60,6 @@ public class Accommodation extends TravelComponent {
 	}
     
     
-
+    
     
 }

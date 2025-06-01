@@ -2,6 +2,7 @@ package com.example.backend.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.*;
@@ -10,75 +11,78 @@ import lombok.*;
 @Entity
 @DiscriminatorValue("TRANSPORT")
 @Data
-@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Transport extends TravelComponent {
-    public enum Mode { CAR, TRAIN, BUS, PLANE, BOAT }
-
+    public enum TransportMode { CAR, TRAIN, BUS, PLANE, BOAT }
+    
     @Enumerated(EnumType.STRING)
-    private Mode transportMode;
+    private TransportMode mode;
+    
     private String departureLocation;
     private String arrivalLocation;
+    private Double departureLat;
+    private Double departureLng;
+    private Double arrivalLat;
+    private Double arrivalLng;
+	
     
-    @Embedded
-    @AttributeOverride(name = "lat", column = @Column(name = "departure_lat"))
-    @AttributeOverride(name = "lng", column = @Column(name = "departure_lng"))
-    private Coordinates departureCoordinates;
     
-    @Embedded
-    @AttributeOverride(name = "lat", column = @Column(name = "arrival_lat"))
-    @AttributeOverride(name = "lng", column = @Column(name = "arrival_lng"))
-    private Coordinates arrivalCoordinates;
-
+    
 	public Transport(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String name, String description,
-			String location, String imageUrl, BigDecimal price, Coordinates coordinates, Integer duration,
-			Set<String> tags, Mode transportMode, String departureLocation, String arrivalLocation,
-			Coordinates departureCoordinates, Coordinates arrivalCoordinates) {
-		super(id, createdAt, updatedAt, name, description, location, imageUrl, price, coordinates, duration, tags);
-		this.transportMode = transportMode;
+			String location, String imageUrl, BigDecimal price, Double lat, Double lng, Integer duration,
+			Set<String> tags, TransportMode mode, String departureLocation, String arrivalLocation, Double departureLat,
+			Double departureLng, Double arrivalLat, Double arrivalLng) {
+		super(id, createdAt, updatedAt, name, description, location, imageUrl, price, lat, lng, duration, tags);
+		this.mode = mode;
 		this.departureLocation = departureLocation;
 		this.arrivalLocation = arrivalLocation;
-		this.departureCoordinates = departureCoordinates;
-		this.arrivalCoordinates = arrivalCoordinates;
+		this.departureLat = departureLat;
+		this.departureLng = departureLng;
+		this.arrivalLat = arrivalLat;
+		this.arrivalLng = arrivalLng;
 	}
-
-	public Mode getTransportMode() {
-		return transportMode;
+	public TransportMode getMode() {
+		return mode;
 	}
-
-	public void setTransportMode(Mode transportMode) {
-		this.transportMode = transportMode;
+	public void setMode(TransportMode mode) {
+		this.mode = mode;
 	}
-
 	public String getDepartureLocation() {
 		return departureLocation;
 	}
-
 	public void setDepartureLocation(String departureLocation) {
 		this.departureLocation = departureLocation;
 	}
-
 	public String getArrivalLocation() {
 		return arrivalLocation;
 	}
-
 	public void setArrivalLocation(String arrivalLocation) {
 		this.arrivalLocation = arrivalLocation;
 	}
-
-	public Coordinates getDepartureCoordinates() {
-		return departureCoordinates;
+	public Double getDepartureLat() {
+		return departureLat;
 	}
-
-	public void setDepartureCoordinates(Coordinates departureCoordinates) {
-		this.departureCoordinates = departureCoordinates;
+	public void setDepartureLat(Double departureLat) {
+		this.departureLat = departureLat;
 	}
-
-	public Coordinates getArrivalCoordinates() {
-		return arrivalCoordinates;
+	public Double getDepartureLng() {
+		return departureLng;
 	}
-
-	public void setArrivalCoordinates(Coordinates arrivalCoordinates) {
-		this.arrivalCoordinates = arrivalCoordinates;
+	public void setDepartureLng(Double departureLng) {
+		this.departureLng = departureLng;
+	}
+	public Double getArrivalLat() {
+		return arrivalLat;
+	}
+	public void setArrivalLat(Double arrivalLat) {
+		this.arrivalLat = arrivalLat;
+	}
+	public Double getArrivalLng() {
+		return arrivalLng;
+	}
+	public void setArrivalLng(Double arrivalLng) {
+		this.arrivalLng = arrivalLng;
 	}
     
     

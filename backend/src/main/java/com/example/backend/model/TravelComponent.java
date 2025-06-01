@@ -2,10 +2,10 @@ package com.example.backend.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-
-import com.example.backend.converter.StringListConverter;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,27 +15,32 @@ import lombok.*;
 @DiscriminatorColumn(name = "component_type", discriminatorType = DiscriminatorType.STRING)
 @Table(name = "travel_component")
 public abstract class TravelComponent extends BaseEntity {
-    public enum ComponentType { 
-        ACCOMMODATION, DESTINATION, ACTIVITY, TRANSPORT 
-    }
-
     private String name;
-    protected String description;
+    private String description;
     private String location;
-    private String imageUrl;
-    private BigDecimal price;
-
-    @Embedded
-    private Coordinates coordinates;
     
+    @Column(name = "image_url")
+    private String imageUrl;
+    
+    @Column(precision = 10, scale = 2)
+    private BigDecimal price;
+    
+    private Double lat;
+    private Double lng;
     private Integer duration;
     
-    @Convert(converter = StringListConverter.class)
-    @Column(columnDefinition = "JSON")
+
+    @ElementCollection
+    @CollectionTable(
+        name = "component_tags",
+        joinColumns = @JoinColumn(name = "component_id")
+    )
+    @Column(name = "tag")
     private Set<String> tags = new HashSet<>();
 
+	
 	public TravelComponent(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String name, String description,
-			String location, String imageUrl, BigDecimal price, Coordinates coordinates, Integer duration,
+			String location, String imageUrl, BigDecimal price, Double lat, Double lng, Integer duration,
 			Set<String> tags) {
 		super(id, createdAt, updatedAt);
 		this.name = name;
@@ -43,9 +48,14 @@ public abstract class TravelComponent extends BaseEntity {
 		this.location = location;
 		this.imageUrl = imageUrl;
 		this.price = price;
-		this.coordinates = coordinates;
+		this.lat = lat;
+		this.lng = lng;
 		this.duration = duration;
 		this.tags = tags;
+	}
+
+	public TravelComponent() {
+		
 	}
 
 	public String getName() {
@@ -88,12 +98,20 @@ public abstract class TravelComponent extends BaseEntity {
 		this.price = price;
 	}
 
-	public Coordinates getCoordinates() {
-		return coordinates;
+	public Double getLat() {
+		return lat;
 	}
 
-	public void setCoordinates(Coordinates coordinates) {
-		this.coordinates = coordinates;
+	public void setLat(Double lat) {
+		this.lat = lat;
+	}
+
+	public Double getLng() {
+		return lng;
+	}
+
+	public void setLng(Double lng) {
+		this.lng = lng;
 	}
 
 	public Integer getDuration() {
@@ -104,13 +122,5 @@ public abstract class TravelComponent extends BaseEntity {
 		this.duration = duration;
 	}
 
-	public Set<String> getTags() {
-		return tags;
-	}
-
-	public void setTags(Set<String> tags) {
-		this.tags = tags;
-	}
-    
     
 }

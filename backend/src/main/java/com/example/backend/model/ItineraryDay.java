@@ -1,47 +1,64 @@
 package com.example.backend.model;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import com.example.backend.converter.LongListConverter;
 
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "itinerary_day")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ItineraryDay extends BaseEntity {
-	private String title;
-    private String location;
-    private String description;
-    private String meals;
+    @ManyToOne
+    @JoinColumn(name = "travel_package_id")
+    private TravelPackage travelPackage;
 
     @ManyToOne
     @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;
 
-    @Convert(converter = LongListConverter.class)
-    @Column(columnDefinition = "JSON")
-    private List<Long> activityIds;
-    
-    @ManyToOne
-    @JoinColumn(name = "package_id")
-    private TravelPackage travelPackage;
+    private String title;
+    private String location;
+    private String description;
+    private String meals;
 
-	public ItineraryDay(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String title, String location,
-			String description, String meals, Accommodation accommodation, List<Long> activityIds,
-			TravelPackage travelPackage) {
+    @ManyToMany
+    @JoinTable(name = "itinerary_activities",
+        joinColumns = @JoinColumn(name = "itinerary_day_id"),
+        inverseJoinColumns = @JoinColumn(name = "activity_id"))
+    private List<Activity> activities = new ArrayList<>();
+
+	public ItineraryDay(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, TravelPackage travelPackage,
+			Accommodation accommodation, String title, String location, String description, String meals,
+			List<Activity> activities) {
 		super(id, createdAt, updatedAt);
+		this.travelPackage = travelPackage;
+		this.accommodation = accommodation;
 		this.title = title;
 		this.location = location;
 		this.description = description;
 		this.meals = meals;
-		this.accommodation = accommodation;
-		this.activityIds = activityIds;
+		this.activities = activities;
+	}
+
+	public TravelPackage getTravelPackage() {
+		return travelPackage;
+	}
+
+	public void setTravelPackage(TravelPackage travelPackage) {
 		this.travelPackage = travelPackage;
+	}
+
+	public Accommodation getAccommodation() {
+		return accommodation;
+	}
+
+	public void setAccommodation(Accommodation accommodation) {
+		this.accommodation = accommodation;
 	}
 
 	public String getTitle() {
@@ -76,28 +93,12 @@ public class ItineraryDay extends BaseEntity {
 		this.meals = meals;
 	}
 
-	public Accommodation getAccommodation() {
-		return accommodation;
+	public List<Activity> getActivities() {
+		return activities;
 	}
 
-	public void setAccommodation(Accommodation accommodation) {
-		this.accommodation = accommodation;
-	}
-
-	public List<Long> getActivityIds() {
-		return activityIds;
-	}
-
-	public void setActivityIds(List<Long> activityIds) {
-		this.activityIds = activityIds;
-	}
-
-	public TravelPackage getTravelPackage() {
-		return travelPackage;
-	}
-
-	public void setTravelPackage(TravelPackage travelPackage) {
-		this.travelPackage = travelPackage;
+	public void setActivities(List<Activity> activities) {
+		this.activities = activities;
 	}
     
     

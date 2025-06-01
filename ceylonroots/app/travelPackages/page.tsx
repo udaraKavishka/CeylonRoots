@@ -151,7 +151,7 @@ const TravelPackages = () => {
                             Discover Sri Lanka Tours & Packages
                         </h1>
                         <p className="text-white text-xl max-w-2xl">
-                            Explore our carefully curated travel packages designed to showcase the best of Sri Lanka's
+                            Explore our carefully curated travel packages designed to showcase the best of Sri Lanka&apos;s
                             natural beauty, rich history, and vibrant culture.
                         </p>
                     </div>

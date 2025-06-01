@@ -2,11 +2,9 @@ package com.example.backend.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import com.example.backend.converter.StringListConverter;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,17 +12,24 @@ import lombok.*;
 @Entity
 @DiscriminatorValue("DESTINATION")
 @Data
-@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Destination extends TravelComponent {
-	@Convert(converter = StringListConverter.class)
-    @Column(columnDefinition = "JSON")
-    private List<String> attractions;
+	
+    private List<String> attractions = new ArrayList<>();
+    
+    @ManyToMany(mappedBy = "destinations")
+    private List<GalleryItem> galleryItems = new ArrayList<>();
+    
+  
 
+	
 	public Destination(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String name, String description,
-			String location, String imageUrl, BigDecimal price, Coordinates coordinates, Integer duration,
-			Set<String> tags, List<String> attractions) {
-		super(id, createdAt, updatedAt, name, description, location, imageUrl, price, coordinates, duration, tags);
+			String location, String imageUrl, BigDecimal price, Double lat, Double lng, Integer duration,
+			Set<String> tags, List<String> attractions, List<GalleryItem> galleryItems) {
+		super(id, createdAt, updatedAt, name, description, location, imageUrl, price, lat, lng, duration, tags);
 		this.attractions = attractions;
+		this.galleryItems = galleryItems;
 	}
 
 	public List<String> getAttractions() {
@@ -34,6 +39,6 @@ public class Destination extends TravelComponent {
 	public void setAttractions(List<String> attractions) {
 		this.attractions = attractions;
 	}
-	
-	
+    
+    
 }

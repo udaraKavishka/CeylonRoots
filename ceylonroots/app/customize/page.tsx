@@ -5,7 +5,7 @@ import { useToast } from '../components/ui/use-toast';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+// import Footer from '../components/Footer';
 import TravelPackageHeader from '../components/customize/TravelPackageHeader';
 import ComponentSelector from '../components/customize/ComponentSelector';
 import ItineraryTimeline from '../components/customize/ItineraryTimeline';
@@ -136,7 +136,6 @@ const CustomizePage = () => {
                 </div>
             </main>
 
-            <Footer />
         </div>
     );
 };
