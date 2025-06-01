@@ -88,7 +88,7 @@ const Navbar = () => {
                                                 )}
                                                 role="menuitem"
                                             >
-                                                {link.name}
+                                                {item.name}
                                             </Link>
                                         ))}
                                     </div>
@@ -118,7 +118,7 @@ const Navbar = () => {
                             className="ceylon-button-primary"
                             aria-label="Plan your trip with Ceylon Roots"
                         >
-                            <Link href="/plan-your-trip">Plan Your Trip</Link>
+                            <Link href="/packages">Plan Your Trip</Link>
                         </Button>
                     </div>
 
@@ -197,7 +197,7 @@ const Navbar = () => {
                                     className="ceylon-button-primary w-full"
                                     aria-label="Plan your trip with Ceylon Roots"
                                 >
-                                    <Link href="/plan-your-trip">Plan Your Trip</Link>
+                                    <Link href="/packages">Plan Your Trip</Link>
                                 </Button>
                             </div>
                         </div>
