@@ -1,7 +1,7 @@
 'use client';
 
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+// import Footer from '../components/Footer';
 import { Separator } from "../components/ui/separator";
 
 const TermsOfService = () => {
@@ -148,7 +148,6 @@ const TermsOfService = () => {
                     </div>
                 </div>
             </main>
-            <Footer />
         </div>
     );
 };

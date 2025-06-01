@@ -1,11 +1,12 @@
 // app/page.tsx
 import { Button } from "./components/ui/button";
-import { MapPin,Users, Palmtree, Compass, Camera } from 'lucide-react';
+import { MapPin, Users, Palmtree, Compass, Camera } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import FeaturedPackages from "./components/FeaturedPackages";
 import Testimonials from "./components/Testimonials";
 import BlogPreview from "./components/BlogPreview";
+import HeroSection from "./components/HeroSection";
 
 export default function HomePage() {
   const destinations = [
@@ -16,22 +17,22 @@ export default function HomePage() {
   ];
 
   const features = [
-    { 
+    {
       icon: <Compass className="h-10 w-10 text-ceylon-tea" />,
       title: "Personalized Itineraries",
       description: "Custom travel plans designed around your interests, timeline, and budget."
     },
-    { 
+    {
       icon: <Users className="h-10 w-10 text-ceylon-tea" />,
       title: "Expert Local Guides",
       description: "Knowledgeable guides who bring Sri Lanka's culture and history to life."
     },
-    { 
+    {
       icon: <Palmtree className="h-10 w-10 text-ceylon-tea" />,
       title: "Authentic Experiences",
       description: "Connect with local communities and traditions beyond typical tourist spots."
     },
-    { 
+    {
       icon: <Camera className="h-10 w-10 text-ceylon-tea" />,
       title: "Photographic Journeys",
       description: "Discover perfect photo opportunities at the island's most scenic locations."
@@ -40,6 +41,7 @@ export default function HomePage() {
 
   return (
     <>
+    <HeroSection />
 
       {/* Why Choose Us Section */}
       <section className="py-16 bg-white">
@@ -50,7 +52,7 @@ export default function HomePage() {
                 Discover Sri Lanka With <span className="text-ceylon-tea">Local Experts</span>
               </h2>
               <p className="text-gray-600 mb-8">
-                CeylonRoots creates immersive travel experiences that connect you with the authentic heart of Sri Lanka. 
+                CeylonRoots creates immersive travel experiences that connect you with the authentic heart of Sri Lanka.
                 Our local expertise and personalized approach ensure your journey is filled with meaningful discoveries.
               </p>
 
@@ -115,7 +117,7 @@ export default function HomePage() {
         </div>
       </section>
 
-        <FeaturedPackages />
+      <FeaturedPackages />
 
       {/* Popular Destinations Section */}
       <section className="py-16 bg-white">

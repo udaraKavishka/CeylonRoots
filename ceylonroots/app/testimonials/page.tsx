@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+// import Footer from '../components/Footer';
 import { Card, CardContent } from "../components/ui/card";
 import { Star } from 'lucide-react';
 
@@ -136,8 +136,6 @@ const Testimonials = () => {
                     </div>
                 </section>
             </main>
-
-            <Footer />
         </div>
     );
 };
