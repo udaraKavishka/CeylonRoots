@@ -101,39 +101,35 @@ export default function AboutPage() {
                     </section>
 
                     {/* Core Values Section */}
-                    <section className="mb-20" aria-labelledby="core-values">
-                        <h2 id="core-values" className="text-3xl font-bold text-ceylon-stone text-center mb-12">
-                            Our Core Values
-                        </h2>
+                    <section className="mb-20">
+                        <h2 className="text-3xl font-bold text-ceylon-stone text-center mb-12">Our Core Values</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                                <div className="bg-gray-50 p-6 rounded-lg border border-gray-100">
-                                    <h3 className="font-semibold text-xl mb-3 text-ceylon-tea">Authenticity</h3>
-                                    <p className="text-gray-700">
-                                        We showcase the real Sri Lanka with experiences that go beyond tourist clichés to reveal the heart of our culture.
-                                    </p>
-                                </div>
+                            <div className="bg-gray-50 p-6 rounded-lg border border-gray-100">
+                                <h3 className="font-semibold text-xl mb-3 text-ceylon-tea">Authenticity</h3>
+                                <p className="text-gray-700">
+                                    We showcase the real Sri Lanka with experiences that go beyond tourist clichés to reveal the heart of our culture.
+                                </p>
+                            </div>
 
-                                <div className="bg-gray-50 p-6 rounded-lg border border-gray-100">
-                                    <h3 className="font-semibold text-xl mb-3 text-ceylon-tea">Sustainability</h3>
-                                    <p className="text-gray-700">
-                                        We&#39;re committed to environmentally responsible practices and supporting conservation efforts across the island.
-                                    </p>
-                                </div>
+                            <div className="bg-gray-50 p-6 rounded-lg border border-gray-100">
+                                <h3 className="font-semibold text-xl mb-3 text-ceylon-tea">Sustainability</h3>
+                                <p className="text-gray-700">
+                                    We&apos;re committed to environmentally responsible practices and supporting conservation efforts across the island.
+                                </p>
+                            </div>
 
-                                <div className="bg-gray-50 p-6 rounded-lg border border-gray-100">
-                                    <h3 className="font-semibold text-xl mb-3 text-ceylon-tea">Community</h3>
-                                    <p className="text-gray-700">
-                                        We believe tourism should benefit local people through fair employment and community-based initiatives.
-                                    </p>
-                                </div>
+                            <div className="bg-gray-50 p-6 rounded-lg border border-gray-100">
+                                <h3 className="font-semibold text-xl mb-3 text-ceylon-tea">Community</h3>
+                                <p className="text-gray-700">
+                                    We believe tourism should benefit local people through fair employment and community-based initiatives.
+                                </p>
+                            </div>
 
-                                <div className="bg-gray-50 p-6 rounded-lg border border-gray-100">
-                                    <h3 className="font-semibold text-xl mb-3 text-ceylon-tea">Excellence</h3>
-                                    <p className="text-gray-700">
-                                        We strive for the highest standards in every aspect of our service, from planning to execution.
-                                    </p>
-                                </div>
+                            <div className="bg-gray-50 p-6 rounded-lg border border-gray-100">
+                                <h3 className="font-semibold text-xl mb-3 text-ceylon-tea">Excellence</h3>
+                                <p className="text-gray-700">
+                                    We strive for the highest standards in every aspect of our service, from planning to execution.
+                                </p>
                             </div>
                         </div>
                     </section>
