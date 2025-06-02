@@ -1,10 +1,17 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.TravelPackageRequest;
 import com.example.backend.exception.ResourceNotFoundException;
+import com.example.backend.model.Activity;
+import com.example.backend.model.Destination;
+import com.example.backend.model.ItineraryDay;
 import com.example.backend.model.TravelPackage;
+import com.example.backend.repository.ActivityRepository;
+import com.example.backend.repository.DestinationRepository;
 import com.example.backend.repository.TravelPackageRepository;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +27,9 @@ public class TravelPackageService {
     public TravelPackage create(TravelPackage travelPackage) {
         return repository.save(travelPackage);
     }
+    
+    
+
 
     public TravelPackage getById(Long id) {
         return repository.findById(id)
