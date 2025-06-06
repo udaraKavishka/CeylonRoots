@@ -4,6 +4,11 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.example.backend.dto.DestinationRequestDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,6 +17,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TravelPackage extends BaseEntity {
+	
     private String title;
     private String description;
     
@@ -26,18 +32,43 @@ public class TravelPackage extends BaseEntity {
     private Double rating;
     private Integer reviewCount;
 
+    
     @OneToMany(mappedBy = "travelPackage", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<ItineraryDay> itineraryDays = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(name = "package_destinations",
-        joinColumns = @JoinColumn(name = "package_id"),
-        inverseJoinColumns = @JoinColumn(name = "destination_id"))
-    private List<Destination> destinations = new ArrayList<>();
+//    @ManyToMany
+//    @JoinTable(name = "package_destinations",
+//        joinColumns = @JoinColumn(name = "package_id"),
+//        inverseJoinColumns = @JoinColumn(name = "destination_id"))
+//    private List<Destination> destinations = new ArrayList<>();
+    
+//    @ElementCollection
+//    @CollectionTable(name = "travel_package_destinations", joinColumns = @JoinColumn(name = "travel_package_id"))
+//    private List<DestinationRequestDTO> destinations = new ArrayList<>();
+    
+    private List<String> highlights= new ArrayList<>();
+    private List <String> gallery=new ArrayList<>();
+    private List<String> includes= new ArrayList<>();
+    private List<String> excludes = new ArrayList<>();
+    
+    
+    private List<String> destinations;
+    
+    
+	
+    
+    
+	public TravelPackage() {
+		
+	}
 
+	
+	
 	public TravelPackage(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String title, String description,
 			String imageUrl, Integer durationDays, BigDecimal price, Double rating, Integer reviewCount,
-			List<ItineraryDay> itineraryDays, List<Destination> destinations) {
+			List<ItineraryDay> itineraryDays, List<String> destinations, List<String> highlights, List<String> gallery,
+			List<String> includes, List<String> excludes) {
 		super(id, createdAt, updatedAt);
 		this.title = title;
 		this.description = description;
@@ -48,7 +79,13 @@ public class TravelPackage extends BaseEntity {
 		this.reviewCount = reviewCount;
 		this.itineraryDays = itineraryDays;
 		this.destinations = destinations;
+		this.highlights = highlights;
+		this.gallery = gallery;
+		this.includes = includes;
+		this.excludes = excludes;
 	}
+
+
 
 	public String getTitle() {
 		return title;
@@ -114,13 +151,63 @@ public class TravelPackage extends BaseEntity {
 		this.itineraryDays = itineraryDays;
 	}
 
-	public List<Destination> getDestinations() {
+	
+
+	
+
+
+	public List<String> getDestinations() {
 		return destinations;
 	}
 
-	public void setDestinations(List<Destination> destinations) {
+
+
+	public void setDestinations(List<String> destinations) {
 		this.destinations = destinations;
 	}
-    
+
+
+
+	public List<String> getHighlights() {
+		return highlights;
+	}
+
+	public void setHighlights(List<String> highlights) {
+		this.highlights = highlights;
+	}
+
+	public List<String> getGallery() {
+		return gallery;
+	}
+
+	public void setGallery(List<String> gallery) {
+		this.gallery = gallery;
+	}
+
+	public List<String> getIncludes() {
+		return includes;
+	}
+
+	public void setIncludes(List<String> includes) {
+		this.includes = includes;
+	}
+
+	public List<String> getExcludes() {
+		return excludes;
+	}
+
+	public void setExcludes(List<String> excludes) {
+		this.excludes = excludes;
+	}
+
+
+
+	
+
+
+
+	
+
+	
     
 }
