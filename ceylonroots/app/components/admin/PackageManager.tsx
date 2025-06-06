@@ -23,6 +23,17 @@ type TravelPackage = {
     rating?: number;
 };
 
+const initialFormState = {
+    title: '',
+    description: '',
+    image: '',
+    duration: '',
+    price: '',
+    regions: '',
+    themes: '',
+    highlights: ''
+};
+
 const PackageManager = () => {
     const [packages, setPackages] = useState<TravelPackage[]>([]);
     const [loading, setLoading] = useState(true);
@@ -30,17 +41,6 @@ const PackageManager = () => {
     const [editingPackage, setEditingPackage] = useState<string | null>(null);
     const { toast } = useToast();
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const initialFormState = {
-        title: '',
-        description: '',
-        image: '',
-        duration: '',
-        price: '',
-        regions: '',
-        themes: '',
-        highlights: ''
-    };
     const [formData, setFormData] = useState(initialFormState);
 
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -49,16 +49,13 @@ const PackageManager = () => {
         try {
             setLoading(true);
             const response = await fetch(`${API_BASE_URL}/packages`);
-
             if (!response.ok) {
                 throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
             }
-
             const data = await response.json();
 
             // Safely extract packages array from response
             let packagesArray: TravelPackage[] = [];
-
             if (Array.isArray(data)) {
                 packagesArray = data;
             } else if (data && Array.isArray(data.data)) {
@@ -66,8 +63,7 @@ const PackageManager = () => {
             } else if (data && Array.isArray(data.packages)) {
                 packagesArray = data.packages;
             }
-
-            setPackages(packagesArray);
+            setPackages(Array.isArray(packagesArray) ? packagesArray : []);
         } catch (error) {
             console.error("Fetch error:", error);
             toast({
@@ -75,7 +71,7 @@ const PackageManager = () => {
                 description: "Failed to fetch packages. Please try again later.",
                 variant: "destructive"
             });
-            setPackages([]); // Ensure we always have an array
+            setPackages([]);
         } finally {
             setLoading(false);
         }
@@ -83,9 +79,10 @@ const PackageManager = () => {
 
     useEffect(() => {
         fetchPackages();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const createPackage = async (packageData: any) => {
+    const createPackage = async (packageData: Partial<TravelPackage>) => {
         const response = await fetch(`${API_BASE_URL}/packages`, {
             method: 'POST',
             headers: {
@@ -108,7 +105,7 @@ const PackageManager = () => {
         }
     };
 
-    const updatePackage = async (id: string, packageData: any) => {
+    const updatePackage = async (id: string, packageData: Partial<TravelPackage>) => {
         const response = await fetch(`${API_BASE_URL}/packages/${id}`, {
             method: 'PUT',
             headers: {
@@ -131,14 +128,16 @@ const PackageManager = () => {
                 ...formData,
                 duration: Number(formData.duration),
                 price: Number(formData.price),
-                regions: formData.regions.split(',').map(s => s.trim()),
-                themes: formData.themes.split(',').map(s => s.trim()),
-                highlights: formData.highlights.split(',').map(s => s.trim())
+                regions: formData.regions.split(',').map(s => s.trim()).filter(Boolean),
+                themes: formData.themes.split(',').map(s => s.trim()).filter(Boolean),
+                highlights: formData.highlights.split(',').map(s => s.trim()).filter(Boolean)
             };
 
             if (editingPackage) {
                 const updatedPackage = await updatePackage(editingPackage, packageData);
-                setPackages(packages.map(p => p.id === editingPackage ? updatedPackage : p));
+                setPackages(prev =>
+                    prev.map(p => p.id === editingPackage ? updatedPackage : p)
+                );
                 toast({ title: "Package updated", description: "Travel package updated successfully." });
             } else {
                 const newPackage = await createPackage(packageData);
@@ -206,15 +205,11 @@ const PackageManager = () => {
     // Safely render packages
     const renderPackages = () => {
         if (!Array.isArray(packages)) {
-            console.error("Packages is not an array:", packages);
             return (
                 <Card>
                     <CardContent className="py-12 text-center">
                         <p className="text-red-500">Data format error. Failed to load packages.</p>
-                        <Button
-                            className="mt-4"
-                            onClick={fetchPackages}
-                        >
+                        <Button className="mt-4" onClick={fetchPackages}>
                             Retry Loading Packages
                         </Button>
                     </CardContent>
@@ -299,7 +294,7 @@ const PackageManager = () => {
             <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold">Travel Packages</h2>
                 <Button
-                    onClick={() => setIsCreating(true)}
+                    onClick={() => { setIsCreating(true); setEditingPackage(null); setFormData(initialFormState); }}
                     className="flex items-center gap-2"
                     disabled={isSubmitting}
                 >
