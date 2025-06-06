@@ -1,6 +1,11 @@
 package com.example.backend.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,62 +14,137 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DestinationDetails extends BaseEntity {
-    @OneToOne
-    @JoinColumn(name = "destination_id")
-    private Destination destination;
-
+    
+	private String name;
+	private String description;
     private String region;
     private String topAttraction;
     private String bestTimeToVisit;
     private String recommendedDuration;
     private String culturalTips;
-	public DestinationDetails(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, Destination destination,
-			String region, String topAttraction, String bestTimeToVisit, String recommendedDuration,
-			String culturalTips) {
+	
+    @ElementCollection @CollectionTable(name = "destination_attraction")
+    private List<String> attractions = new ArrayList<>();
+    
+    private Coordinates coordinates;
+//    @ManyToMany(mappedBy = "destinationDetails")
+//    private Set<TravelPackage> packages = new HashSet<>();
+    
+    
+	public DestinationDetails() {
+		
+	}
+
+
+	public DestinationDetails(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String name,
+			String description, String region, String topAttraction, String bestTimeToVisit, String recommendedDuration,
+			String culturalTips, List<String> attractions, Coordinates coordinates) {
 		super(id, createdAt, updatedAt);
-		this.destination = destination;
+		this.name = name;
+		this.description = description;
 		this.region = region;
 		this.topAttraction = topAttraction;
 		this.bestTimeToVisit = bestTimeToVisit;
 		this.recommendedDuration = recommendedDuration;
 		this.culturalTips = culturalTips;
+		this.attractions = attractions;
+		this.coordinates = coordinates;
+		
 	}
-	public Destination getDestination() {
-		return destination;
+
+
+	public String getName() {
+		return name;
 	}
-	public void setDestination(Destination destination) {
-		this.destination = destination;
+
+
+	public void setName(String name) {
+		this.name = name;
 	}
+
+
+	public String getDescription() {
+		return description;
+	}
+
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+
 	public String getRegion() {
 		return region;
 	}
+
+
 	public void setRegion(String region) {
 		this.region = region;
 	}
+
+
 	public String getTopAttraction() {
 		return topAttraction;
 	}
+
+
 	public void setTopAttraction(String topAttraction) {
 		this.topAttraction = topAttraction;
 	}
+
+
 	public String getBestTimeToVisit() {
 		return bestTimeToVisit;
 	}
+
+
 	public void setBestTimeToVisit(String bestTimeToVisit) {
 		this.bestTimeToVisit = bestTimeToVisit;
 	}
+
+
 	public String getRecommendedDuration() {
 		return recommendedDuration;
 	}
+
+
 	public void setRecommendedDuration(String recommendedDuration) {
 		this.recommendedDuration = recommendedDuration;
 	}
+
+
 	public String getCulturalTips() {
 		return culturalTips;
 	}
+
+
 	public void setCulturalTips(String culturalTips) {
 		this.culturalTips = culturalTips;
 	}
+
+
+	public List<String> getAttractions() {
+		return attractions;
+	}
+
+
+	public void setAttractions(List<String> attractions) {
+		this.attractions = attractions;
+	}
+
+
+	public Coordinates getCoordinates() {
+		return coordinates;
+	}
+
+
+	public void setCoordinates(Coordinates coordinates) {
+		this.coordinates = coordinates;
+	}
+
+
+	
+    
     
     
 }
