@@ -1,83 +1,123 @@
 package com.example.backend.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import java.util.List;
+import java.util.Set;
 
+import com.example.backend.model.ActivityData;
+import com.example.backend.model.MealType;
+
+import lombok.Data;
+
+@Data
 public class ItineraryDayRequest {
-    @NotBlank(message = "Title is required")
-    @Size(max = 100, message = "Title must be less than 100 characters")
+    private Integer dayNumber;
     private String title;
-
-    @Size(max = 200, message = "Location must be less than 200 characters")
-    private String location;
-
-    @Size(max = 1000, message = "Description must be less than 1000 characters")
+    private String mainTown;
     private String description;
+    private List<String> accommodation;
+    private Set<MealType> meals;
+    private List<ActivityData> activities;
+    
+    
+	
 
-    @Size(max = 200, message = "Accommodation must be less than 200 characters")
-    private String accommodation;
 
-    @Size(max = 200, message = "Meals must be less than 200 characters")
-    private String meals;
-
-	public ItineraryDayRequest(
-			@NotBlank(message = "Title is required") @Size(max = 100, message = "Title must be less than 100 characters") String title,
-			@Size(max = 200, message = "Location must be less than 200 characters") String location,
-			@Size(max = 1000, message = "Description must be less than 1000 characters") String description,
-			@Size(max = 200, message = "Accommodation must be less than 200 characters") String accommodation,
-			@Size(max = 200, message = "Meals must be less than 200 characters") String meals) {
+	public ItineraryDayRequest(Integer dayNumber, String title, String mainTown, String description,
+			List<String> accommodation, Set<MealType> meals, List<ActivityData> activities) {
 		super();
+		this.dayNumber = dayNumber;
 		this.title = title;
-		this.location = location;
+		this.mainTown = mainTown;
 		this.description = description;
 		this.accommodation = accommodation;
 		this.meals = meals;
+		this.activities = activities;
 	}
 
-	public ItineraryDayRequest() {
-		super();
+
+	public Integer getDayNumber() {
+		return dayNumber;
 	}
+
+
+	public void setDayNumber(Integer dayNumber) {
+		this.dayNumber = dayNumber;
+	}
+
 
 	public String getTitle() {
 		return title;
 	}
 
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
 
-	public String getLocation() {
-		return location;
+
+	public String getMainTown() {
+		return mainTown;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
+
+	public void setMainTown(String mainTown) {
+		this.mainTown = mainTown;
 	}
+
 
 	public String getDescription() {
 		return description;
 	}
 
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
-	public String getAccommodation() {
+
+	
+
+
+	public List<String> getAccommodation() {
 		return accommodation;
 	}
 
-	public void setAccommodation(String accommodation) {
+
+	public void setAccommodation(List<String> accommodation) {
 		this.accommodation = accommodation;
 	}
 
-	public String getMeals() {
+
+	public Set<MealType> getMeals() {
 		return meals;
 	}
 
-	public void setMeals(String meals) {
+
+	public void setMeals(Set<MealType> meals) {
 		this.meals = meals;
 	}
 
+
+	public List<ActivityData> getactivities() {
+		return activities;
+	}
+
+
+	public void setactivities(List<ActivityData> activities) {
+		this.activities = activities;
+	}
+
+	
+	
+
+	
+	
+	
+
+
+
+
     
+
     
 }

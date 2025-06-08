@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.TravelPackageRequest;
 import com.example.backend.model.TravelPackage;
 import com.example.backend.service.TravelPackageService;
 
@@ -18,10 +19,17 @@ public class TravelPackageController {
         this.service = service;
     }
 
+//    @PostMapping
+//    public ResponseEntity<TravelPackage> create(@RequestBody TravelPackage travelPackage) {
+//        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(travelPackage));
+//    }
+    
     @PostMapping
-    public ResponseEntity<TravelPackage> create(@RequestBody TravelPackage travelPackage) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(travelPackage));
+    public ResponseEntity<TravelPackage> createPackage(@RequestBody TravelPackageRequest request) {
+        TravelPackage created = service.createPackage(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
+    
 
     @GetMapping("/{id}")
     public ResponseEntity<TravelPackage> getById(@PathVariable Long id) {

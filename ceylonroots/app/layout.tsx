@@ -7,6 +7,7 @@ import Footer from "./components/Footer";
 // import { Toaster } from './components/ui/toaster';
 // import { Toaster as Sonner } from "./components/ui/sonner";
 import { TooltipProvider } from "./components/ui/tooltip";
+import { UserProvider } from "./contexts/UserContext";
 // import NotFound from './not-found';
 // import { ErrorBoundary } from 'next/dist/client/components/error-boundary';
 
@@ -23,23 +24,6 @@ export const metadata: Metadata = {
     "custom packages",
     "luxury tours",
   ],
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: "https://ceylonroots.com",
-    siteName: "CeylonRoots",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    creator: "@ceylonroots",
-  },
 };
 
 export default function RootLayout({
@@ -51,13 +35,16 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <TooltipProvider delayDuration={300}>
-          <Navbar />
-          <main className="min-h-screen">{children}</main>
-          <Footer />
-          {/* <Toaster /> */}
-          {/* <Sonner /> */}
+          <UserProvider>
+            <Navbar />
+            <main className="min-h-screen">{children}</main>
+            <Footer />
+            {/* <Toaster /> */}
+            {/* <Sonner /> */}
+          </UserProvider>
         </TooltipProvider>
       </body>
     </html>
   );
 }
+// 
