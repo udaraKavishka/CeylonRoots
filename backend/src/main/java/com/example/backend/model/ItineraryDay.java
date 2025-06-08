@@ -21,14 +21,15 @@ public class ItineraryDay extends BaseEntity {
     @JsonBackReference
     private TravelPackage travelPackage;
 
-    @ManyToOne
-    @JoinColumn(name = "accommodation_id")
-    private Accommodation accommodation;
+//    @ManyToOne
+//    @JoinColumn(name = "accommodation_id")
+//    private Accommodation accommodation;
 
     private String title;
     private Integer dayNumber;
     private String mainTown;
     private String description;
+    private List<String> accommodation;
     
     @ElementCollection(targetClass = MealType.class)             
     @Enumerated(EnumType.STRING)
@@ -54,7 +55,7 @@ public class ItineraryDay extends BaseEntity {
 	
 	
 	public ItineraryDay(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, TravelPackage travelPackage,
-			Accommodation accommodation, String title, Integer dayNumber, String mainTown, String description,
+			List<String> accommodation, String title, Integer dayNumber, String mainTown, String description,
 			Set<MealType> meals, List<ActivityData> activities) {
 		super(id, createdAt, updatedAt);
 		this.travelPackage = travelPackage;
@@ -78,11 +79,11 @@ public class ItineraryDay extends BaseEntity {
 		this.travelPackage = travelPackage;
 	}
 
-	public Accommodation getAccommodation() {
+	public List<String> getAccommodation() {
 		return accommodation;
 	}
 
-	public void setAccommodation(Accommodation accommodation) {
+	public void setAccommodation(List<String> accommodation) {
 		this.accommodation = accommodation;
 	}
 
