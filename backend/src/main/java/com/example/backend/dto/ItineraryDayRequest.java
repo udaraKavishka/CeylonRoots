@@ -14,21 +14,24 @@ public class ItineraryDayRequest {
     private String title;
     private String mainTown;
     private String description;
-    private Long accommodationId;
+    private List<String> accommodation;
     private Set<MealType> meals;
-    private List<ActivityData> activity;
+    private List<ActivityData> activities;
     
     
+	
+
+
 	public ItineraryDayRequest(Integer dayNumber, String title, String mainTown, String description,
-			Long accommodationId, Set<MealType> meals, List<ActivityData> activity) {
+			List<String> accommodation, Set<MealType> meals, List<ActivityData> activities) {
 		super();
 		this.dayNumber = dayNumber;
 		this.title = title;
 		this.mainTown = mainTown;
 		this.description = description;
-		this.accommodationId = accommodationId;
+		this.accommodation = accommodation;
 		this.meals = meals;
-		this.activity = activity;
+		this.activities = activities;
 	}
 
 
@@ -72,13 +75,16 @@ public class ItineraryDayRequest {
 	}
 
 
-	public Long getAccommodationId() {
-		return accommodationId;
+	
+
+
+	public List<String> getAccommodation() {
+		return accommodation;
 	}
 
 
-	public void setAccommodationId(Long accommodationId) {
-		this.accommodationId = accommodationId;
+	public void setAccommodation(List<String> accommodation) {
+		this.accommodation = accommodation;
 	}
 
 
@@ -92,13 +98,13 @@ public class ItineraryDayRequest {
 	}
 
 
-	public List<ActivityData> getActivity() {
-		return activity;
+	public List<ActivityData> getactivities() {
+		return activities;
 	}
 
 
-	public void setActivity(List<ActivityData> activity) {
-		this.activity = activity;
+	public void setactivities(List<ActivityData> activities) {
+		this.activities = activities;
 	}
 
 	
