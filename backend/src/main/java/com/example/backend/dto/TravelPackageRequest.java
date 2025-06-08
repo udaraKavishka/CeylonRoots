@@ -1,75 +1,38 @@
-package com.example.backend.model;
+package com.example.backend.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-import com.example.backend.dto.DestinationRequestDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.example.backend.model.DestinationData;
 
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
 
-@Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class TravelPackage extends BaseEntity {
-	
-    private String title;
+public class TravelPackageRequest {
+	private String title;
     private String description;
-    
-    @Column(name = "image_url")
     private String imageUrl;
-    
     private Integer durationDays;
-    
-    @Column(precision = 10, scale = 2)
     private BigDecimal price;
-    
     private Double rating;
     private Integer reviewCount;
-
-    
-    @OneToMany(mappedBy = "travelPackage", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<ItineraryDay> itineraryDays = new ArrayList<>();
-
-//    @ManyToMany
-//    @JoinTable(name = "package_destinations",
-//        joinColumns = @JoinColumn(name = "package_id"),
-//        inverseJoinColumns = @JoinColumn(name = "destination_id"))
-//    private List<Destination> destinations = new ArrayList<>();
-    
-//    @ElementCollection
-//    @CollectionTable(name = "travel_package_destinations", joinColumns = @JoinColumn(name = "travel_package_id"))
-//    private List<DestinationRequestDTO> destinations = new ArrayList<>();
-    
-    private List<String> highlights= new ArrayList<>();
-    private List <String> gallery=new ArrayList<>();
-    private List<String> includes= new ArrayList<>();
-    private List<String> excludes = new ArrayList<>();
-    
     
     private List<String> destinations;
-    
-    
-	
-    
-    
-	public TravelPackage() {
-		
-	}
+    private List<String> highlights;
+    private List<String> gallery;
+    private List<String> includes;
+    private List<String> excludes;
+
+    private List<ItineraryDayRequest> itineraryDays;
 
 	
-	
-	public TravelPackage(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String title, String description,
-			String imageUrl, Integer durationDays, BigDecimal price, Double rating, Integer reviewCount,
-			List<ItineraryDay> itineraryDays, List<String> destinations, List<String> highlights, List<String> gallery,
-			List<String> includes, List<String> excludes) {
-		super(id, createdAt, updatedAt);
+    
+    
+	public TravelPackageRequest(String title, String description, String imageUrl, Integer durationDays,
+			BigDecimal price, Double rating, Integer reviewCount, List<String> destinations,
+			List<String> highlights, List<String> gallery, List<String> includes, List<String> excludes,
+			List<ItineraryDayRequest> itineraryDays) {
+		super();
 		this.title = title;
 		this.description = description;
 		this.imageUrl = imageUrl;
@@ -77,15 +40,13 @@ public class TravelPackage extends BaseEntity {
 		this.price = price;
 		this.rating = rating;
 		this.reviewCount = reviewCount;
-		this.itineraryDays = itineraryDays;
 		this.destinations = destinations;
 		this.highlights = highlights;
 		this.gallery = gallery;
 		this.includes = includes;
 		this.excludes = excludes;
+		this.itineraryDays = itineraryDays;
 	}
-
-
 
 	public String getTitle() {
 		return title;
@@ -143,30 +104,14 @@ public class TravelPackage extends BaseEntity {
 		this.reviewCount = reviewCount;
 	}
 
-	public List<ItineraryDay> getItineraryDays() {
-		return itineraryDays;
-	}
-
-	public void setItineraryDays(List<ItineraryDay> itineraryDays) {
-		this.itineraryDays = itineraryDays;
-	}
-
-	
-
-	
-
 
 	public List<String> getDestinations() {
 		return destinations;
 	}
 
-
-
 	public void setDestinations(List<String> destinations) {
 		this.destinations = destinations;
 	}
-
-
 
 	public List<String> getHighlights() {
 		return highlights;
@@ -200,14 +145,19 @@ public class TravelPackage extends BaseEntity {
 		this.excludes = excludes;
 	}
 
+	public List<ItineraryDayRequest> getItineraryDays() {
+		return itineraryDays;
+	}
 
+	public void setItineraryDays(List<ItineraryDayRequest> itineraryDays) {
+		this.itineraryDays = itineraryDays;
+	}
+    
+    
 
-	
-
-
-
-	
-
-	
     
 }
+	
+	
+    
+    

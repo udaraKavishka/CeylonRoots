@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+// import Footer from '../components/Footer';
 import { Button } from '../components/ui/button';
 // import { useToast } from '../components/ui/use-toast';
 import PackageFilter from '../components/packages/PackageFilter';
@@ -214,7 +214,6 @@ const TravelPackages = () => {
                 />
             )}
 
-            <Footer />
         </div>
     );
 };

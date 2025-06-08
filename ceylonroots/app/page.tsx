@@ -41,7 +41,7 @@ export default function HomePage() {
 
   return (
     <>
-    <HeroSection />
+      <HeroSection />
 
       {/* Why Choose Us Section */}
       <section className="py-16 bg-white">
@@ -79,7 +79,7 @@ export default function HomePage() {
               <div className="space-y-4">
                 <div className="rounded-lg overflow-hidden shadow-lg relative aspect-video">
                   <Image
-                    src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    src="/images/home/whychoose1.jpg"
                     alt="Sri Lanka Scenery"
                     fill
                     className="object-cover"
@@ -87,7 +87,7 @@ export default function HomePage() {
                 </div>
                 <div className="rounded-lg overflow-hidden shadow-lg relative aspect-square">
                   <Image
-                    src="https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    src="/images/home/whychoose2.jpg"
                     alt="Sri Lanka Culture"
                     fill
                     className="object-cover"
@@ -97,7 +97,7 @@ export default function HomePage() {
               <div className="space-y-4 pt-6">
                 <div className="rounded-lg overflow-hidden shadow-lg relative aspect-square">
                   <Image
-                    src="https://images.unsplash.com/photo-1465379944081-7f47de8d74ac?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    src="/images/home/whychoose3.jpg"
                     alt="Sri Lanka Wildlife"
                     fill
                     className="object-cover"
@@ -105,7 +105,7 @@ export default function HomePage() {
                 </div>
                 <div className="rounded-lg overflow-hidden shadow-lg relative aspect-video">
                   <Image
-                    src="https://images.unsplash.com/photo-1466442929976-97f336a657be?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    src="/images/home/whychoose4.jpg"
                     alt="Sri Lanka Temples"
                     fill
                     className="object-cover"
@@ -177,7 +177,7 @@ export default function HomePage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" className="ceylon-button-primary" asChild>
-                  <Link href="/custom-trip">Plan Your Custom Trip</Link>
+                  <Link href="/customize">Plan Your Custom Trip</Link>
                 </Button>
                 <Button size="lg" variant="outline" className="border-ceylon-tea text-ceylon-tea hover:bg-ceylon-tea hover:text-white" asChild>
                   <Link href="/packages">Explore Travel Packages</Link>

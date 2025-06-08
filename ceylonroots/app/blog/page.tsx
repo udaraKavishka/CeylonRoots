@@ -1,3 +1,7 @@
+'use client';
+
+import { useState } from 'react';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import {
     Breadcrumb,
@@ -9,6 +13,7 @@ import {
 } from "../components/ui/breadcrumb";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
 import BlogCard from '../components/blog/BlogCard';
+import BlogPost from '../components/blog/BlogPost';
 import { blogPosts } from '../data/blogPosts';
 
 const categories = [
@@ -19,19 +24,34 @@ const categories = [
     { id: 'stories', name: 'Traveler Stories' }
 ];
 
-export default function BlogPage({
-    searchParams,
-}: {
-    searchParams?: { [key: string]: string | string[] | undefined };
-}) {
-    const activeCategory = searchParams?.category || 'all';
+const Blog = () => {
+    const params = useParams();
+    const id = Array.isArray(params.id) ? params.id[0] : params.id;
+    const [activeCategory, setActiveCategory] = useState('all');
 
-    // Filter posts based on category
+    // If an ID is provided, show the full blog post
+    if (id) {
+        const post = blogPosts.find(post => post.id.toString() === id);
+
+        if (!post) {
+            return (
+                <div className="ceylon-container py-20">
+                    <h1 className="text-3xl font-bold mb-6">Blog Post Not Found</h1>
+                    <p>The blog post you&apos;re looking for doesn&apos;t exist or has been removed.</p>
+                    <Link href="/blog" className="text-ceylon-tea hover:underline mt-4 inline-block">
+                        ← Back to all blog posts
+                    </Link>
+                </div>
+            );
+        }
+
+        return <BlogPost params={{ id: id }} />;
+    }
+
+    // Filter posts by category if not "all"
     const filteredPosts = activeCategory === 'all'
         ? blogPosts
-        : blogPosts.filter(post =>
-            post.category.toLowerCase().includes(activeCategory.toString().toLowerCase())
-        );
+        : blogPosts.filter(post => post.category.toLowerCase().includes(activeCategory));
 
     return (
         <div className="bg-white">
@@ -56,9 +76,9 @@ export default function BlogPage({
                     <Breadcrumb>
                         <BreadcrumbList>
                             <BreadcrumbItem>
-                                <Link href="/" passHref legacyBehavior>
-                                    <BreadcrumbLink>Home</BreadcrumbLink>
-                                </Link>
+                                <BreadcrumbLink href="/" asChild>
+                                    <Link href="/">Home</Link>
+                                </BreadcrumbLink>
                             </BreadcrumbItem>
                             <BreadcrumbSeparator />
                             <BreadcrumbItem>
@@ -71,23 +91,17 @@ export default function BlogPage({
 
             {/* Blog Content */}
             <div className="ceylon-container py-12">
-                <Tabs defaultValue="all" className="w-full"
-                    value={activeCategory.toString()}>
+                <Tabs defaultValue="all" className="w-full" onValueChange={setActiveCategory}>
                     <div className="flex justify-center mb-10">
                         <TabsList className="bg-gray-100">
                             {categories.map(category => (
-                                <Link
+                                <TabsTrigger
                                     key={category.id}
-                                    href={`/blog?category=${category.id}`}
-                                    scroll={false}
+                                    value={category.id}
+                                    className="px-5 py-2 data-[state=active]:bg-ceylon-tea data-[state=active]:text-white"
                                 >
-                                    <TabsTrigger
-                                        value={category.id}
-                                        className="px-5 py-2 data-[state=active]:bg-ceylon-tea data-[state=active]:text-white"
-                                    >
-                                        {category.name}
-                                    </TabsTrigger>
-                                </Link>
+                                    {category.name}
+                                </TabsTrigger>
                             ))}
                         </TabsList>
                     </div>
@@ -111,4 +125,6 @@ export default function BlogPage({
             </div>
         </div>
     );
-}
+};
+
+export default Blog;
