@@ -49,7 +49,7 @@ public class TravelPackageService {
         travelPackage.setGallery(request.getGallery());
         travelPackage.setIncludes(request.getIncludes());
         travelPackage.setExcludes(request.getExcludes());
-        travelPackage.setDestinations(request.getDestinations()); // names only
+        travelPackage.setDestinations(request.getDestinations()); 
 
         // Build itinerary days
         List<ItineraryDay> itineraryDays = new ArrayList<>();
@@ -64,8 +64,8 @@ public class TravelPackageService {
                 itinerary.setTravelPackage(travelPackage);
 
                 
-                if (itineraryDTO.getActivity() != null) {
-                    List<ActivityData> activities = itineraryDTO.getActivity().stream()
+                if (itineraryDTO.getactivities() != null) {
+                    List<ActivityData> activities = itineraryDTO.getactivities().stream()
                         .map(dto -> {
                             ActivityData activity = new ActivityData();
                             activity.setName(dto.getName());
