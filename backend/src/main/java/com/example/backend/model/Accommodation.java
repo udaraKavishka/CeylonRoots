@@ -25,7 +25,9 @@ public class Accommodation extends TravelComponent {
 
     private Double rating;
 
-	
+    public Accommodation() {
+		
+	}
 	
 	public Accommodation(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String name, String description,
 			String location, String imageUrl, BigDecimal price, Double lat, Double lng, Integer duration,
@@ -37,9 +39,7 @@ public class Accommodation extends TravelComponent {
 
 
 
-	public Accommodation() {
-		
-	}
+	
 
 
 
