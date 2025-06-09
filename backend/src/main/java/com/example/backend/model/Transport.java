@@ -26,7 +26,9 @@ public class Transport extends TravelComponent {
     private Double arrivalLat;
     private Double arrivalLng;
 	
-    
+    public Transport() {
+    	
+    }
     
     
 	public Transport(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String name, String description,
