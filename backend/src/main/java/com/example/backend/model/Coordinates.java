@@ -3,32 +3,43 @@ package com.example.backend.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Embeddable
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor 
 @AllArgsConstructor
 public class Coordinates {
-	private Double lat;
-    private Double lng;
-	public Coordinates(Double lat, Double lng) {
+	private Double latitude;
+    private Double longitude;
+    
+    
+    public Coordinates() {
+    	
+    }
+    
+	public Coordinates(Double latitude, Double longitude) {
 		super();
-		this.lat = lat;
-		this.lng = lng;
+		this.latitude = latitude;
+		this.longitude = longitude;
 	}
-	public Double getLat() {
-		return lat;
+	public Double getLatitude() {
+		return latitude;
 	}
-	public void setLat(Double lat) {
-		this.lat = lat;
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
 	}
-	public Double getLng() {
-		return lng;
+	public Double getLongitude() {
+		return longitude;
 	}
-	public void setLng(Double lng) {
-		this.lng = lng;
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
 	}
+
+    
     
     
 }
