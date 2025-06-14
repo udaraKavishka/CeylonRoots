@@ -10,7 +10,7 @@ import { Package, MapPin, FileText, Images, MessageSquare, Calendar, Map } from 
 import PackageManager from '../components/admin/PackageManager';
 import DestinationManager from '../components/admin/DestinationManager';
 import BlogManager from '../components/admin/BlogManager';
-import GalleryManager from '../components/admin/GalleryManager';
+// import GalleryManager from '../components/admin/GalleryManager';
 import TestimonialsManager from '../components/admin/TestimonialsManager';
 import ItineraryManager from '../components/admin/ItineraryManager';
 import TravelComponentManager from '../components/admin/TravelComponentManager';
@@ -64,7 +64,7 @@ const Admin = () => {
                         </CardHeader>
                         <CardContent>
                             <Tabs value={activeTab} onValueChange={setActiveTab}>
-                                <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-1">
+                                {/* <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-1">
                                     <TabsTrigger value="packages" className="flex items-center gap-1 py-1 text-xs">
                                         <Package className="h-3 w-3 sm:h-4 sm:w-4" />
                                         <span className="truncate">Packages</span>
@@ -93,7 +93,7 @@ const Admin = () => {
                                         <Map className="h-3 w-3 sm:h-4 sm:w-4" />
                                         <span className="truncate">Components</span>
                                     </TabsTrigger>
-                                </TabsList>
+                                </TabsList> */}
 
                                 <TabsContent value="packages" className="mt-6">
                                     <PackageManager />
@@ -107,9 +107,9 @@ const Admin = () => {
                                     <BlogManager />
                                 </TabsContent>
 
-                                <TabsContent value="gallery" className="mt-6">
+                                {/* <TabsContent value="gallery" className="mt-6">
                                     <GalleryManager />
-                                </TabsContent>
+                                </TabsContent> */}
 
                                 <TabsContent value="testimonials" className="mt-6">
                                     <TestimonialsManager />
