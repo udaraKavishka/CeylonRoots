@@ -45,7 +45,7 @@ const initialFormState = {
   lng: ''
 };
 
-const API_BASE_URL = 'process.env.NEXT_PUBLIC_API_BASE_URL/destination-details';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const DestinationManager = () => {
   const [destinations, setDestinations] = useState<Destination[]>([]);
@@ -59,7 +59,7 @@ const DestinationManager = () => {
   const fetchDestinations = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch(API_BASE_URL);
+      const response = await fetch(`${API_BASE_URL}/destinationdetail`);
 
       if (!response.ok) {
         throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
@@ -84,7 +84,7 @@ const DestinationManager = () => {
   }, [fetchDestinations]);
 
   const createDestination = async (destinationData: Partial<Destination>) => {
-    const response = await fetch(API_BASE_URL, {
+    const response = await fetch(`${API_BASE_URL}/destinationdetail`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(destinationData)
@@ -94,7 +94,7 @@ const DestinationManager = () => {
   };
 
   const updateDestination = async (id: string, destinationData: Partial<Destination>) => {
-    const response = await fetch(`${API_BASE_URL}/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/destinationdetail/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(destinationData)
@@ -104,7 +104,7 @@ const DestinationManager = () => {
   };
 
   const deleteDestination = async (id: string) => {
-    const response = await fetch(`${API_BASE_URL}/${id}`, { method: 'DELETE' });
+    const response = await fetch(`${API_BASE_URL}/destinationdetail/${id}`, { method: 'DELETE' });
     if (!response.ok) throw new Error(`Failed to delete destination: ${response.status}`);
   };
 
