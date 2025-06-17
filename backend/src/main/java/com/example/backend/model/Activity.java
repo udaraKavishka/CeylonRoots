@@ -25,7 +25,9 @@ public class Activity extends TravelComponent {
     @ManyToMany(mappedBy = "activities")
     private List<GalleryItem> galleryItems = new ArrayList<>();
 
-	
+	public Activity() {
+		
+	}
 
 	
 

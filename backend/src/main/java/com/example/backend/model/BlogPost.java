@@ -36,6 +36,10 @@ public class BlogPost extends BaseEntity {
         joinColumns = @JoinColumn(name = "post_id"),
         inverseJoinColumns = @JoinColumn(name = "related_post_id"))
     private List<BlogPost> relatedPosts = new ArrayList<>();
+    
+    public BlogPost() {
+    	
+    }
 
 	public BlogPost(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String title, String excerpt,
 			String content, String imageUrl, LocalDate postDate, String author, String category, Integer commentCount,

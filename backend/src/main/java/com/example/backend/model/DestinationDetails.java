@@ -22,10 +22,12 @@ public class DestinationDetails extends BaseEntity {
     private String bestTimeToVisit;
     private String recommendedDuration;
     private String culturalTips;
+    private String image;
 	
     @ElementCollection @CollectionTable(name = "destination_attraction")
     private List<String> attractions = new ArrayList<>();
     
+    @Embedded
     private Coordinates coordinates;
 //    @ManyToMany(mappedBy = "destinationDetails")
 //    private Set<TravelPackage> packages = new HashSet<>();
@@ -36,21 +38,27 @@ public class DestinationDetails extends BaseEntity {
 	}
 
 
-	public DestinationDetails(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String name,
-			String description, String region, String topAttraction, String bestTimeToVisit, String recommendedDuration,
-			String culturalTips, List<String> attractions, Coordinates coordinates) {
-		super(id, createdAt, updatedAt);
-		this.name = name;
-		this.description = description;
-		this.region = region;
-		this.topAttraction = topAttraction;
-		this.bestTimeToVisit = bestTimeToVisit;
-		this.recommendedDuration = recommendedDuration;
-		this.culturalTips = culturalTips;
-		this.attractions = attractions;
-		this.coordinates = coordinates;
-		
-	}
+
+
+
+	public DestinationDetails(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String name, String description,
+		String region, String topAttraction, String bestTimeToVisit, String recommendedDuration, String culturalTips,
+		String image, List<String> attractions, Coordinates coordinates) {
+	super(id, createdAt, updatedAt);
+	this.name = name;
+	this.description = description;
+	this.region = region;
+	this.topAttraction = topAttraction;
+	this.bestTimeToVisit = bestTimeToVisit;
+	this.recommendedDuration = recommendedDuration;
+	this.culturalTips = culturalTips;
+	this.image = image;
+	this.attractions = attractions;
+	this.coordinates = coordinates;
+}
+
+
+
 
 
 	public String getName() {
@@ -140,6 +148,22 @@ public class DestinationDetails extends BaseEntity {
 
 	public void setCoordinates(Coordinates coordinates) {
 		this.coordinates = coordinates;
+	}
+
+
+
+
+
+	public String getImage() {
+		return image;
+	}
+
+
+
+
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 
