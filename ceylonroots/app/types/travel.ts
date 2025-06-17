@@ -1,6 +1,11 @@
-export type ComponentType = 'accommodation' | 'destination' | 'activity' | 'transport';
+export type ComponentType = 'accommodations' | 'destination' | 'activities' | 'transport';
 
-export interface TravelComponent {
+export type Coordinates = {
+    lat: number;
+    lng: number;
+};
+
+export type BaseTravelComponent = {
     id: string;
     type: ComponentType;
     name: string;
@@ -8,45 +13,45 @@ export interface TravelComponent {
     location: string;
     image: string;
     price: number;
-    coordinates: {
-        lat: number;
-        lng: number;
-    };
-    duration?: number; // in hours for activities, days for accommodations
-    tags?: string[];
-}
+    coordinates: Coordinates;
+    duration: number;
+    tags: string[];
+};
 
-export interface Accommodation extends TravelComponent {
-    type: 'accommodation';
+export type AccommodationComponent = BaseTravelComponent & {
+    type: 'accommodations';
     amenities: string[];
     rating: number;
-}
+};
 
-export interface Destination extends TravelComponent {
+export type ActivityDifficulty = 'EASY' | 'MODERATE' | 'CHALLENGING';
+
+export type ActivityComponent = BaseTravelComponent & {
+    type: 'activities';
+    difficulty: ActivityDifficulty;
+};
+
+export type DestinationComponent = BaseTravelComponent & {
     type: 'destination';
     attractions: string[];
-}
+};
 
-export interface Activity extends TravelComponent {
-    type: 'activity';
-    duration: number; // in hours
-    difficulty?: 'easy' | 'moderate' | 'challenging';
-}
+export type TransportMode = 'CAR' | 'TRAIN' | 'BUS' | 'PLANE' | 'BOAT';
 
-export interface Transport extends TravelComponent {
+export type TransportComponent = BaseTravelComponent & {
     type: 'transport';
-    mode: 'car' | 'train' | 'bus' | 'plane' | 'boat';
+    mode: TransportMode;
     departureLocation: string;
     arrivalLocation: string;
-    departureCoordinates: {
-        lat: number;
-        lng: number;
-    };
-    arrivalCoordinates: {
-        lat: number;
-        lng: number;
-    };
-}
+    departureCoordinates: Coordinates;
+    arrivalCoordinates: Coordinates;
+};
+
+export type TravelComponent = 
+    | AccommodationComponent 
+    | ActivityComponent 
+    | DestinationComponent 
+    | TransportComponent;
 
 // New interfaces for the travel packages page
 
