@@ -44,7 +44,24 @@ const TravelPackages = () => {
                 const data = await response.json();
 
                 // Map backend data to frontend structure
-                const mappedPackages = data.map((pkg: any) => ({
+                type ApiPackage = {
+                    id: string;
+                    title: string;
+                    description: string;
+                    imageUrl: string;
+                    durationDays: number;
+                    price: number;
+                    rating: number;
+                    reviewCount: number;
+                    destinations: string[];
+                    highlights: string[];
+                    includes?: string[];
+                    excludes?: string[];
+                    itineraryDays?: any[];
+                    gallery?: string[];
+                };
+
+                const mappedPackages = (data as ApiPackage[]).map((pkg) => ({
                     id: pkg.id,
                     title: pkg.title,
                     description: pkg.description,
@@ -63,8 +80,12 @@ const TravelPackages = () => {
 
                 setPackages(mappedPackages);
                 setError(null);
-            } catch (err: any) {
-                setError(err.message || 'Failed to load packages');
+            } catch (err: unknown) {
+                if (err instanceof Error) {
+                    setError(err.message);
+                } else {
+                    setError('Failed to load packages');
+                }
                 setPackages([]);
             } finally {
                 setLoading(false);
@@ -188,7 +209,7 @@ const TravelPackages = () => {
         }
     };
 
-    const handleBookNow = (pkg: TravelPackage) => {
+    const handleBookNow = () => {
         router.push('/checkout');
     };
 
@@ -278,7 +299,7 @@ const TravelPackages = () => {
                                         travelPackage={pkg}
                                         onView={() => handleOpenModal(pkg)}
                                         onCustomize={() => handleCustomize(pkg)}
-                                        onBookNow={() => handleBookNow(pkg)}
+                                        onBookNow={handleBookNow}
                                     />
                                 ))}
                             </div>
@@ -312,7 +333,7 @@ const TravelPackages = () => {
                     onClose={handleCloseModal}
                     travelPackage={selectedPackage}
                     onCustomize={() => handleCustomize(selectedPackage)}
-                    onBookNow={() => handleBookNow(selectedPackage)}
+                    onBookNow={handleBookNow}
                 />
             )}
 
