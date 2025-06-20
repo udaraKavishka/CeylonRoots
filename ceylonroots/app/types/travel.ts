@@ -60,12 +60,16 @@ export type TravelComponent =
 // New interfaces for the travel packages page
 
 export interface ItineraryDay {
+  id: number;
+  dayNumber: number;
   title: string;
-  location: string;
+  mainTown: string;
   description: string;
-  accommodation?: string;
-  meals?: string;
-  activities?: string[];
+  accommodation: string[];
+  meals: string[];
+  activities: string[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // export interface TravelPackage {
@@ -87,7 +91,7 @@ export interface ItineraryDay {
 // }
 
 export type TravelPackage = {
-  id: number;
+  id: string;
   title: string;
   description: string;
   imageUrl: string;
@@ -136,10 +140,6 @@ export type DestinationDetails = {
   bestTimeToVisit: string;
   recommendedDuration: string;
   culturalTips: string;
-  image: string;
+  image: string; // Now using local images
   attractions: string[];
-  coordinates: {
-    latitude: number;
-    longitude: number;
-  };
 };
