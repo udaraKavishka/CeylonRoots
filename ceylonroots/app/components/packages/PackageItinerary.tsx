@@ -1,73 +1,159 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ItineraryDay } from '../../types/travel';
-import { MapPin, Coffee, Bed, UtensilsCrossed } from 'lucide-react';
+import { MapPin, Bed, UtensilsCrossed, ChevronDown, ChevronUp, Loader } from 'lucide-react';
+import { Button } from '../ui/button';
 
 interface PackageItineraryProps {
-    itinerary: ItineraryDay[];
+    packageId: string;
 }
 
-const PackageItinerary: React.FC<PackageItineraryProps> = ({ itinerary }) => {
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+const PackageItinerary: React.FC<PackageItineraryProps> = ({ packageId }) => {
+    const [itinerary, setItinerary] = useState<ItineraryDay[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [expandedDays, setExpandedDays] = useState<Record<number, boolean>>({});
+
+    useEffect(() => {
+        const fetchItinerary = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch(`${API_BASE_URL}/travel-packages/${packageId}/itinerary`);
+
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch itinerary: ${response.status}`);
+                }
+
+                const data = await response.json();
+                setItinerary(data);
+                setError(null);
+
+                // Expand first day by default
+                if (data.length > 0) {
+                    setExpandedDays({ [data[0].dayNumber]: true });
+                }
+            } catch (err: unknown) {
+                if (err instanceof Error) {
+                    setError(err.message);
+                } else {
+                    setError('Failed to load itinerary');
+                }
+                setItinerary([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (packageId) {
+            fetchItinerary();
+        }
+    }, [packageId]);
+
+    const toggleDay = (dayNumber: number) => {
+        setExpandedDays(prev => ({
+            ...prev,
+            [dayNumber]: !prev[dayNumber]
+        }));
+    };
+
+    if (loading) {
+        return (
+            <div className="flex justify-center py-12">
+                <Loader className="animate-spin h-8 w-8 text-ceylon-tea" />
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="text-center py-10 bg-red-50 rounded-lg">
+                <p className="text-red-600 mb-4">{error}</p>
+                <Button
+                    onClick={() => window.location.reload()}
+                    className="bg-ceylon-tea hover:bg-ceylon-tea-dark text-white"
+                >
+                    Retry Loading
+                </Button>
+            </div>
+        );
+    }
+
+    if (!itinerary || itinerary.length === 0) {
+        return (
+            <div className="text-center py-10 bg-gray-50 rounded-lg">
+                <p className="text-gray-500">No itinerary details available</p>
+            </div>
+        );
+    }
+
     return (
         <div className="space-y-6">
             <h3 className="text-lg font-semibold mb-4">Day-by-Day Itinerary</h3>
 
             <div className="space-y-6">
-                {itinerary.map((day, index) => (
-                    <div key={index} className="border-l-2 border-ceylon-tea pl-4 pb-6 relative">
+                {itinerary.map((day) => (
+                    <div key={day.id} className="border-l-2 border-ceylon-tea pl-4 pb-4 relative">
                         <div className="absolute -left-2.5 top-0 w-5 h-5 rounded-full bg-ceylon-tea text-white flex items-center justify-center text-xs">
-                            {index + 1}
+                            {day.dayNumber}
                         </div>
 
-                        <div className="mb-2">
-                            <h4 className="text-lg font-medium">Day {index + 1}: {day.title}</h4>
-                            <div className="flex items-center text-sm text-gray-500 mb-2">
-                                <MapPin className="h-4 w-4 mr-1" />
-                                {day.location}
-                            </div>
-                        </div>
-
-                        <p className="text-gray-700 mb-4">{day.description}</p>
-
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
-                            {day.accommodation && (
-                                <div className="flex items-center bg-gray-50 p-3 rounded-md">
-                                    <Bed className="h-4 w-4 mr-2 text-ceylon-spice" />
-                                    <div>
-                                        <p className="text-xs text-gray-500">Accommodation</p>
-                                        <p className="text-sm font-medium">{day.accommodation}</p>
-                                    </div>
-                                </div>
-                            )}
-
-                            {day.meals && (
-                                <div className="flex items-center bg-gray-50 p-3 rounded-md">
-                                    <UtensilsCrossed className="h-4 w-4 mr-2 text-ceylon-spice" />
-                                    <div>
-                                        <p className="text-xs text-gray-500">Meals</p>
-                                        <p className="text-sm font-medium">{day.meals}</p>
-                                    </div>
-                                </div>
-                            )}
-
-                            {day.activities && day.activities.length > 0 && (
-                                <div className="flex items-center bg-gray-50 p-3 rounded-md">
-                                    <Coffee className="h-4 w-4 mr-2 text-ceylon-spice" />
-                                    <div>
-                                        <p className="text-xs text-gray-500">Activities</p>
-                                        <p className="text-sm font-medium">{day.activities.length} Planned</p>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-                        {day.activities && day.activities.length > 0 && (
+                        <div className="flex justify-between items-start">
                             <div>
-                                <p className="text-sm font-medium mb-2">Today&apos;s Activities:</p>
-                                <ul className="list-disc pl-5 space-y-1">
-                                    {day.activities.map((activity, idx) => (
-                                        <li key={idx} className="text-sm text-gray-700">{activity}</li>
-                                    ))}
-                                </ul>
+                                <h4 className="text-lg font-medium">Day {day.dayNumber}: {day.title}</h4>
+                                <div className="flex items-center text-sm text-gray-500 mb-2">
+                                    <MapPin className="h-4 w-4 mr-1" />
+                                    {day.mainTown}
+                                </div>
+                            </div>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => toggleDay(day.dayNumber)}
+                                className="ml-2"
+                            >
+                                {expandedDays[day.dayNumber] ? <ChevronUp /> : <ChevronDown />}
+                            </Button>
+                        </div>
+
+                        {expandedDays[day.dayNumber] && (
+                            <div className="space-y-4 mt-2">
+                                <p className="text-gray-700">{day.description}</p>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                                    {day.accommodation && day.accommodation.length > 0 && (
+                                        <div className="flex items-center bg-gray-50 p-3 rounded-md">
+                                            <Bed className="h-4 w-4 mr-2 text-ceylon-spice" />
+                                            <div>
+                                                <p className="text-xs text-gray-500">Accommodation</p>
+                                                <p className="text-sm font-medium">{day.accommodation.join(", ")}</p>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {day.meals && day.meals.length > 0 && (
+                                        <div className="flex items-center bg-gray-50 p-3 rounded-md">
+                                            <UtensilsCrossed className="h-4 w-4 mr-2 text-ceylon-spice" />
+                                            <div>
+                                                <p className="text-xs text-gray-500">Meals</p>
+                                                <p className="text-sm font-medium">{day.meals.join(", ")}</p>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {day.activities && day.activities.length > 0 && (
+                                    <div>
+                                        <p className="text-sm font-medium mb-2">Activities:</p>
+                                        <ul className="list-disc pl-5 space-y-1">
+                                            {day.activities.map((activity, idx) => (
+                                                <li key={idx} className="text-sm text-gray-700">
+                                                    {activity}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
