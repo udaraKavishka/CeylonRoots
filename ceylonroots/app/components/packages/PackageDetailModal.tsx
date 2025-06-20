@@ -10,12 +10,13 @@ import {
     DialogTitle,
 } from '../../components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
-import { TravelPackage} from '../../types/travel';
+import { TravelPackage } from '../../types/travel';
 import { MapPin, Calendar, DollarSign, Star, CheckCircle2 } from 'lucide-react';
 import PackageGallery from './PackageGallery';
 import PackagePriceBreakdown from './PackagePriceBreakdown';
 import PackageItinerary from './PackageItinerary';
 import Image from 'next/image';
+import { packageImages, packageGalleries } from '../../data/packageImageMap';
 
 interface PackageDetailModalProps {
     isOpen: boolean;
@@ -30,10 +31,14 @@ const PackageDetailModal = ({
     onClose,
     travelPackage,
     onCustomize,
-
+    onBookNow
 }: PackageDetailModalProps) => {
     const [activeTab, setActiveTab] = useState('overview');
     const router = useRouter();
+
+    // Get local images
+    const mainImage = packageImages[travelPackage.id] || "/placeholder.jpg";
+    const galleryImages = packageGalleries[travelPackage.id] || [];
 
     const handleBookNow = () => {
         onClose();
@@ -61,7 +66,7 @@ const PackageDetailModal = ({
                     <TabsContent value="overview" className="space-y-4">
                         <div className="aspect-video overflow-hidden rounded-lg relative">
                             <Image
-                                src={travelPackage.image}
+                                src={mainImage}
                                 alt={travelPackage.title}
                                 fill
                                 className="object-cover"
@@ -69,7 +74,6 @@ const PackageDetailModal = ({
                             />
                         </div>
 
-                        {/* Rest of the overview content remains the same */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                             <div className="flex items-center">
                                 <Calendar className="h-5 w-5 mr-2 text-ceylon-spice" />
@@ -108,7 +112,7 @@ const PackageDetailModal = ({
 
                             <h3 className="text-lg font-semibold mb-2">Tour Highlights</h3>
                             <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">
-                                {travelPackage.highlights.map((highlight, index) => (
+                                {travelPackage.themes.map((highlight, index) => (
                                     <li key={index} className="flex items-start">
                                         <CheckCircle2 className="h-5 w-5 mr-2 text-ceylon-tea flex-shrink-0 mt-0.5" />
                                         <span>{highlight}</span>
@@ -119,18 +123,18 @@ const PackageDetailModal = ({
                     </TabsContent>
 
                     <TabsContent value="itinerary">
-                        <PackageItinerary itinerary={travelPackage.itinerary} />
+                        <PackageItinerary packageId={travelPackage.id} />
                     </TabsContent>
 
                     <TabsContent value="gallery">
-                        <PackageGallery images={travelPackage.gallery} />
+                        <PackageGallery images={galleryImages} />
                     </TabsContent>
 
                     <TabsContent value="pricing">
                         <PackagePriceBreakdown
                             basePrice={travelPackage.price}
-                            priceIncludes={travelPackage.priceIncludes}
-                            priceExcludes={travelPackage.priceExcludes}
+                            priceIncludes={travelPackage.includes}
+                            priceExcludes={travelPackage.excludes}
                         />
                     </TabsContent>
                 </Tabs>
