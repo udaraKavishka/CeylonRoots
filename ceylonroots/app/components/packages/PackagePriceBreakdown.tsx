@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, TableBody, TableCell,TableRow } from '../../components/ui/table';
+import { Table, TableBody, TableCell, TableRow } from '../../components/ui/table';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
 import { Check, X } from 'lucide-react';
 
@@ -53,35 +53,51 @@ const PackagePriceBreakdown: React.FC<PackagePriceBreakdownProps> = ({
             </Card>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <h4 className="font-semibold mb-3 flex items-center">
-                        <Check className="h-5 w-5 mr-2 text-green-500" />
-                        Price Includes
-                    </h4>
-                    <ul className="space-y-2">
-                        {priceIncludes.map((item, index) => (
-                            <li key={index} className="flex items-start">
-                                <Check className="h-4 w-4 mr-2 text-green-500 mt-1" />
-                                <span className="text-sm">{item}</span>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+                <Card>
+                    <CardHeader className="pb-3">
+                        <CardTitle className="flex items-center">
+                            <Check className="h-5 w-5 mr-2 text-green-500" />
+                            Price Includes
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <ul className="space-y-2">
+                            {priceIncludes.length > 0 ? (
+                                priceIncludes.map((item, index) => (
+                                    <li key={index} className="flex items-start">
+                                        <Check className="h-4 w-4 mr-2 text-green-500 mt-1" />
+                                        <span className="text-sm">{item}</span>
+                                    </li>
+                                ))
+                            ) : (
+                                <li className="text-gray-500 text-sm">No inclusions listed</li>
+                            )}
+                        </ul>
+                    </CardContent>
+                </Card>
 
-                <div>
-                    <h4 className="font-semibold mb-3 flex items-center">
-                        <X className="h-5 w-5 mr-2 text-red-500" />
-                        Price Excludes
-                    </h4>
-                    <ul className="space-y-2">
-                        {priceExcludes.map((item, index) => (
-                            <li key={index} className="flex items-start">
-                                <X className="h-4 w-4 mr-2 text-red-500 mt-1" />
-                                <span className="text-sm">{item}</span>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+                <Card>
+                    <CardHeader className="pb-3">
+                        <CardTitle className="flex items-center">
+                            <X className="h-5 w-5 mr-2 text-red-500" />
+                            Price Excludes
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <ul className="space-y-2">
+                            {priceExcludes.length > 0 ? (
+                                priceExcludes.map((item, index) => (
+                                    <li key={index} className="flex items-start">
+                                        <X className="h-4 w-4 mr-2 text-red-500 mt-1" />
+                                        <span className="text-sm">{item}</span>
+                                    </li>
+                                ))
+                            ) : (
+                                <li className="text-gray-500 text-sm">No exclusions listed</li>
+                            )}
+                        </ul>
+                    </CardContent>
+                </Card>
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg">
