@@ -7,6 +7,7 @@ import {
     CarouselPrevious,
 } from "../../components/ui/carousel";
 import { Camera } from 'lucide-react';
+import Image from 'next/image';
 
 interface PackageGalleryProps {
     images: string[];
@@ -31,11 +32,13 @@ const PackageGallery: React.FC<PackageGalleryProps> = ({ images }) => {
                     {images.map((image, index) => (
                         <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
                             <div className="p-1">
-                                <div className="overflow-hidden rounded-md aspect-square">
-                                    <img
+                                <div className="overflow-hidden rounded-md aspect-square relative">
+                                    <Image
                                         src={image}
                                         alt={`Gallery image ${index + 1}`}
-                                        className="h-full w-full object-cover hover:scale-105 transition-transform duration-300"
+                                        fill
+                                        className="object-cover"
+                                        sizes="(max-width: 768px) 50vw, 33vw"
                                     />
                                 </div>
                             </div>
@@ -48,11 +51,13 @@ const PackageGallery: React.FC<PackageGalleryProps> = ({ images }) => {
 
             <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 mt-4">
                 {images.slice(0, 8).map((image, index) => (
-                    <div key={index} className="overflow-hidden rounded-md aspect-square">
-                        <img
+                    <div key={index} className="overflow-hidden rounded-md aspect-square relative">
+                        <Image
                             src={image}
                             alt={`Thumbnail ${index + 1}`}
-                            className="h-full w-full object-cover hover:scale-105 transition-transform duration-300"
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 25vw, 12.5vw"
                         />
                     </div>
                 ))}
