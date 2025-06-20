@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { Card, CardContent, CardFooter, CardHeader } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { Calendar, MapPin, DollarSign, Star, Sparkles } from 'lucide-react';
@@ -7,22 +8,30 @@ import { TravelPackage } from '../../types/travel';
 interface PackageCardProps {
     travelPackage: TravelPackage;
     onView: () => void;
-    onCustomize: () => void;
     onBookNow: () => void;
+    onCustomize: () => void;
 }
 
 const PackageCard: React.FC<PackageCardProps> = ({
     travelPackage,
     onView,
-    onBookNow
+    onBookNow,
+    onCustomize
 }) => {
+    // Safely handle regions array
+    const regions = travelPackage.regions || [];
+    const themes = travelPackage.themes || [];
+
     return (
         <Card className="ceylon-card group overflow-hidden h-full flex flex-col">
-            <div className="aspect-[4/3] overflow-hidden relative">
-                <img
-                    src={travelPackage.image}
+            <div className="relative w-full h-56 sm:h-64">
+                <Image
+                    src={travelPackage.imageUrl}
                     alt={travelPackage.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    fill
+                    className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    priority
                 />
                 <div className="absolute top-3 right-3 px-2 py-1 bg-ceylon-gold/80 text-white rounded-md text-sm font-medium flex items-center">
                     <Star className="h-4 w-4 mr-1 fill-white" />
@@ -51,12 +60,12 @@ const PackageCard: React.FC<PackageCardProps> = ({
                 <div className="flex items-start mb-3">
                     <MapPin className="h-4 w-4 text-ceylon-spice mt-1 flex-shrink-0" />
                     <p className="text-sm text-gray-500 ml-1 line-clamp-1">
-                        {travelPackage.regions.join(", ")}
+                        {regions.join(", ")}
                     </p>
                 </div>
 
                 <div className="flex flex-wrap gap-2 mt-2">
-                    {travelPackage.themes.slice(0, 3).map((theme) => (
+                    {themes.slice(0, 3).map((theme) => (
                         <span
                             key={theme}
                             className="inline-flex items-center px-2 py-1 bg-ceylon-tea/10 text-ceylon-tea text-xs rounded-full"
@@ -81,6 +90,13 @@ const PackageCard: React.FC<PackageCardProps> = ({
                     onClick={onBookNow}
                 >
                     Book Now
+                </Button>
+                <Button
+                    variant="ghost"
+                    className="col-span-2 mt-2 text-ceylon-tea hover:bg-ceylon-tea/10 w-full"
+                    onClick={onCustomize}
+                >
+                    Customize Package
                 </Button>
             </CardFooter>
         </Card>
