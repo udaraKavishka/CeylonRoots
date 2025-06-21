@@ -97,7 +97,7 @@ const Destinations = () => {
         <div className="min-h-screen flex flex-col">
             <main className="flex-grow">
                 {/* Hero Section */}
-                <div className="bg-gradient-to-r from-ceylon-teal/20 to-ceylon-teal/10 py-16 mt-10">
+                <div className="bg-gradient-to-r from-ceylon-teal-700 to-ceylon-teal-900 py-16 px-4">
                     <div className="max-w-7xl mx-auto px-4">
                         <h1 className="text-4xl md:text-5xl font-bold mb-6">
                             Discover Sri Lanka&apos;s{" "}
@@ -132,7 +132,7 @@ const Destinations = () => {
 
                         <Button
                             onClick={() => router.push("/packages")}
-                            className="bg-ceylon-teal hover:bg-ceylon-teal-dark text-white"
+                            className=" bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-lg shadow"
                         >
                             View Travel Packages
                             <ArrowUpRight className="ml-1 h-4 w-4" />
