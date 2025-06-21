@@ -104,7 +104,7 @@ const TravelPackages = () => {
                                 )
                                 : []
                         })),
-                        gallery 
+                        gallery
                     };
                 });
 
@@ -288,7 +288,7 @@ const TravelPackages = () => {
                         <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
                             Discover Sri Lanka Tours & Packages
                         </h1>
-                        <p className="text-white text-xl max-w-3xl">
+                        <p className="text-black text-xl max-w-3xl">
                             Explore our carefully curated travel packages designed to showcase the best of Sri Lanka&apos;s
                             natural beauty, rich history, and vibrant culture.
                         </p>
@@ -367,15 +367,7 @@ const TravelPackages = () => {
                 />
             )}
 
-            {/* Footer */}
-            <footer className="bg-gray-800 text-white py-8">
-                <div className="max-w-7xl mx-auto px-4">
-                    <div className="text-center">
-                        <p>© 2024 Ceylon Travel. All rights reserved.</p>
-                        <p className="mt-2 text-gray-400">Discover the beauty of Sri Lanka with our curated travel experiences</p>
-                    </div>
-                </div>
-            </footer>
+
         </div>
     );
 };
