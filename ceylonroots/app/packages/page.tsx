@@ -8,6 +8,7 @@ import PackageFilter from '../components/packages/PackageFilter';
 import PackageCard from '../components/packages/PackageCard';
 import PackageDetailModal from '../components/packages/PackageDetailModal';
 import { TravelPackage } from '../types/travel';
+import { packageImages, packageGalleries } from '../data/packageImageMap';
 
 const regions = ["All Regions", "Cultural Triangle", "Hill Country", "Southern Coast", "Northern Province", "Eastern Coast"];
 const durations = ["Any Duration", "1-3 Days", "4-7 Days", "8-14 Days", "15+ Days"];
@@ -32,6 +33,7 @@ const TravelPackages = () => {
     const [searchQuery, setSearchQuery] = useState("");
 
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
     // Fetch packages from backend API
     useEffect(() => {
         const fetchPackages = async () => {
@@ -44,11 +46,10 @@ const TravelPackages = () => {
                 const data = await response.json();
 
                 // Map backend data to frontend structure
-                type ApiPackage = {
+                interface BackendPackage {
                     id: string;
                     title: string;
                     description: string;
-                    imageUrl: string;
                     durationDays: number;
                     price: number;
                     rating: number;
@@ -57,26 +58,55 @@ const TravelPackages = () => {
                     highlights: string[];
                     includes?: string[];
                     excludes?: string[];
-                    itineraryDays?: any[];
-                    gallery?: string[];
-                };
+                    itineraryDays?: {
+                        dayNumber: number;
+                        title: string;
+                        description: string;
+                        activities?: { name?: string }[] | string[];
+                    }[];
+                }
 
-                const mappedPackages = (data as ApiPackage[]).map((pkg) => ({
-                    id: pkg.id,
-                    title: pkg.title,
-                    description: pkg.description,
-                    imageUrl: pkg.imageUrl,
-                    duration: pkg.durationDays,
-                    price: pkg.price,
-                    rating: pkg.rating,
-                    reviewCount: pkg.reviewCount,
-                    regions: pkg.destinations,
-                    themes: pkg.highlights,
-                    includes: pkg.includes || [],
-                    excludes: pkg.excludes || [],
-                    itineraryDays: pkg.itineraryDays || [],
-                    gallery: pkg.gallery || []
-                }));
+                const mappedPackages = data.map((pkg: BackendPackage) => {
+                    // Use local images instead of backend URLs
+                    const imageUrl = packageImages[pkg.id] || "/placeholder.jpg";
+                    const gallery = packageGalleries[pkg.id] || [];
+
+                    return {
+                        id: pkg.id,
+                        title: pkg.title,
+                        description: pkg.description,
+                        imageUrl, // Use local image
+                        duration: pkg.durationDays,
+                        price: pkg.price,
+                        rating: pkg.rating,
+                        reviewCount: pkg.reviewCount,
+                        regions: pkg.destinations,
+                        themes: pkg.highlights,
+                        includes: pkg.includes || [],
+                        excludes: pkg.excludes || [],
+                        itineraryDays: (pkg.itineraryDays || []).map((day: {
+                            dayNumber: number;
+                            title: string;
+                            description: string;
+                            activities?: { name?: string }[] | string[];
+                        }) => ({
+                            dayNumber: day.dayNumber,
+                            title: day.title,
+                            description: day.description,
+                            activities: day.activities
+                                ? (Array.isArray(day.activities)
+                                    ? (day.activities as ({ name?: string } | string)[]).map((act) =>
+                                        typeof act === 'string'
+                                            ? { name: act }
+                                            : { name: act.name || '' }
+                                    )
+                                    : [{ name: String(day.activities) }]
+                                )
+                                : []
+                        })),
+                        gallery 
+                    };
+                });
 
                 setPackages(mappedPackages);
                 setError(null);
@@ -93,7 +123,7 @@ const TravelPackages = () => {
         };
 
         fetchPackages();
-    }, []);
+    }, [API_BASE_URL]);
 
     // Initialize filters from URL params
     useEffect(() => {
@@ -298,8 +328,8 @@ const TravelPackages = () => {
                                         key={pkg.id}
                                         travelPackage={pkg}
                                         onView={() => handleOpenModal(pkg)}
-                                        onCustomize={() => handleCustomize(pkg)}
                                         onBookNow={handleBookNow}
+                                        onCustomize={() => handleCustomize(pkg)}
                                     />
                                 ))}
                             </div>

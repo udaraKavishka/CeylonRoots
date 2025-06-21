@@ -1,7 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
     Breadcrumb,
@@ -13,8 +12,8 @@ import {
 } from "../components/ui/breadcrumb";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
 import BlogCard from '../components/blog/BlogCard';
-import BlogPost from '../components/blog/BlogPost';
-import { blogPosts } from '../data/blogPosts';
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const categories = [
     { id: 'all', name: 'All Stories' },
@@ -24,34 +23,64 @@ const categories = [
     { id: 'stories', name: 'Traveler Stories' }
 ];
 
+// Define TypeScript types matching backend structure
+type BlogComment = {
+    id: number;
+    author: string;
+    avatar?: string;
+    date: string;
+    text: string;
+}
+
+
+type BlogPostType = {
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+    title: string;
+    excerpt: string;
+    content: string;
+    imageUrl: string;
+    postDate: string;
+    author: string;
+    category: string;
+    commentCount: number | null;
+    comments: BlogComment[];
+    relatedPosts: BlogPostType[];
+};
+
 const Blog = () => {
-    const params = useParams();
-    const id = Array.isArray(params.id) ? params.id[0] : params.id;
     const [activeCategory, setActiveCategory] = useState('all');
+    const [blogPosts, setBlogPosts] = useState<BlogPostType[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    // If an ID is provided, show the full blog post
-    if (id) {
-        const post = blogPosts.find(post => post.id.toString() === id);
+    // Fetch blog posts from backend
+    useEffect(() => {
+        const fetchBlogPosts = async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/blogpost`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch blog posts');
+                }
+                const data: BlogPostType[] = await response.json();
+                setBlogPosts(data);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'An unknown error occurred');
+            } finally {
+                setLoading(false);
+            }
+        };
 
-        if (!post) {
-            return (
-                <div className="ceylon-container py-20">
-                    <h1 className="text-3xl font-bold mb-6">Blog Post Not Found</h1>
-                    <p>The blog post you&apos;re looking for doesn&apos;t exist or has been removed.</p>
-                    <Link href="/blog" className="text-ceylon-tea hover:underline mt-4 inline-block">
-                        ← Back to all blog posts
-                    </Link>
-                </div>
-            );
-        }
-
-        return <BlogPost params={{ id: id }} />;
-    }
+        fetchBlogPosts();
+    }, []);
 
     // Filter posts by category if not "all"
     const filteredPosts = activeCategory === 'all'
         ? blogPosts
-        : blogPosts.filter(post => post.category.toLowerCase().includes(activeCategory));
+        : blogPosts.filter(post =>
+            post.category.toLowerCase().replace(/\s+/g, '-') === activeCategory
+        );
 
     return (
         <div className="bg-white">
@@ -106,21 +135,52 @@ const Blog = () => {
                         </TabsList>
                     </div>
 
-                    {categories.map(category => (
-                        <TabsContent key={category.id} value={category.id} className="mt-0">
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                {filteredPosts.map(post => (
-                                    <BlogCard key={post.id} post={post} />
-                                ))}
-                            </div>
-
-                            {filteredPosts.length === 0 && (
-                                <div className="text-center py-20">
-                                    <h3 className="text-2xl font-medium text-gray-500">No blog posts found in this category</h3>
+                    {loading ? (
+                        <div className="text-center py-20">
+                            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-ceylon-tea mx-auto mb-4"></div>
+                            <p>Loading blog posts...</p>
+                        </div>
+                    ) : error ? (
+                        <div className="text-center py-20">
+                            <h2 className="text-2xl font-bold mb-4">Error Loading Blog Posts</h2>
+                            <p className="text-red-500 mb-6">{error}</p>
+                            <button
+                                onClick={() => window.location.reload()}
+                                className="px-6 py-3 bg-ceylon-tea text-white rounded-lg hover:bg-ceylon-tea/80 transition-colors"
+                            >
+                                Retry Loading
+                            </button>
+                        </div>
+                    ) : (
+                        categories.map(category => (
+                            <TabsContent key={category.id} value={category.id} className="mt-0">
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                    {filteredPosts.map(post => (
+                                        <BlogCard
+                                            key={post.id}
+                                            post={{
+                                                ...post,
+                                                image: post.imageUrl, 
+                                                date: post.postDate || post.createdAt, 
+                                                tags: post.category ? [post.category] : [] 
+                                            }}
+                                        />
+                                    ))}
                                 </div>
-                            )}
-                        </TabsContent>
-                    ))}
+
+                                {filteredPosts.length === 0 && (
+                                    <div className="text-center py-20">
+                                        <h3 className="text-2xl font-medium text-gray-500">
+                                            No blog posts found in this category
+                                        </h3>
+                                        <p className="mt-2 text-gray-500">
+                                            Check back later for new content
+                                        </p>
+                                    </div>
+                                )}
+                            </TabsContent>
+                        ))
+                    )}
                 </Tabs>
             </div>
         </div>

@@ -64,7 +64,7 @@ const Admin = () => {
                         </CardHeader>
                         <CardContent>
                             <Tabs value={activeTab} onValueChange={setActiveTab}>
-                                {/* <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-1">
+                                <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-1">
                                     <TabsTrigger value="packages" className="flex items-center gap-1 py-1 text-xs">
                                         <Package className="h-3 w-3 sm:h-4 sm:w-4" />
                                         <span className="truncate">Packages</span>
@@ -93,7 +93,7 @@ const Admin = () => {
                                         <Map className="h-3 w-3 sm:h-4 sm:w-4" />
                                         <span className="truncate">Components</span>
                                     </TabsTrigger>
-                                </TabsList> */}
+                                </TabsList>
 
                                 <TabsContent value="packages" className="mt-6">
                                     <PackageManager />
