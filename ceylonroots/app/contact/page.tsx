@@ -48,7 +48,7 @@ const Contact = () => {
             <div className="relative pt-20 h-64 md:h-80 bg-gradient-to-r from-ceylon-ocean to-ceylon-tea">
                 <div className="ceylon-container h-full flex flex-col justify-center">
                     <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Contact Us</h1>
-                    <p className="text-white/90 text-lg md:text-xl max-w-2xl">
+                    <p className="text-black text-lg md:text-xl max-w-2xl">
                         Have questions or ready to plan your Sri Lankan adventure? We&#39;re here to help you every step of the way.
                     </p>
                 </div>
