@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import { headers } from 'next/headers';
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -11,29 +12,78 @@ import {
 } from "../../components/ui/breadcrumb";
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/avatar";
 import { Button } from "../../components/ui/button";
-import { Calendar, User, Tag, Share2, Facebook, Twitter, Instagram, MessageSquare } from 'lucide-react';
-import { blogPosts } from '../../data/blogPosts';
+import { Calendar, User, Share2, Facebook, Twitter, Instagram, MessageSquare } from 'lucide-react';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+// Define TypeScript types matching backend structure
+type BlogPostType = {
+    id: number;
+    title: string;
+    excerpt: string;
+    content: string;
+    imageUrl: string;
+    postDate: string;
+    author: string;
+    category: string;
+    commentCount: number | null;
+    comments: CommentType[];
+    relatedPosts: RelatedPostType[];
+};
+
+type CommentType = {
+    id: number;
+    author: string;
+    text: string;
+    createdAt: string;
+    avatarUrl: string | null;
+};
+
+type RelatedPostType = {
+    id: number;
+    title: string;
+    imageUrl: string;
+    postDate: string;
+};
+
+async function getBlogPost(id: string): Promise<BlogPostType | null> {
+    try {
+        const res = await fetch(`${API_BASE_URL}/blogpost/${id}`, {
+            next: { revalidate: 60 } // Revalidate every 60 seconds
+        });
+
+        if (!res.ok) {
+            if (res.status === 404) return null;
+            throw new Error('Failed to fetch blog post');
+        }
+
+        return await res.json();
+    } catch (error) {
+        console.error('Error fetching blog post:', error);
+        return null;
+    }
+}
+
+// Generate static paths at build time
 export async function generateStaticParams() {
-    return blogPosts.map(post => ({
-        id: post.id.toString(),
-    }));
+    try {
+        const res = await fetch(`${API_BASE_URL}/blogpost`);
+        if (!res.ok) return [];
+        const posts: BlogPostType[] = await res.json();
+        return posts.map(post => ({ id: post.id.toString() }));
+    } catch (error) {
+        console.error('Error generating static params:', error);
+        return [];
+    }
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
-    const post = blogPosts.find(post => post.id.toString() === params.id);
-
-    return {
-        title: `${post?.title} | Travel Blog`,
-        description: post?.excerpt,
-        openGraph: {
-            images: [post?.image || '/default-blog.jpg'],
-        },
-    };
-}
-
-const BlogPostPage = ({ params }: { params: { id: string } }) => {
-    const post = blogPosts.find(post => post.id.toString() === params.id);
+const BlogPostPage = async ({ params }: { params: { id: string } }) => {
+    // Corrected: Properly await the async operation
+    const post = await getBlogPost(params.id);
+    const headersList = await headers();
+    const host = headersList.get('host');
+    const protocol = host?.includes('localhost') ? 'http' : 'https';
+    const fullUrl = `${protocol}://${host}/blog/${params.id}`;
 
     if (!post) {
         notFound();
@@ -47,12 +97,22 @@ const BlogPostPage = ({ params }: { params: { id: string } }) => {
             .toUpperCase();
     };
 
+    // Format date for display
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    };
+
     return (
         <div className="bg-white">
             {/* Header Image */}
             <div className="relative h-[40vh] min-h-[300px] md:h-[50vh]">
                 <Image
-                    src={post.image}
+                    src={post.imageUrl}
                     alt={post.title}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -74,27 +134,27 @@ const BlogPostPage = ({ params }: { params: { id: string } }) => {
                         </div>
                         <div className="flex items-center">
                             <Calendar className="h-4 w-4 mr-2" />
-                            <span>{post.date}</span>
+                            <span>{formatDate(post.postDate)}</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Breadcrumbs */}
+            {/* Breadcrumbs - Fixed Link usage */}
             <div className="border-b">
                 <div className="ceylon-container py-4">
                     <Breadcrumb>
                         <BreadcrumbList>
                             <BreadcrumbItem>
-                                <Link href="/" >
-                                    <BreadcrumbLink>Home</BreadcrumbLink>
-                                </Link>
+                                <BreadcrumbLink asChild>
+                                    <Link href="/">Home</Link>
+                                </BreadcrumbLink>
                             </BreadcrumbItem>
                             <BreadcrumbSeparator />
                             <BreadcrumbItem>
-                                <Link href="/blog" >
-                                    <BreadcrumbLink>Travel Blog</BreadcrumbLink>
-                                </Link>
+                                <BreadcrumbLink asChild>
+                                    <Link href="/blog">Travel Blog</Link>
+                                </BreadcrumbLink>
                             </BreadcrumbItem>
                             <BreadcrumbSeparator />
                             <BreadcrumbItem>
@@ -111,23 +171,8 @@ const BlogPostPage = ({ params }: { params: { id: string } }) => {
                     {/* Main Content */}
                     <div className="lg:col-span-2">
                         <article className="prose prose-lg max-w-none">
-                            {post.content.map((paragraph, index) => (
-                                <p key={index}>{paragraph}</p>
-                            ))}
+                            <div dangerouslySetInnerHTML={{ __html: post.content }} />
                         </article>
-
-                        {/* Tags */}
-                        <div className="flex flex-wrap gap-2 mt-8">
-                            {post.tags.map((tag, index) => (
-                                <div
-                                    key={index}
-                                    className="inline-flex items-center px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm"
-                                >
-                                    <Tag className="h-3.5 w-3.5 mr-1.5" />
-                                    {tag}
-                                </div>
-                            ))}
-                        </div>
 
                         {/* Social Share */}
                         <div className="border-t border-b py-6 my-8">
@@ -136,38 +181,58 @@ const BlogPostPage = ({ params }: { params: { id: string } }) => {
                                     <Share2 className="h-4 w-4 mr-2" /> Share This Story:
                                 </span>
                                 <Button variant="outline" size="sm" className="rounded-full" asChild>
-                                    <Link href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}>
+                                    <a
+                                        href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(fullUrl)}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
                                         <Facebook className="h-4 w-4 mr-2" /> Facebook
-                                    </Link>
+                                    </a>
                                 </Button>
                                 <Button variant="outline" size="sm" className="rounded-full" asChild>
-                                    <Link href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(window.location.href)}`}>
+                                    <a
+                                        href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(fullUrl)}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
                                         <Twitter className="h-4 w-4 mr-2" /> Twitter
-                                    </Link>
+                                    </a>
                                 </Button>
                                 <Button variant="outline" size="sm" className="rounded-full" asChild>
-                                    <Link href={`https://www.instagram.com/share?url=${encodeURIComponent(window.location.href)}`}>
+                                    <a
+                                        href={`https://www.instagram.com/share?url=${encodeURIComponent(fullUrl)}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
                                         <Instagram className="h-4 w-4 mr-2" /> Instagram
-                                    </Link>
+                                    </a>
                                 </Button>
                             </div>
                         </div>
 
                         {/* Comments Section */}
                         <section className="my-10">
-                            <h3 className="text-2xl font-bold mb-6">Comments ({post.commentCount})</h3>
+                            <h3 className="text-2xl font-bold mb-6">
+                                Comments ({post.commentCount ?? 0})
+                            </h3>
 
-                            {post.comments?.map((comment, index) => (
-                                <div key={index} className="border-b last:border-b-0 py-6">
+                            {post.comments?.map((comment) => (
+                                <div key={comment.id} className="border-b last:border-b-0 py-6">
                                     <div className="flex items-start gap-4">
                                         <Avatar className="h-10 w-10">
-                                            <AvatarImage src={comment.avatar} />
-                                            <AvatarFallback>{getInitials(comment.author)}</AvatarFallback>
+                                            {comment.avatarUrl ? (
+                                                <AvatarImage src={comment.avatarUrl} />
+                                            ) : null}
+                                            <AvatarFallback>
+                                                {getInitials(comment.author)}
+                                            </AvatarFallback>
                                         </Avatar>
                                         <div className="flex-1">
                                             <div className="flex items-center justify-between mb-2">
                                                 <h4 className="font-medium">{comment.author}</h4>
-                                                <span className="text-sm text-gray-500">{comment.date}</span>
+                                                <span className="text-sm text-gray-500">
+                                                    {formatDate(comment.createdAt)}
+                                                </span>
                                             </div>
                                             <p className="text-gray-700">{comment.text}</p>
                                         </div>
@@ -176,9 +241,9 @@ const BlogPostPage = ({ params }: { params: { id: string } }) => {
                             ))}
 
                             <Button className="mt-6 bg-ceylon-tea hover:bg-ceylon-tea/90 text-white" asChild>
-                                <Link href="#comment-form">
+                                <a href="#comment-form">
                                     <MessageSquare className="h-4 w-4 mr-2" /> Leave a Comment
-                                </Link>
+                                </a>
                             </Button>
                         </section>
                     </div>
@@ -203,36 +268,38 @@ const BlogPostPage = ({ params }: { params: { id: string } }) => {
                         </div>
 
                         {/* Related Posts */}
-                        <div className="mb-8">
-                            <h3 className="text-xl font-bold mb-4 border-b pb-2">Related Articles</h3>
-                            <div className="space-y-4 mt-4">
-                                {post.relatedPosts?.map((related) => (
-                                    <article key={related.id} className="flex items-start gap-3">
-                                        <div className="w-20 h-16 overflow-hidden rounded shrink-0">
-                                            <Image
-                                                src={related.image}
-                                                alt={related.title}
-                                                width={80}
-                                                height={64}
-                                                className="object-cover"
-                                            />
-                                        </div>
-                                        <div>
-                                            <Link
-                                                href={`/blog/${related.id}`}
-                                                className="font-medium hover:text-ceylon-tea line-clamp-2 text-sm"
-                                            >
-                                                {related.title}
-                                            </Link>
-                                            <div className="flex items-center mt-1 text-xs text-gray-500">
-                                                <Calendar className="h-3 w-3 mr-1" />
-                                                <span>{related.date}</span>
+                        {post.relatedPosts && post.relatedPosts.length > 0 && (
+                            <div className="mb-8">
+                                <h3 className="text-xl font-bold mb-4 border-b pb-2">Related Articles</h3>
+                                <div className="space-y-4 mt-4">
+                                    {post.relatedPosts.map((related) => (
+                                        <article key={related.id} className="flex items-start gap-3">
+                                            <div className="w-20 h-16 overflow-hidden rounded shrink-0">
+                                                <Image
+                                                    src={related.imageUrl}
+                                                    alt={related.title}
+                                                    width={80}
+                                                    height={64}
+                                                    className="object-cover"
+                                                />
                                             </div>
-                                        </div>
-                                    </article>
-                                ))}
+                                            <div>
+                                                <Link
+                                                    href={`/blog/${related.id}`}
+                                                    className="font-medium hover:text-ceylon-tea line-clamp-2 text-sm"
+                                                >
+                                                    {related.title}
+                                                </Link>
+                                                <div className="flex items-center mt-1 text-xs text-gray-500">
+                                                    <Calendar className="h-3 w-3 mr-1" />
+                                                    <span>{formatDate(related.postDate)}</span>
+                                                </div>
+                                            </div>
+                                        </article>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
+                        )}
 
                         {/* Categories */}
                         <nav className="mb-8">

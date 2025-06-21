@@ -1,27 +1,23 @@
 export interface BlogPost {
-    id: number;
-    title: string;
-    excerpt: string;
-    content: string[];
-    image: string;
-    date: string;
-    author: string;
-    category: string;
-    tags: string[];
-    commentCount: number;
-    comments?: BlogComment[];
-    relatedPosts?: {
-        id: number;
-        title: string;
-        image: string;
-        date: string;
-    }[];
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  imageUrl: string;
+  postDate: string;
+  author: string;
+  category: string;
+  commentCount: number | null;
+  comments: BlogComment[];
+  relatedPosts: BlogPost[];
 }
 
 export interface BlogComment {
-    id: number;
-    author: string;
-    avatar?: string;
-    date: string;
-    text: string;
+  id: number;
+  author: string;
+  avatar?: string;
+  date: string;
+  text: string;
 }
