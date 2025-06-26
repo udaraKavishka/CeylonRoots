@@ -9,7 +9,7 @@ export interface BlogPost {
   postDate: string;
   author: string;
   category: string;
-  commentCount: number | null;
+  commentCount: number ;
   comments: BlogComment[];
   relatedPosts: BlogPost[];
 }
