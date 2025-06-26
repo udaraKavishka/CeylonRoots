@@ -1,44 +1,45 @@
 import React from 'react';
-import { Button } from '../ui/button';
-import { Save, Send } from 'lucide-react';
+import { Button } from '../../components/ui/button';
 
 interface SubmitPanelProps {
-    onSave: () => void;
-    onSubmit: () => void;
+    onSave: () => Promise<void>;
+    onRequestQuotation: () => void;
     isEmpty: boolean;
+    isSaving: boolean;
+    isSubmitting: boolean;
 }
 
-const SubmitPanel: React.FC<SubmitPanelProps> = ({ onSave, onSubmit, isEmpty }) => {
+const SubmitPanel: React.FC<SubmitPanelProps> = ({
+    onSave,
+    onRequestQuotation,
+    isEmpty,
+    isSaving,
+    isSubmitting
+}) => {
     return (
-        <div className="ceylon-card p-4">
-            <h2 className="text-lg font-bold mb-4">Save Your Journey</h2>
+        <div className="bg-white rounded-xl shadow-sm p-5 border border-ceylon-sand/30">
+            <h2 className="text-xl font-bold text-ceylon-stone mb-4 flex items-center">
+                <span className="bg-ceylon-tea text-white rounded-full w-6 h-6 flex items-center justify-center mr-2">2</span>
+                Save & Request Quote
+            </h2>
 
             <div className="flex flex-col sm:flex-row gap-3">
                 <Button
                     onClick={onSave}
-                    variant="outline"
-                    className="border-ceylon-tea text-ceylon-tea hover:bg-ceylon-tea hover:text-white flex-1"
-                    disabled={isEmpty}
+                    disabled={isEmpty || isSaving || isSubmitting}
+                    className="flex-1 bg-ceylon-sand hover:bg-ceylon-sand-dark text-white"
                 >
-                    <Save className="mr-2 h-4 w-4" />
-                    Save Itinerary
+                    {isSaving ? "Saving..." : "Save Itinerary"}
                 </Button>
-
                 <Button
-                    onClick={onSubmit}
-                    className="bg-ceylon-tea hover:bg-ceylon-tea/90 text-white flex-1"
-                    disabled={isEmpty}
+                    onClick={onRequestQuotation}
+                    disabled={isEmpty || isSaving || isSubmitting}
+                    className="flex-1 bg-ceylon-tea hover:bg-ceylon-tea-dark text-white"
+
                 >
-                    <Send className="mr-2 h-4 w-4" />
-                    Request Quotation
+                    {isSubmitting ? "Requesting..." : "Request Quotation"}
                 </Button>
             </div>
-
-            {isEmpty && (
-                <p className="text-xs text-gray-500 mt-2 text-center">
-                    Add at least one component to save or request a quotation.
-                </p>
-            )}
         </div>
     );
 };
