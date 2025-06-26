@@ -357,7 +357,7 @@ export const travelPackages: TravelPackage[] = [
         meals: "Breakfast, Lunch",
         activities: [
           "Tea plantation and factory tour",
-          "Tea tasting experience",
+          "c",
           "Nuwara Eliya city tour",
           "Victoria Park visit",
         ],
@@ -465,4 +465,277 @@ export const travelPackages: TravelPackage[] = [
       "Meals not mentioned in the itinerary",
     ],
   },
+];
+
+
+import { TravelPackage } from "../types/travel";
+
+export const travelPackages: TravelPackage[] = [
+  // Existing packages here...
+  
+  {
+    id: "pkg-004",
+    title: "Wildlife & Rainforest Adventure",
+    description: "Immerse yourself in Sri Lanka's biodiversity with safaris in premier national parks and exploration of UNESCO-listed rainforests, featuring elephants, leopards and endemic species.",
+    image: "/images/home/img1.jpg",
+    duration: 6,
+    price: 949,
+    rating: 4.9,
+    reviewCount: 78,
+    regions: ["Uva Province", "Southern Province"],
+    themes: ["Wildlife", "Nature", "Adventure"],
+    highlights: [
+      "Leopard tracking safari in Yala National Park",
+      "Elephant encounters in Udawalawe",
+      "Birdwatching in Sinharaja Rainforest",
+      "Night jungle walk in Kitulgala",
+      "River safari in Madu Ganga wetlands"
+    ],
+    gallery: [
+      "https://images.unsplash.com/photo-1598024055260-9d9a0e1236d4",
+      "https://images.unsplash.com/photo-1548263594-a071a1e3fe5b",
+      "https://images.unsplash.com/photo-1573512449171-1a8b7e4a4143",
+      "https://images.unsplash.com/photo-1567599759063-89ff5f3d56b2"
+    ],
+    itinerary: [
+      {
+        title: "Arrival & Transfer to Udawalawe",
+        location: "Udawalawe",
+        description: "Airport pickup and scenic drive to Udawalawe. Evening orientation and nature documentary screening.",
+        accommodation: "Grand Udawalawe Safari Resort",
+        meals: "Dinner",
+        activities: ["Transfer from airport", "Resort orientation"]
+      },
+      {
+        title: "Udawalawe Safari Experience",
+        location: "Udawalawe",
+        description: "Morning safari focusing on elephant herds. Afternoon visit to Elephant Transit Home. Evening nature walk.",
+        accommodation: "Grand Udawalawe Safari Resort",
+        meals: "Breakfast, Lunch",
+        activities: ["Morning safari", "Elephant orphanage visit", "Guided nature walk"]
+      },
+      {
+        title: "Sinharaja Rainforest Exploration",
+        location: "Sinharaja",
+        description: "Transfer to Sinharaja UNESCO Biosphere. Guided trek through primary rainforest with endemic species spotting.",
+        accommodation: "Rainforest Eco Lodge",
+        meals: "Breakfast, Dinner",
+        activities: ["Rainforest trekking", "Birdwatching", "Waterfall swim"]
+      },
+      {
+        title: "Kitulgala Adventure",
+        location: "Kitulgala",
+        description: "River tubing and rainforest canopy walk. Afternoon visit to local village and spice garden.",
+        accommodation: "The Plantation",
+        meals: "Breakfast, Lunch",
+        activities: ["River tubing", "Canopy walkway", "Village tour"]
+      },
+      {
+        title: "Yala National Park Safari",
+        location: "Yala",
+        description: "Full day safari in Yala with picnic lunch. Focus on leopard habitats and wetland birds.",
+        accommodation: "Cinnamon Wild Yala",
+        meals: "Breakfast, Lunch",
+        activities: ["Morning safari", "Afternoon safari", "Wildlife photography"]
+      },
+      {
+        title: "Departure via Coastal Route",
+        location: "Colombo",
+        description: "Scenic coastal drive to Colombo with stop at turtle hatchery. Airport transfer.",
+        meals: "Breakfast",
+        activities: ["Turtle conservation center", "Coastal route drive"]
+      }
+    ],
+    priceIncludes: [
+      "5 nights accommodation",
+      "All safari jeeps and park entrances",
+      "Professional wildlife guide",
+      "Daily breakfast + 3 lunches + 3 dinners",
+      "All activities mentioned",
+      "Airport transfers"
+    ],
+    priceExcludes: [
+      "Camera fees at national parks",
+      "Personal expenses",
+      "Optional rafting activities",
+      "Tips for guides"
+    ]
+  },
+  {
+    id: "pkg-005",
+    title: "East Coast Tropical Escape",
+    description: "Discover Sri Lanka's unspoiled eastern coastline with pristine beaches, cultural sites and marine adventures in Trincomalee and Batticaloa.",
+    image: "/images/home/img1.jpg",
+    duration: 5,
+    price: 799,
+    rating: 4.7,
+    reviewCount: 56,
+    regions: ["Eastern Province"],
+    themes: ["Beach", "Culture", "Diving"],
+    highlights: [
+      "Whale watching in Trincomalee",
+      "Pigeon Island snorkeling",
+      "Koneswaram Temple visit",
+      "Kallady Bridge musical sands",
+      "Traditional catamaran sailing"
+    ],
+    gallery: [
+      "https://images.unsplash.com/photo-1581434681311-1fe5a1029567",
+      "https://images.unsplash.com/photo-1599643477877-530eb83abc8e",
+      "https://images.unsplash.com/photo-1579033014070-3d7a6e11c3e2",
+      "https://images.unsplash.com/photo-1577696467905-54d0bc9d1459"
+    ],
+    itinerary: [
+      {
+        title: "Arrival in Trincomalee",
+        location: "Trincomalee",
+        description: "Airport transfer to Trincomalee via Dambulla. Evening beach welcome ceremony.",
+        accommodation: "Trinco Blu by Cinnamon",
+        meals: "Dinner",
+        activities: ["Transfer from airport", "Beach welcome"]
+      },
+      {
+        title: "Marine Adventure Day",
+        location: "Trincomalee",
+        description: "Morning whale watching tour. Afternoon snorkeling at Pigeon Island National Park.",
+        accommodation: "Trinco Blu by Cinnamon",
+        meals: "Breakfast, Lunch",
+        activities: ["Whale watching", "Pigeon Island snorkeling"]
+      },
+      {
+        title: "Cultural Exploration",
+        location: "Trincomalee",
+        description: "Visit Koneswaram Temple and Fort Frederick. Afternoon cooking class and fishing village tour.",
+        accommodation: "Trinco Blu by Cinnamon",
+        meals: "Breakfast, Dinner",
+        activities: ["Temple visit", "Cooking class", "Village tour"]
+      },
+      {
+        title: "Batticaloa Lagoon Discovery",
+        location: "Batticaloa",
+        description: "Transfer to Batticaloa. Lagoon boat tour with musical sands experience. Dutch Fort exploration.",
+        accommodation: "Amaya Beach Resort",
+        meals: "Breakfast, Lunch",
+        activities: ["Lagoon cruise", "Musical sands", "Fort visit"]
+      },
+      {
+        title: "Departure with Coastal Memories",
+        location: "Colombo",
+        description: "Return drive to Colombo with stop at local markets. Airport transfer.",
+        meals: "Breakfast",
+        activities: ["Market visit", "Scenic coastal drive"]
+      }
+    ],
+    priceIncludes: [
+      "4 nights beachfront accommodation",
+      "Marine activities with equipment",
+      "Cultural site entries",
+      "Daily breakfast + 2 lunches + 3 dinners",
+      "English-speaking guide",
+      "All transportation"
+    ],
+    priceExcludes: [
+      "Diving certification fees",
+      "Personal shopping",
+      "Optional spa treatments",
+      "Beverages"
+    ]
+  },
+  {
+    id: "pkg-006",
+    title: "Wellness & Ayurveda Retreat",
+    description: "Rejuvenate with authentic Ayurvedic treatments, yoga sessions and mindful nature experiences in Sri Lanka's tranquil southern and hill regions.",
+    image: "/images/home/img1.jpg",
+    duration: 7,
+    price: 1299,
+    rating: 4.9,
+    reviewCount: 92,
+    regions: ["Southern Province", "Sabaragamuwa Province"],
+    themes: ["Wellness", "Nature", "Yoga"],
+    highlights: [
+      "Personalized Ayurveda consultation",
+      "Daily yoga and meditation",
+      "Herbal garden tour",
+      "Mindfulness forest bathing",
+      "Traditional detox treatments"
+    ],
+    gallery: [
+      "https://images.unsplash.com/photo-1549576490-b0b4831a60b1",
+      "https://images.unsplash.com/photo-1599901860904-17e6ed7083a0",
+      "https://images.unsplash.com/photo-1591348122449-02525d703f45",
+      "https://images.unsplash.com/photo-1543050027-8c8d41e89e81"
+    ],
+    itinerary: [
+      {
+        title: "Arrival & Wellness Orientation",
+        location: "Weligama",
+        description: "Transfer to beachside wellness resort. Ayurvedic consultation and welcome ceremony.",
+        accommodation: "Santani Wellness Resort",
+        meals: "Detox dinner",
+        activities: ["Airport transfer", "Doctor consultation"]
+      },
+      {
+        title: "Holistic Healing Start",
+        location: "Weligama",
+        description: "Sunrise yoga session. Herbal compress massage. Nutrition workshop and cooking demonstration.",
+        accommodation: "Santani Wellness Resort",
+        meals: "All meals",
+        activities: ["Yoga", "Ayurveda treatment", "Cooking class"]
+      },
+      {
+        title: "Nature Immersion",
+        location: "Weligama",
+        description: "Guided forest bathing. Sound healing therapy. Afternoon mindfulness beach walk.",
+        accommodation: "Santani Wellness Resort",
+        meals: "All meals",
+        activities: ["Nature therapy", "Sound meditation", "Beach walk"]
+      },
+      {
+        title: "Mountain Retreat Transfer",
+        location: "Kanneliya",
+        description: "Scenic drive to hill retreat. Afternoon herbal garden tour and tea ceremony.",
+        accommodation: "The Rainforest Ecolodge",
+        meals: "All meals",
+        activities: ["Garden tour", "Tea ceremony", "Sunset meditation"]
+      },
+      {
+        title: "Water Healing Day",
+        location: "Kanneliya",
+        description: "Waterfall meditation. Hydrotherapy session. Evening yoga nidra.",
+        accommodation: "The Rainforest Ecolodge",
+        meals: "All meals",
+        activities: ["Water therapy", "Hydro massage", "Deep relaxation"]
+      },
+      {
+        title: "Integration & Reflection",
+        location: "Kanneliya",
+        description: "Personalized wellness plan development. Final detox treatment. Farewell ceremony.",
+        accommodation: "The Rainforest Ecolodge",
+        meals: "All meals",
+        activities: ["Wellness planning", "Final treatment", "Closing circle"]
+      },
+      {
+        title: "Departure with Renewed Energy",
+        location: "Colombo",
+        description: "Transfer to airport with herbal tea hamper. Optional Colombo spa stop.",
+        meals: "Breakfast",
+        activities: ["Transfer to airport", "Wellness gift"]
+      }
+    ],
+    priceIncludes: [
+      "6 nights premium wellness accommodation",
+      "Daily Ayurvedic treatments (2x daily)",
+      "All yoga and meditation sessions",
+      "Full board organic meals",
+      "Personalized wellness program",
+      "All consultations and workshops",
+      "Airport transfers"
+    ],
+    priceExcludes: [
+      "Specialized therapy supplements",
+      "Optional spa upgrades",
+      "Personal purchases",
+      "International flights"
+    ]
+  }
 ];

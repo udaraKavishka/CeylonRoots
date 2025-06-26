@@ -144,7 +144,6 @@
 //   attractions: string[];
 // };
 
-
 export type ComponentType =
   | "accommodations"
   | "destination"
