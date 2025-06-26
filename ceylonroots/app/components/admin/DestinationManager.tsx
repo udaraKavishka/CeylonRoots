@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useEffect, useState, useCallback } from 'react';
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card";
@@ -55,6 +56,7 @@ const DestinationManager = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState(initialFormState);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const fetchDestinations = useCallback(async () => {
     try {
@@ -82,6 +84,15 @@ const DestinationManager = () => {
   useEffect(() => {
     fetchDestinations();
   }, [fetchDestinations]);
+
+
+  useEffect(() => {
+    if (formData.image) {
+      setImagePreview(formData.image);
+    } else {
+      setImagePreview(null);
+    }
+  }, [formData.image]);
 
   const createDestination = async (destinationData: Partial<Destination>) => {
     const response = await fetch(`${API_BASE_URL}/destinationdetail`, {
@@ -113,12 +124,21 @@ const DestinationManager = () => {
     setIsSubmitting(true);
 
     try {
+      // Validate coordinates
+      const lat = parseFloat(formData.lat);
+      const lng = parseFloat(formData.lng);
+      
+      if (isNaN(lat)) throw new Error("Latitude must be a valid number");
+      if (isNaN(lng)) throw new Error("Longitude must be a valid number");
+      if (lat < -90 || lat > 90) throw new Error("Latitude must be between -90 and 90");
+      if (lng < -180 || lng > 180) throw new Error("Longitude must be between -180 and 180");
+
       const destinationData = {
         ...formData,
         attractions: formData.attractions.split(',').map(a => a.trim()).filter(Boolean),
         coordinates: {
-          latitude: parseFloat(formData.lat),
-          longitude: parseFloat(formData.lng)
+          latitude: lat,
+          longitude: lng
         }
       };
 
@@ -139,10 +159,12 @@ const DestinationManager = () => {
       }
 
       resetForm();
-    } catch {
+    } catch (error) {
       toast({
         title: "Error",
-        description: `Failed to ${editingDestination ? 'update' : 'create'} destination. Please check your input.`,
+        description: error instanceof Error 
+          ? error.message 
+          : `Failed to ${editingDestination ? 'update' : 'create'} destination.`,
         variant: "destructive"
       });
     } finally {
@@ -194,6 +216,7 @@ const DestinationManager = () => {
     setIsCreating(false);
     setEditingDestination(null);
     setFormData(initialFormState);
+    setImagePreview(null);
   };
 
   const renderDestinations = () => {
@@ -252,6 +275,25 @@ const DestinationManager = () => {
                       required
                       disabled={isSubmitting}
                     />
+                    
+                    {/* Image Preview */}
+                    {imagePreview && (
+                      <div className="mt-3">
+                        <Label>Image Preview</Label>
+                        <div className="relative mt-1 border rounded-md overflow-hidden w-full max-w-xs aspect-video">
+                          <Image
+                            src={imagePreview}
+                            alt="Preview"
+                            fill
+                            className="object-cover"
+                            style={{ objectFit: 'cover' }}
+                            onError={() => setImagePreview('/images/placeholder.jpg')}
+                            sizes="(max-width: 640px) 100vw, 400px"
+                            priority
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div>
@@ -382,6 +424,21 @@ const DestinationManager = () => {
                 <div className="flex flex-col md:flex-row justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <h3 className="text-lg font-semibold mb-2 truncate">{destination.name}</h3>
+                    
+                    {/* Destination Image */}
+                    <div className="relative w-full h-48 rounded-md overflow-hidden border mb-3">
+                      <Image
+                        src={destination.image}
+                        alt={destination.name}
+                        fill
+                        className="object-cover"
+                        style={{ objectFit: 'cover' }}
+                        onError={() => {}}
+                        sizes="(max-width: 640px) 100vw, 400px"
+                        priority={false}
+                      />
+                    </div>
+                    
                     <p className="text-gray-600 mb-3 line-clamp-2">{destination.description}</p>
                     <div className="flex flex-wrap gap-2 mb-3">
                       <Badge variant="secondary">{destination.region}</Badge>
@@ -494,6 +551,25 @@ const DestinationManager = () => {
                   required
                   disabled={isSubmitting}
                 />
+                
+                {/* Image Preview */}
+                {imagePreview && (
+                  <div className="mt-3">
+                    <Label>Image Preview</Label>
+                    <div className="relative mt-1 border rounded-md overflow-hidden w-full max-w-xs aspect-video">
+                      <Image
+                        src={imagePreview}
+                        alt="Preview"
+                        fill
+                        className="object-cover"
+                        style={{ objectFit: 'cover' }}
+                        onError={() => setImagePreview('/images/placeholder.jpg')}
+                        sizes="(max-width: 640px) 100vw, 400px"
+                        priority
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div>
