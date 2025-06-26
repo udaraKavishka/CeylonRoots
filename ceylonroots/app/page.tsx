@@ -6,7 +6,7 @@ import Link from 'next/link';
 import FeaturedPackages from "./components/FeaturedPackages";
 import Testimonials from "./components/Testimonials";
 import BlogPreview from "./components/BlogPreview";
-import HeroSection from "./components/HeroSection";
+import HeroSection from "./components/HeroSection"; 
 
 export default function HomePage() {
   const destinations = [
