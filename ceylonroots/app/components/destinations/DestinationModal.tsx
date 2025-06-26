@@ -145,7 +145,7 @@ const DestinationModal: React.FC<DestinationModalProps> = ({
                                     <div key={pkg.id} className="border rounded-md p-3 flex">
                                         <div className="w-20 h-20 flex-shrink-0 rounded-md overflow-hidden mr-3 relative">
                                             <Image
-                                                src={pkg.image}
+                                                src={pkg.imageUrl}
                                                 alt={pkg.title}
                                                 fill
                                                 className="object-cover"
