@@ -16,7 +16,7 @@ import PackageGallery from './PackageGallery';
 import PackagePriceBreakdown from './PackagePriceBreakdown';
 import PackageItinerary from './PackageItinerary';
 import Image from 'next/image';
-import {packageGalleries } from '../../data/packageImageMap';
+import { packageGalleries } from '../../data/packageImageMap';
 
 interface PackageDetailModalProps {
     isOpen: boolean;
