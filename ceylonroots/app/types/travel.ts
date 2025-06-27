@@ -250,3 +250,15 @@ export type DestinationDetails = {
   image: string;
   attractions: string[];
 };
+
+export type BlogPost = {
+  id: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  imageUrl: string;
+  date: string;
+  author: string;
+  slug: string;
+  tags: string[];
+};
