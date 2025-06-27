@@ -16,7 +16,7 @@ import PackageGallery from './PackageGallery';
 import PackagePriceBreakdown from './PackagePriceBreakdown';
 import PackageItinerary from './PackageItinerary';
 import Image from 'next/image';
-import { packageImages, packageGalleries } from '../../data/packageImageMap';
+import {packageGalleries } from '../../data/packageImageMap';
 
 interface PackageDetailModalProps {
     isOpen: boolean;
@@ -36,8 +36,8 @@ const PackageDetailModal = ({
     const [activeTab, setActiveTab] = useState('overview');
     const router = useRouter();
 
-    // Get local images
-    const mainImage = packageImages[travelPackage.id] || "/placeholder.jpg";
+
+    const mainImage = travelPackage.imageUrl;
     const galleryImages = packageGalleries[travelPackage.id] || [];
 
     const handleBookNow = () => {
@@ -71,6 +71,11 @@ const PackageDetailModal = ({
                                 fill
                                 className="object-cover"
                                 sizes="(max-width: 768px) 100vw, 80vw"
+                                onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.onerror = null;
+                                    target.src = '/images/placeholder.jpg';
+                                }}
                             />
                         </div>
 

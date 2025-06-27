@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
 // import { Badge } from "../components/ui/badge";
-import { Package, MapPin, FileText, Images, MessageSquare, Calendar, Map } from 'lucide-react';
+import { Package, MapPin, FileText, Calendar, Map } from 'lucide-react';
 // import Navbar from '../components/Navbar';
 // import Footer from '../components/Footer';
 import PackageManager from '../components/admin/PackageManager';
@@ -18,15 +18,15 @@ import TravelComponentManager from '../components/admin/TravelComponentManager';
 const Admin = () => {
     const [activeTab, setActiveTab] = useState('packages');
 
-    const stats = [
-        { label: 'Travel Packages', value: '3', icon: Package, color: 'bg-blue-500' },
-        { label: 'Destinations', value: '6', icon: MapPin, color: 'bg-green-500' },
-        { label: 'Blog Posts', value: '9', icon: FileText, color: 'bg-purple-500' },
-        { label: 'Gallery Items', value: '16', icon: Images, color: 'bg-orange-500' },
-        { label: 'Testimonials', value: '12', icon: MessageSquare, color: 'bg-pink-500' },
-        { label: 'Itineraries', value: '8', icon: Calendar, color: 'bg-indigo-500' },
-        { label: 'Components', value: '24', icon: Map, color: 'bg-teal-500' },
-    ];
+    // const stats = [
+    //     { label: 'Travel Packages', value: '3', icon: Package, color: 'bg-blue-500' },
+    //     { label: 'Destinations', value: '6', icon: MapPin, color: 'bg-green-500' },
+    //     { label: 'Blog Posts', value: '9', icon: FileText, color: 'bg-purple-500' },
+    //     { label: 'Gallery Items', value: '16', icon: Images, color: 'bg-orange-500' },
+    //     { label: 'Testimonials', value: '12', icon: MessageSquare, color: 'bg-pink-500' },
+    //     { label: 'Itineraries', value: '8', icon: Calendar, color: 'bg-indigo-500' },
+    //     { label: 'Components', value: '24', icon: Map, color: 'bg-teal-500' },
+    // ];
 
     return (
         <div className="flex flex-col min-h-screen mt-4">
@@ -40,7 +40,7 @@ const Admin = () => {
                     </div>
 
                     {/* Stats Overview */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4 mb-8">
+                    {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4 mb-8">
                         {stats.map((stat, index) => (
                             <Card key={index} className="overflow-hidden">
                                 <CardContent className="flex items-center p-4">
@@ -54,7 +54,7 @@ const Admin = () => {
                                 </CardContent>
                             </Card>
                         ))}
-                    </div>
+                    </div> */}
 
                     {/* Management Tabs */}
                     <Card>
@@ -77,14 +77,14 @@ const Admin = () => {
                                         <FileText className="h-3 w-3 sm:h-4 sm:w-4" />
                                         <span className="truncate">Blog</span>
                                     </TabsTrigger>
-                                    <TabsTrigger value="gallery" className="flex items-center gap-1 py-1 text-xs">
+                                    {/* <TabsTrigger value="gallery" className="flex items-center gap-1 py-1 text-xs">
                                         <Images className="h-3 w-3 sm:h-4 sm:w-4" />
                                         <span className="truncate">Gallery</span>
-                                    </TabsTrigger>
-                                    <TabsTrigger value="testimonials" className="flex items-center gap-1 py-1 text-xs">
+                                    </TabsTrigger> */}
+                                    {/* <TabsTrigger value="testimonials" className="flex items-center gap-1 py-1 text-xs">
                                         <MessageSquare className="h-3 w-3 sm:h-4 sm:w-4" />
                                         <span className="truncate">Testimonials</span>
-                                    </TabsTrigger>
+                                    </TabsTrigger> */}
                                     <TabsTrigger value="itineraries" className="flex items-center gap-1 py-1 text-xs">
                                         <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
                                         <span className="truncate">Itineraries</span>
