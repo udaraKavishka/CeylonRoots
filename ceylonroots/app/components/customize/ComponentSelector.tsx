@@ -101,14 +101,14 @@ const ComponentSelector: React.FC<ComponentSelectorProps> = ({ onAddComponent })
 
     const ComponentCard = ({ component }: { component: TravelComponent }) => (
         <div className="border border-ceylon-sand/30 rounded-lg overflow-hidden transition-all hover:shadow-md group mb-4">
-            <div className="relative w-full h-48">
-                <Image
+            <div className="relative w-full h-5">
+                {/* <Image
                     src={component.image || '/placeholder.jpg'}
                     alt={component.name}
                     className="w-full h-full object-cover transition-transform group-hover:scale-105"
                     layout="fill"
                     objectFit="cover"
-                />
+                /> */}
                 <div className="absolute top-3 right-3 bg-ceylon-tea text-white rounded-full px-3 py-1 text-xs font-bold">
                     ${component.price}
                 </div>
