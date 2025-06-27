@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -18,72 +18,42 @@ import {
     Calendar,
     DollarSign,
 } from "lucide-react";
+import { TravelPackage } from "../types/travel";
 
-const featuredPackages = [
-    {
-        id: 1,
-        title: "Cultural Triangle Explorer",
-        description:
-            "Discover the ancient cities of Anuradhapura, Polonnaruwa, and the rock fortress of Sigiriya",
-        image:
-            "https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
-        duration: "7 Days",
-        price: "$899",
-        rating: 4.8,
-        locations: ["Colombo", "Anuradhapura", "Sigiriya", "Polonnaruwa", "Kandy"],
-    },
-    {
-        id: 2,
-        title: "Coastal Paradise",
-        description:
-            "Relax on pristine beaches and explore vibrant coastal towns along Sri Lanka's southern coast",
-        image:
-            "https://images.unsplash.com/photo-1433086966358-54859d0ed716?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
-        duration: "9 Days",
-        price: "$1099",
-        rating: 4.9,
-        locations: ["Colombo", "Bentota", "Galle", "Mirissa", "Tangalle"],
-    },
-    {
-        id: 3,
-        title: "Tea Country & Wildlife",
-        description:
-            "Journey through misty tea plantations and encounter wildlife in Sri Lanka's national parks",
-        image:
-            "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
-        duration: "8 Days",
-        price: "$999",
-        rating: 4.7,
-        locations: ["Colombo", "Nuwara Eliya", "Ella", "Yala", "Galle"],
-    },
-    {
-        id: 4,
-        title: "Complete Sri Lanka",
-        description:
-            "Experience the best of Sri Lanka with this comprehensive tour of the island's highlights",
-        image:
-            "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
-        duration: "14 Days",
-        price: "$1799",
-        rating: 4.9,
-        locations: [
-            "Colombo",
-            "Anuradhapura",
-            "Kandy",
-            "Nuwara Eliya",
-            "Ella",
-            "Yala",
-            "Galle",
-        ],
-    },
-];
+interface FeaturedPackagesProps {
+    packages: TravelPackage[];
+}
 
-const FeaturedPackages = () => {
+const FeaturedPackages = ({ packages }: FeaturedPackagesProps) => {
     const [startIndex, setStartIndex] = useState(0);
-    const displayCount = 3;
+    const [displayCount, setDisplayCount] = useState(3);
+
+    // Responsive display count
+    useEffect(() => {
+        const updateDisplayCount = () => {
+            if (window.innerWidth < 768) {
+                setDisplayCount(1);
+            } else if (window.innerWidth < 1024) {
+                setDisplayCount(2);
+            } else {
+                setDisplayCount(3);
+            }
+        };
+
+        updateDisplayCount();
+        window.addEventListener('resize', updateDisplayCount);
+        return () => window.removeEventListener('resize', updateDisplayCount);
+    }, []);
+
+    // Reset startIndex when packages change
+    useEffect(() => {
+        setStartIndex(0);
+    }, [packages]);
 
     const nextSlide = () => {
-        if (startIndex + displayCount < featuredPackages.length) {
+        if (packages.length <= displayCount) return;
+
+        if (startIndex + displayCount < packages.length) {
             setStartIndex(startIndex + 1);
         } else {
             setStartIndex(0);
@@ -91,12 +61,35 @@ const FeaturedPackages = () => {
     };
 
     const prevSlide = () => {
+        if (packages.length <= displayCount) return;
+
         if (startIndex > 0) {
             setStartIndex(startIndex - 1);
         } else {
-            setStartIndex(featuredPackages.length - displayCount); 
+            setStartIndex(packages.length - displayCount);
         }
     };
+
+    // Safeguard against undefined packages
+    if (!packages || packages.length === 0) {
+        return (
+            <section className="py-16 bg-gray-50" aria-label="Featured Travel Packages">
+                <div className="ceylon-container">
+                    <div className="max-w-3xl mx-auto text-center mb-12">
+                        <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                            Featured Travel Packages
+                        </h2>
+                        <p className="text-gray-600">
+                            Carefully crafted itineraries to showcase the very best of Sri Lanka
+                        </p>
+                    </div>
+                    <div className="text-center py-12">
+                        <p className="text-gray-500">No featured packages available at the moment</p>
+                    </div>
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section className="py-16 bg-gray-50" aria-label="Featured Travel Packages">
@@ -112,97 +105,105 @@ const FeaturedPackages = () => {
                 </div>
 
                 <div className="relative">
-                    {/* Carousel Navigation */}
-                    <div className="absolute top-1/2 -left-5 transform -translate-y-1/2 z-10">
-                        <button
-                            onClick={prevSlide}
-                            className="p-2 rounded-full bg-white shadow-md text-ceylon-tea hover:bg-ceylon-tea hover:text-white transition-colors"
-                            aria-label="Previous packages"
-                        >
-                            <ChevronLeft className="h-6 w-6" />
-                        </button>
-                    </div>
+                    {/* Carousel Navigation - only show if there are more packages than display count */}
+                    {packages.length > displayCount && (
+                        <>
+                            <div className="absolute top-1/2 -left-5 transform -translate-y-1/2 z-10">
+                                <button
+                                    onClick={prevSlide}
+                                    className="p-2 rounded-full bg-white shadow-md text-ceylon-tea hover:bg-ceylon-tea hover:text-white transition-colors"
+                                    aria-label="Previous packages"
+                                >
+                                    <ChevronLeft className="h-6 w-6" />
+                                </button>
+                            </div>
 
-                    <div className="absolute top-1/2 -right-5 transform -translate-y-1/2 z-10">
-                        <button
-                            onClick={nextSlide}
-                            className="p-2 rounded-full bg-white shadow-md text-ceylon-tea hover:bg-ceylon-tea hover:text-white transition-colors"
-                            aria-label="Next packages"
-                        >
-                            <ChevronRight className="h-6 w-6" />
-                        </button>
-                    </div>
+                            <div className="absolute top-1/2 -right-5 transform -translate-y-1/2 z-10">
+                                <button
+                                    onClick={nextSlide}
+                                    className="p-2 rounded-full bg-white shadow-md text-ceylon-tea hover:bg-ceylon-tea hover:text-white transition-colors"
+                                    aria-label="Next packages"
+                                >
+                                    <ChevronRight className="h-6 w-6" />
+                                </button>
+                            </div>
+                        </>
+                    )}
 
                     {/* Package Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 overflow-hidden">
-                        {featuredPackages
+                        {packages
                             .slice(startIndex, startIndex + displayCount)
-                            .map((pkg) => (
-                                <Card key={pkg.id} className="ceylon-card group">
-                                    <div className="aspect-[4/3] overflow-hidden relative">
-                                        <Image
-                                            src={pkg.image}
-                                            alt={`${pkg.title} tour package`}
-                                            fill
-                                            className="object-cover group-hover:scale-105 transition-transform duration-500"
-                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                        />
-                                    </div>
-                                    <CardHeader className="pb-2">
-                                        <div className="flex justify-between items-start">
-                                            <CardTitle className="text-xl" aria-label={pkg.title}>
-                                                {pkg.title}
-                                            </CardTitle>
-                                            <div
-                                                className="px-2 py-1 bg-ceylon-gold/20 text-ceylon-gold rounded text-sm font-medium"
-                                                aria-label={`Rating: ${pkg.rating} stars`}
-                                            >
-                                                {pkg.rating} ★
-                                            </div>
+                            .map((pkg) => {
+                                const regions = pkg.regions || [];
+
+                                return (
+                                    <Card key={pkg.id} className="ceylon-card group">
+                                        <div className="aspect-[4/3] overflow-hidden relative">
+                                            <Image
+                                                src={pkg.imageUrl}
+                                                alt={`${pkg.title} tour package`}
+                                                fill
+                                                className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                            />
                                         </div>
-                                    </CardHeader>
-                                    <CardContent className="pb-4">
-                                        <p
-                                            className="text-gray-600 mb-4 line-clamp-2"
-                                            aria-label="Package description"
-                                        >
-                                            {pkg.description}
-                                        </p>
-                                        <div className="flex flex-wrap gap-y-2">
-                                            <div className="flex items-center text-sm text-gray-500 mr-4">
-                                                <Calendar className="h-4 w-4 mr-1" aria-hidden="true" />
-                                                <span>{pkg.duration}</span>
+                                        <CardHeader className="pb-2">
+                                            <div className="flex justify-between items-start">
+                                                <CardTitle className="text-xl" aria-label={pkg.title}>
+                                                    {pkg.title}
+                                                </CardTitle>
+                                                <div
+                                                    className="px-2 py-1 bg-ceylon-gold/20 text-ceylon-gold rounded text-sm font-medium"
+                                                    aria-label={`Rating: ${pkg.rating} stars`}
+                                                >
+                                                    {pkg.rating} ★
+                                                </div>
                                             </div>
-                                            <div className="flex items-center text-sm text-gray-500">
-                                                <DollarSign
-                                                    className="h-4 w-4 mr-1"
+                                        </CardHeader>
+                                        <CardContent className="pb-4">
+                                            <p
+                                                className="text-gray-600 mb-4 line-clamp-2"
+                                                aria-label="Package description"
+                                            >
+                                                {pkg.description}
+                                            </p>
+                                            <div className="flex flex-wrap gap-y-2">
+                                                <div className="flex items-center text-sm text-gray-500 mr-4">
+                                                    <Calendar className="h-4 w-4 mr-1" aria-hidden="true" />
+                                                    <span>{pkg.duration} days</span>
+                                                </div>
+                                                <div className="flex items-center text-sm text-gray-500">
+                                                    <DollarSign
+                                                        className="h-4 w-4 mr-1"
+                                                        aria-hidden="true"
+                                                    />
+                                                    <span>${pkg.price}</span>
+                                                </div>
+                                            </div>
+                                            <div className="mt-3 flex items-start">
+                                                <MapPin
+                                                    className="h-4 w-4 text-ceylon-spice mt-1 flex-shrink-0"
                                                     aria-hidden="true"
                                                 />
-                                                <span>From {pkg.price}</span>
+                                                <p className="text-sm text-gray-500 ml-1 line-clamp-1">
+                                                    {regions.slice(0, 3).join(", ")}
+                                                    {regions.length > 3 && "..."}
+                                                </p>
                                             </div>
-                                        </div>
-                                        <div className="mt-3 flex items-start">
-                                            <MapPin
-                                                className="h-4 w-4 text-ceylon-spice mt-1 flex-shrink-0"
-                                                aria-hidden="true"
-                                            />
-                                            <p className="text-sm text-gray-500 ml-1 line-clamp-1">
-                                                {pkg.locations.slice(0, 3).join(", ")}
-                                                {pkg.locations.length > 3 && "..."}
-                                            </p>
-                                        </div>
-                                    </CardContent>
-                                    <CardFooter>
-                                        <Button
-                                            asChild
-                                            className="w-full bg-ceylon-tea hover:bg-ceylon-tea/90 text-white"
-                                            aria-label={`View details for ${pkg.title}`}
-                                        >
-                                            <Link href={`/packages/${pkg.id}`}>View Details</Link>
-                                        </Button>
-                                    </CardFooter>
-                                </Card>
-                            ))}
+                                        </CardContent>
+                                        <CardFooter>
+                                            <Button
+                                                asChild
+                                                className="w-full bg-ceylon-tea hover:bg-ceylon-tea/90 text-white"
+                                                aria-label={`View details for ${pkg.title}`}
+                                            >
+                                                <Link href={"/packages/"}>View Details</Link>
+                                            </Button>
+                                        </CardFooter>
+                                    </Card>
+                                );
+                            })}
                     </div>
                 </div>
 

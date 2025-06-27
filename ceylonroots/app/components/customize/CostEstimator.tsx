@@ -41,7 +41,7 @@ const CostEstimator: React.FC<CostEstimatorProps> = ({ components, totalCost }) 
                             {items.map(item => (
                                 <div key={item.id} className="flex justify-between text-sm">
                                     <span className="text-gray-600">{item.name}</span>
-                                    <span className="font-medium">${item.price}</span>
+                                    <span className="font-medium">Rs{item.price}</span>
                                 </div>
                             ))}
                         </div>
@@ -51,7 +51,7 @@ const CostEstimator: React.FC<CostEstimatorProps> = ({ components, totalCost }) 
 
             <div className="mt-6 pt-4 border-t border-ceylon-sand/30 flex justify-between items-center">
                 <span className="text-lg font-bold text-ceylon-stone">Total</span>
-                <span className="text-2xl font-bold text-ceylon-tea">${totalCost}</span>
+                <span className="text-2xl font-bold text-ceylon-tea">Rs{totalCost}</span>
             </div>
         </div>
     );
