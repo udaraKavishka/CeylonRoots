@@ -30,7 +30,7 @@ const TravelPackageHeader: React.FC<TravelPackageHeaderProps> = ({ duration, tot
 
                         <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 min-w-[140px] border border-ceylon-sand/30">
                             <p className="text-xs uppercase tracking-wider text-ceylon-sand-light mb-1">Estimated Cost</p>
-                            <p className="text-2xl font-bold text-black">${totalCost.toFixed(2)}</p>
+                            <p className="text-2xl font-bold text-black">Rs{totalCost.toFixed(2)}</p>
                         </div>
                     </div>
                 </div>

@@ -68,8 +68,7 @@ const TravelPackages = () => {
                 }
 
                 const mappedPackages = data.map((pkg: BackendPackage) => {
-                    // Use local images instead of backend URLs
-                    // const imageUrl = packageImages[pkg.id] || "/placeholder.jpg";
+                    
                     const gallery = packageGalleries[pkg.id] || [];
 
                     return {

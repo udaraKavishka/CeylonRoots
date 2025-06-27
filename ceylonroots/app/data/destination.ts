@@ -106,7 +106,7 @@ export const allDestinations: DestinationDetails[] = [
     culturalTips:
       "Ella has become a tourist hotspot but remains a relaxed place. Respect the tranquility of the area. Try the local cuisine, especially the curries and rice dishes. Tea plantations welcome visitors.",
     attractions: [
-      "Nine Arch Bridge",
+      "Ella has become a tourist hotspot but remains a relaxed place. Respect the tranquility of the area. Try the local cuisine, especially the curries and rice dishes. Tea plantations welcome visitors.",
       "Ella Rock",
       "Little Adam's Peak",
       "Ravana Falls",
