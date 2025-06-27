@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
@@ -63,6 +64,7 @@ const TravelComponentManager = () => {
         arrivalCoordinates: { lat: number; lng: number };
     };
 
+    // Initialize all array fields as empty arrays
     const [formData, setFormData] = useState<TravelComponentFormData>({
         type: 'accommodations',
         name: '',
@@ -160,14 +162,31 @@ const TravelComponentManager = () => {
                 successMessage = 'Component updated successfully';
             }
 
+            // Create payload with cleaned values
+            const payload = {
+                ...formData,
+                // Convert empty strings to null for backend
+                image: formData.image || null,
+                coordinates: formData.coordinates.lat && formData.coordinates.lng
+                    ? formData.coordinates
+                    : null,
+                departureCoordinates: formData.departureCoordinates.lat && formData.departureCoordinates.lng
+                    ? formData.departureCoordinates
+                    : null,
+                arrivalCoordinates: formData.arrivalCoordinates.lat && formData.arrivalCoordinates.lng
+                    ? formData.arrivalCoordinates
+                    : null,
+            };
+
             const response = await fetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(payload)
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorData = await response.json();
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
             }
 
             toast({
@@ -189,11 +208,13 @@ const TravelComponentManager = () => {
         setEditingComponent(component);
         setFormData({
             ...component,
-            coordinates: component.coordinates || { lat: 0, lng: 0 },
+            // Ensure all array fields are arrays, not undefined
+            tags: component.tags || [],
             amenities: (component as AccommodationComponent).amenities || [],
+            attractions: (component as DestinationComponent).attractions || [],
+            coordinates: component.coordinates || { lat: 0, lng: 0 },
             rating: (component as AccommodationComponent).rating || 0,
             difficulty: (component as ActivityComponent).difficulty || 'EASY',
-            attractions: (component as DestinationComponent).attractions || [],
             mode: (component as TransportComponent).mode || 'CAR',
             departureLocation: (component as TransportComponent).departureLocation || '',
             arrivalLocation: (component as TransportComponent).arrivalLocation || '',
@@ -203,6 +224,7 @@ const TravelComponentManager = () => {
         setActiveTab(component.type);
         setIsDialogOpen(true);
     };
+
     const handleDelete = async (id: string, type: ComponentType) => {
         try {
             const response = await fetch(`${API_BASE_URL}/${type}/${id}`, {
@@ -245,6 +267,19 @@ const TravelComponentManager = () => {
 
         return (
             <Card className="relative overflow-hidden">
+                {/* Image display */}
+                {component.image && (
+                    <div className="relative h-48 w-full">
+                        <Image
+                            src={component.image}
+                            alt={component.name}
+                            fill={true}
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            className="object-cover rounded-t-lg"
+                        />
+                    </div>
+                )}
+
                 {component.type === 'accommodations' && (
                     <div className="absolute top-4 right-4 bg-ceylon-teal/90 text-white px-2 py-1 rounded-md flex items-center">
                         <Star className="h-4 w-4 mr-1" />
@@ -304,7 +339,7 @@ const TravelComponentManager = () => {
                         <div className="mb-3">
                             <h4 className="text-sm font-medium mb-1">Amenities:</h4>
                             <div className="flex flex-wrap gap-1">
-                                {(component as AccommodationComponent).amenities.map((amenity, index) => (
+                                {((component as AccommodationComponent).amenities || []).map((amenity, index) => (
                                     <Badge key={index} variant="secondary" className="text-xs">
                                         {amenity}
                                     </Badge>
@@ -318,7 +353,7 @@ const TravelComponentManager = () => {
                         <div className="mb-3">
                             <h4 className="text-sm font-medium mb-1">Attractions:</h4>
                             <ul className="list-disc pl-5 text-sm">
-                                {(component as DestinationComponent).attractions.map((attraction, index) => (
+                                {((component as DestinationComponent).attractions || []).map((attraction, index) => (
                                     <li key={index}>{attraction}</li>
                                 ))}
                             </ul>
@@ -358,7 +393,7 @@ const TravelComponentManager = () => {
 
                     {component.tags && component.tags.length > 0 && (
                         <div className="flex flex-wrap gap-1">
-                            {component.tags.map((tag, index) => (
+                            {(component.tags || []).map((tag, index) => (
                                 <Badge key={index} variant="secondary" className="text-xs">
                                     {tag}
                                 </Badge>
@@ -383,7 +418,6 @@ const TravelComponentManager = () => {
                         resetForm();
                         setIsDialogOpen(true);
                     }}
-
                 >
                     <Plus className="h-4 w-4 mr-2" />
                     Add Component
@@ -425,7 +459,7 @@ const TravelComponentManager = () => {
                                 <Label htmlFor="name">Name *</Label>
                                 <Input
                                     id="name"
-                                    value={formData.name ?? ''}
+                                    value={formData.name}
                                     onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                                     required
                                 />
@@ -437,7 +471,7 @@ const TravelComponentManager = () => {
                                 <Label htmlFor="location">Location *</Label>
                                 <Input
                                     id="location"
-                                    value={formData.location ?? ''}
+                                    value={formData.location}
                                     onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
                                     required
                                 />
@@ -449,7 +483,7 @@ const TravelComponentManager = () => {
                                     type="number"
                                     min="0"
                                     step="0.01"
-                                    value={formData.price ?? ''}
+                                    value={formData.price}
                                     onChange={(e) => setFormData(prev => ({
                                         ...prev,
                                         price: parseFloat(e.target.value) || 0
@@ -472,12 +506,32 @@ const TravelComponentManager = () => {
 
                         <div>
                             <Label htmlFor="image">Image URL</Label>
-                            <Input
-                                id="image"
-                                value={formData.image}
-                                onChange={(e) => setFormData(prev => ({ ...prev, image: e.target.value }))}
-                                placeholder="https://example.com/image.jpg"
-                            />
+                            <div className="flex flex-col gap-4">
+                                <Input
+                                    id="image"
+                                    value={formData.image}
+                                    onChange={(e) => setFormData(prev => ({
+                                        ...prev,
+                                        image: e.target.value
+                                    }))}
+                                    placeholder="https://example.com/image.jpg"
+                                />
+
+                                {formData.image && (
+                                    <div className="relative w-full h-48 rounded-md overflow-hidden border">
+                                        <Image
+                                            src={formData.image}
+                                            alt="Preview"
+                                            fill={true}
+                                            sizes="(max-width: 768px) 100vw, 50vw"
+                                            className="object-cover rounded-md"
+                                            onError={(e) => {
+                                                e.currentTarget.src = '/placeholder-image.jpg';
+                                            }}
+                                        />
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -487,12 +541,12 @@ const TravelComponentManager = () => {
                                     id="lat"
                                     type="number"
                                     step="any"
-                                    value={formData.coordinates.lat ?? ''}
+                                    value={formData.coordinates.lat}
                                     onChange={(e) => setFormData(prev => ({
                                         ...prev,
                                         coordinates: {
                                             ...prev.coordinates,
-                                            lat: parseFloat(e.target.value)
+                                            lat: parseFloat(e.target.value) || 0
                                         }
                                     }))}
                                 />
@@ -503,12 +557,12 @@ const TravelComponentManager = () => {
                                     id="lng"
                                     type="number"
                                     step="any"
-                                    value={formData.coordinates.lng ?? ''}
+                                    value={formData.coordinates.lng}
                                     onChange={(e) => setFormData(prev => ({
                                         ...prev,
                                         coordinates: {
                                             ...prev.coordinates,
-                                            lng: parseFloat(e.target.value)
+                                            lng: parseFloat(e.target.value) || 0
                                         }
                                     }))}
                                 />
@@ -520,7 +574,7 @@ const TravelComponentManager = () => {
                                         id="duration"
                                         type="number"
                                         min="0"
-                                        value={formData.duration || 0}
+                                        value={formData.duration}
                                         onChange={(e) => setFormData(prev => ({
                                             ...prev,
                                             duration: parseInt(e.target.value) || 0
@@ -554,7 +608,7 @@ const TravelComponentManager = () => {
                                     <Label htmlFor="amenities">Amenities (comma separated)</Label>
                                     <Input
                                         id="amenities"
-                                        value={(formData.amenities ?? []).join(', ')}
+                                        value={formData.amenities.join(', ')}
                                         onChange={(e) => setFormData(prev => ({
                                             ...prev,
                                             amenities: e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag)
@@ -660,12 +714,12 @@ const TravelComponentManager = () => {
                                                 placeholder="Latitude"
                                                 type="number"
                                                 step="any"
-                                                value={formData.departureCoordinates.lat ?? ''}
+                                                value={formData.departureCoordinates.lat}
                                                 onChange={(e) => setFormData(prev => ({
                                                     ...prev,
                                                     departureCoordinates: {
                                                         ...prev.departureCoordinates,
-                                                        lat: e.target.value === '' ? 0 : parseFloat(e.target.value)
+                                                        lat: parseFloat(e.target.value) || 0
                                                     }
                                                 }))}
                                             />
@@ -673,12 +727,12 @@ const TravelComponentManager = () => {
                                                 placeholder="Longitude"
                                                 type="number"
                                                 step="any"
-                                                value={formData.departureCoordinates.lng ?? ''}
+                                                value={formData.departureCoordinates.lng}
                                                 onChange={(e) => setFormData(prev => ({
                                                     ...prev,
                                                     departureCoordinates: {
                                                         ...prev.departureCoordinates,
-                                                        lng: e.target.value === '' ? 0 : parseFloat(e.target.value)
+                                                        lng: parseFloat(e.target.value) || 0
                                                     }
                                                 }))}
                                             />
@@ -691,12 +745,12 @@ const TravelComponentManager = () => {
                                                 placeholder="Latitude"
                                                 type="number"
                                                 step="any"
-                                                value={formData.arrivalCoordinates.lat || 0}
+                                                value={formData.arrivalCoordinates.lat}
                                                 onChange={(e) => setFormData(prev => ({
                                                     ...prev,
                                                     arrivalCoordinates: {
                                                         ...prev.arrivalCoordinates,
-                                                        lat: parseFloat(e.target.value)
+                                                        lat: parseFloat(e.target.value) || 0
                                                     }
                                                 }))}
                                             />
@@ -704,12 +758,12 @@ const TravelComponentManager = () => {
                                                 placeholder="Longitude"
                                                 type="number"
                                                 step="any"
-                                                value={formData.arrivalCoordinates.lng || 0}
+                                                value={formData.arrivalCoordinates.lng}
                                                 onChange={(e) => setFormData(prev => ({
                                                     ...prev,
                                                     arrivalCoordinates: {
                                                         ...prev.arrivalCoordinates,
-                                                        lng: parseFloat(e.target.value)
+                                                        lng: parseFloat(e.target.value) || 0
                                                     }
                                                 }))}
                                             />
@@ -723,7 +777,7 @@ const TravelComponentManager = () => {
                             <Label htmlFor="tags">Tags (comma separated)</Label>
                             <Input
                                 id="tags"
-                                value={(formData.tags ?? []).join(', ')}
+                                value={formData.tags.join(', ')}
                                 onChange={(e) => setFormData(prev => ({
                                     ...prev,
                                     tags: e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag)
@@ -794,7 +848,6 @@ const TravelComponentManager = () => {
                                                     resetForm();
                                                     setIsDialogOpen(true);
                                                 }}
-
                                             >
                                                 Create {type.charAt(0).toUpperCase() + type.slice(1)}
                                             </Button>

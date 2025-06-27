@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { Card, CardContent } from "../components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
 import Navbar from '../components/Navbar';
-// import Footer from '../components/Footer';
+import Footer from '../components/Footer';
 import { teamMembers, milestones, partners } from '../data/aboutData';
 
 export default function AboutPage() {
@@ -48,7 +48,7 @@ export default function AboutPage() {
 
                             <div className="relative h-[400px] rounded-lg overflow-hidden shadow-xl">
                                 <Image
-                                    src="/images/about/history.jpg"
+                                    src="/images/home/team.jpg"
                                     alt="CeylonRoots Team History"
                                     fill
                                     className="object-cover"
