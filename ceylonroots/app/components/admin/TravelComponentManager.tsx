@@ -266,7 +266,7 @@ const TravelComponentManager = () => {
                                 <div className="flex items-center space-x-4 mt-2">
                                     <div className="flex items-center">
                                         <DollarSign className="h-4 w-4 mr-1 text-ceylon-spice" />
-                                        <span className="text-sm font-medium">${component.price}</span>
+                                        <span className="text-sm font-medium">Rs{component.price}</span>
                                     </div>
                                     {component.duration > 0 && (
                                         <div className="flex items-center">
@@ -443,7 +443,7 @@ const TravelComponentManager = () => {
                                 />
                             </div>
                             <div>
-                                <Label htmlFor="price">Price ($) *</Label>
+                                <Label htmlFor="price">Price (Rs) *</Label>
                                 <Input
                                     id="price"
                                     type="number"
