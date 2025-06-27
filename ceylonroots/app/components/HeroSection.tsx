@@ -14,7 +14,7 @@ const HeroSection = () => {
             {/* Hero Background Image with priority loading */}
             <div className="absolute inset-0 w-full h-full">
                 <Image
-                    src="/images/home/img1.jpg"
+                    src="https://ceylonrootsbucket.s3.eu-north-1.amazonaws.com/upload/mainimg.jpg"
                     alt="Scenic view of Sri Lankan landscape"
                     fill
                     priority
