@@ -16,6 +16,12 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "example.com/",
       },
+      {
+        protocol: "https",
+        hostname: "ceylonrootsbucket.s3.eu-north-1.amazonaws.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
     formats: ["image/avif", "image/webp"],
   },

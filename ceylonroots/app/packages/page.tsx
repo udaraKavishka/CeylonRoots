@@ -8,7 +8,7 @@ import PackageFilter from '../components/packages/PackageFilter';
 import PackageCard from '../components/packages/PackageCard';
 import PackageDetailModal from '../components/packages/PackageDetailModal';
 import { TravelPackage } from '../types/travel';
-import { packageImages, packageGalleries } from '../data/packageImageMap';
+import { packageGalleries } from '../data/packageImageMap';
 
 const regions = ["All Regions", "Cultural Triangle", "Hill Country", "Southern Coast", "Northern Province", "Eastern Coast"];
 const durations = ["Any Duration", "1-3 Days", "4-7 Days", "8-14 Days", "15+ Days"];
@@ -50,6 +50,7 @@ const TravelPackages = () => {
                     id: string;
                     title: string;
                     description: string;
+                    imageUrl: string;
                     durationDays: number;
                     price: number;
                     rating: number;
@@ -68,14 +69,14 @@ const TravelPackages = () => {
 
                 const mappedPackages = data.map((pkg: BackendPackage) => {
                     // Use local images instead of backend URLs
-                    const imageUrl = packageImages[pkg.id] || "/placeholder.jpg";
+                    // const imageUrl = packageImages[pkg.id] || "/placeholder.jpg";
                     const gallery = packageGalleries[pkg.id] || [];
 
                     return {
                         id: pkg.id,
                         title: pkg.title,
                         description: pkg.description,
-                        imageUrl, // Use local image
+                        imageUrl: pkg.imageUrl,
                         duration: pkg.durationDays,
                         price: pkg.price,
                         rating: pkg.rating,
@@ -372,4 +373,4 @@ const TravelPackages = () => {
     );
 };
 
-export default TravelPackages;
+export default TravelPackages; 

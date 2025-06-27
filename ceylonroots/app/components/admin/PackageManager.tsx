@@ -9,7 +9,7 @@ import { Textarea } from "../../components/ui/textarea";
 import { Badge } from "../../components/ui/badge";
 import { Plus, Edit, Trash2, Save } from 'lucide-react';
 import { useToast } from "../../components/ui/use-toast";
-// import Image from 'next/image';
+import Image from 'next/image';
 
 type ItineraryActivity = { name: string };
 type ItineraryDay = {
@@ -236,18 +236,17 @@ const PackageManager = () => {
                     <Card key={pkg.id} className="overflow-hidden">
                         <CardContent className="p-0">
                             <div className="flex flex-col md:flex-row">
-                                {/* Image Section
+
                                 {pkg.imageUrl && (
                                     <div className="md:w-1/3 relative h-48 md:h-auto">
                                         <Image
                                             src={pkg.imageUrl}
                                             alt={pkg.title}
-                                            layout="fill"
-                                            objectFit="cover"
-                                            className="rounded-t-lg md:rounded-l-lg md:rounded-tr-none"
+                                            fill
+                                            className="object-cover rounded-t-lg md:rounded-l-lg md:rounded-tr-none"
                                         />
                                     </div>
-                                )} */}
+                                )}
                                 {/* Content Section */}
                                 <div className="flex-1 p-6">
                                     {editingPackage === pkg.id ? (
@@ -299,7 +298,7 @@ const PackageManager = () => {
                                                     />
                                                 </div>
                                                 <div>
-                                                    <Label htmlFor="price">Price (USD)</Label>
+                                                    <Label htmlFor="price">Price (Rs)</Label>
                                                     <Input
                                                         id="price"
                                                         type="number"
@@ -574,7 +573,7 @@ const PackageManager = () => {
                                     />
                                 </div>
                                 <div>
-                                    <Label htmlFor="price">Price (USD)</Label>
+                                    <Label htmlFor="price">Price (Rs)</Label>
                                     <Input
                                         id="price"
                                         type="number"
