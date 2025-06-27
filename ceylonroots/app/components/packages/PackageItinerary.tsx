@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ItineraryDay } from '../../types/travel';
+import { ItineraryDay, TravelComponent } from '../../types/travel';
 import { MapPin, Bed, UtensilsCrossed, ChevronDown, ChevronUp, Loader } from 'lucide-react';
 import { Button } from '../ui/button';
 
@@ -55,6 +55,13 @@ const PackageItinerary: React.FC<PackageItineraryProps> = ({ packageId }) => {
             ...prev,
             [dayNumber]: !prev[dayNumber]
         }));
+    };
+
+    // Helper function to extract name from activity/component
+    const getComponentName = (component: string | { name: string } | TravelComponent): string => {
+        if (typeof component === 'string') return component;
+        if ('name' in component) return component.name;
+        return JSON.stringify(component); // Fallback
     };
 
     if (loading) {
@@ -126,7 +133,9 @@ const PackageItinerary: React.FC<PackageItineraryProps> = ({ packageId }) => {
                                             <Bed className="h-4 w-4 mr-2 text-ceylon-spice" />
                                             <div>
                                                 <p className="text-xs text-gray-500">Accommodation</p>
-                                                <p className="text-sm font-medium">{day.accommodation.join(", ")}</p>
+                                                <p className="text-sm font-medium">
+                                                    {day.accommodation.map(getComponentName).join(", ")}
+                                                </p>
                                             </div>
                                         </div>
                                     )}
@@ -136,7 +145,9 @@ const PackageItinerary: React.FC<PackageItineraryProps> = ({ packageId }) => {
                                             <UtensilsCrossed className="h-4 w-4 mr-2 text-ceylon-spice" />
                                             <div>
                                                 <p className="text-xs text-gray-500">Meals</p>
-                                                <p className="text-sm font-medium">{day.meals.join(", ")}</p>
+                                                <p className="text-sm font-medium">
+                                                    {day.meals.map(getComponentName).join(", ")}
+                                                </p>
                                             </div>
                                         </div>
                                     )}
@@ -148,7 +159,7 @@ const PackageItinerary: React.FC<PackageItineraryProps> = ({ packageId }) => {
                                         <ul className="list-disc pl-5 space-y-1">
                                             {day.activities.map((activity, idx) => (
                                                 <li key={idx} className="text-sm text-gray-700">
-                                                    {activity}
+                                                    {getComponentName(activity)}
                                                 </li>
                                             ))}
                                         </ul>
