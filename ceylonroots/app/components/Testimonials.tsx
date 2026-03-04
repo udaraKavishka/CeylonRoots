@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Card, CardContent } from "../components/ui/card";
 import { Star } from 'lucide-react';
 import Image from 'next/image';
@@ -9,12 +10,14 @@ interface Testimonial {
     id: number;
     name: string;
     location: string;
-    image: string;
+    image: string | null;
     rating: number;
     testimonial: string;
+    tourType?: string | null;
+    tourDate?: string | null;
 }
 
-const testimonials: Testimonial[] = [
+const fallbackTestimonials: Testimonial[] = [
     {
         id: 1,
         name: "Emma Thompson",
@@ -41,7 +44,31 @@ const testimonials: Testimonial[] = [
     }
 ];
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 const Testimonials = () => {
+    const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchTestimonials = async () => {
+            try {
+                const res = await fetch(`${API_BASE_URL}/testimonials`);
+                if (!res.ok) throw new Error('Failed to fetch');
+                const data: Testimonial[] = await res.json();
+                // Show up to 3 testimonials on homepage
+                setTestimonials(data.length > 0 ? data.slice(0, 3) : fallbackTestimonials);
+            } catch {
+                setTestimonials(fallbackTestimonials);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchTestimonials();
+    }, []);
+
+    const displayTestimonials = loading ? fallbackTestimonials : testimonials;
+
     return (
         <section
             className="py-16 hero-pattern"
@@ -58,7 +85,7 @@ const Testimonials = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {testimonials.map((testimonial) => (
+                    {displayTestimonials.map((testimonial) => (
                         <Card key={testimonial.id} className="ceylon-card">
                             <CardContent className="pt-6">
                                 {/* Rating */}
@@ -72,6 +99,15 @@ const Testimonials = () => {
                                     ))}
                                 </div>
 
+                                {/* Tour badge */}
+                                {testimonial.tourType && (
+                                    <div className="mb-3">
+                                        <span className="text-xs bg-ceylon-sand/30 text-ceylon-stone px-2 py-1 rounded-full">
+                                            {testimonial.tourType}
+                                        </span>
+                                    </div>
+                                )}
+
                                 {/* Testimonial Text */}
                                 <p className="text-gray-600 mb-6 italic" aria-label="Testimonial quote">
                                     &ldquo;{testimonial.testimonial}&rdquo;
@@ -79,13 +115,19 @@ const Testimonials = () => {
 
                                 {/* Author */}
                                 <div className="flex items-center">
-                                    <Image
-                                        src={testimonial.image}
-                                        alt={`Portrait of ${testimonial.name}`}
-                                        width={48}
-                                        height={48}
-                                        className="w-12 h-12 rounded-full mr-4 object-cover"
-                                    />
+                                    {testimonial.image ? (
+                                        <Image
+                                            src={testimonial.image}
+                                            alt={`Portrait of ${testimonial.name}`}
+                                            width={48}
+                                            height={48}
+                                            className="w-12 h-12 rounded-full mr-4 object-cover"
+                                        />
+                                    ) : (
+                                        <div className="w-12 h-12 rounded-full mr-4 bg-ceylon-sand flex items-center justify-center text-ceylon-stone font-bold text-lg">
+                                            {testimonial.name.charAt(0)}
+                                        </div>
+                                    )}
                                     <div>
                                         <h4 className="font-medium" aria-label="Customer name">
                                             {testimonial.name}
