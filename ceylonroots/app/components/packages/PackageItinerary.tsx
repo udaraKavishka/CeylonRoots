@@ -88,8 +88,8 @@ const PackageItinerary: React.FC<PackageItineraryProps> = ({ packageId }) => {
 
     if (!itinerary || itinerary.length === 0) {
         return (
-            <div className="text-center py-10 bg-gray-50 rounded-lg">
-                <p className="text-gray-500">No itinerary details available</p>
+            <div className="text-center py-10 bg-secondary/40 rounded-lg">
+                <p className="text-muted-foreground">No itinerary details available</p>
             </div>
         );
     }
@@ -99,8 +99,8 @@ const PackageItinerary: React.FC<PackageItineraryProps> = ({ packageId }) => {
             <h3 className="text-lg font-semibold mb-4">Day-by-Day Itinerary</h3>
 
             <div className="space-y-6">
-                {itinerary.map((day) => (
-                    <div key={day.id} className="border-l-2 border-ceylon-tea pl-4 pb-4 relative">
+                {itinerary.map((day, index) => (
+                    <div key={day.id ?? index} className="border-l-2 border-ceylon-tea pl-4 pb-4 relative">
                         <div className="absolute -left-2.5 top-0 w-5 h-5 rounded-full bg-ceylon-tea text-white flex items-center justify-center text-xs">
                             {day.dayNumber}
                         </div>
@@ -108,7 +108,7 @@ const PackageItinerary: React.FC<PackageItineraryProps> = ({ packageId }) => {
                         <div className="flex justify-between items-start">
                             <div>
                                 <h4 className="text-lg font-medium">Day {day.dayNumber}: {day.title}</h4>
-                                <div className="flex items-center text-sm text-gray-500 mb-2">
+                                <div className="flex items-center text-sm text-muted-foreground mb-2">
                                     <MapPin className="h-4 w-4 mr-1" />
                                     {day.mainTown}
                                 </div>
@@ -116,37 +116,37 @@ const PackageItinerary: React.FC<PackageItineraryProps> = ({ packageId }) => {
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                onClick={() => toggleDay(day.dayNumber)}
+                                onClick={() => toggleDay(day.dayNumber ?? index)}
                                 className="ml-2"
                             >
-                                {expandedDays[day.dayNumber] ? <ChevronUp /> : <ChevronDown />}
+                                {expandedDays[day.dayNumber ?? index] ? <ChevronUp /> : <ChevronDown />}
                             </Button>
                         </div>
 
-                        {expandedDays[day.dayNumber] && (
+                        {expandedDays[day.dayNumber ?? index] && (
                             <div className="space-y-4 mt-2">
-                                <p className="text-gray-700">{day.description}</p>
+                                <p className="text-foreground">{day.description}</p>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-                                    {day.accommodation && day.accommodation.length > 0 && (
-                                        <div className="flex items-center bg-gray-50 p-3 rounded-md">
+                                    {day.accommodation && (Array.isArray(day.accommodation) ? day.accommodation.length > 0 : !!day.accommodation) && (
+                                        <div className="flex items-center bg-secondary/40 p-3 rounded-md">
                                             <Bed className="h-4 w-4 mr-2 text-ceylon-spice" />
                                             <div>
-                                                <p className="text-xs text-gray-500">Accommodation</p>
+                                                <p className="text-xs text-muted-foreground">Accommodation</p>
                                                 <p className="text-sm font-medium">
-                                                    {day.accommodation.map(getComponentName).join(", ")}
+                                                    {(Array.isArray(day.accommodation) ? day.accommodation : [day.accommodation]).map(getComponentName).join(", ")}
                                                 </p>
                                             </div>
                                         </div>
                                     )}
 
-                                    {day.meals && day.meals.length > 0 && (
-                                        <div className="flex items-center bg-gray-50 p-3 rounded-md">
+                                    {day.meals && (Array.isArray(day.meals) ? day.meals.length > 0 : !!day.meals) && (
+                                        <div className="flex items-center bg-secondary/40 p-3 rounded-md">
                                             <UtensilsCrossed className="h-4 w-4 mr-2 text-ceylon-spice" />
                                             <div>
-                                                <p className="text-xs text-gray-500">Meals</p>
+                                                <p className="text-xs text-muted-foreground">Meals</p>
                                                 <p className="text-sm font-medium">
-                                                    {day.meals.map(getComponentName).join(", ")}
+                                                    {(Array.isArray(day.meals) ? day.meals : [day.meals]).map(getComponentName).join(", ")}
                                                 </p>
                                             </div>
                                         </div>
@@ -158,7 +158,7 @@ const PackageItinerary: React.FC<PackageItineraryProps> = ({ packageId }) => {
                                         <p className="text-sm font-medium mb-2">Activities:</p>
                                         <ul className="list-disc pl-5 space-y-1">
                                             {day.activities.map((activity, idx) => (
-                                                <li key={idx} className="text-sm text-gray-700">
+                                                <li key={idx} className="text-sm text-foreground">
                                                     {getComponentName(activity)}
                                                 </li>
                                             ))}

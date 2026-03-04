@@ -37,7 +37,7 @@ const PackageDetailModal = ({
     const router = useRouter();
 
 
-    const mainImage = travelPackage.imageUrl;
+    const mainImage = travelPackage.imageUrl ?? travelPackage.image ?? '/images/placeholder.jpg';
     const galleryImages = packageGalleries[travelPackage.id] || [];
 
     const handleBookNow = () => {
@@ -83,21 +83,21 @@ const PackageDetailModal = ({
                             <div className="flex items-center">
                                 <Calendar className="h-5 w-5 mr-2 text-ceylon-spice" />
                                 <div>
-                                    <p className="text-sm text-gray-500">Duration</p>
+                                    <p className="text-sm text-muted-foreground">Duration</p>
                                     <p className="font-semibold">{travelPackage.duration} Days</p>
                                 </div>
                             </div>
                             <div className="flex items-center">
                                 <DollarSign className="h-5 w-5 mr-2 text-ceylon-spice" />
                                 <div>
-                                    <p className="text-sm text-gray-500">Starting from</p>
+                                    <p className="text-sm text-muted-foreground">Starting from</p>
                                     <p className="font-semibold">${travelPackage.price} per person</p>
                                 </div>
                             </div>
                             <div className="flex items-center">
                                 <Star className="h-5 w-5 mr-2 text-ceylon-spice" />
                                 <div>
-                                    <p className="text-sm text-gray-500">Rating</p>
+                                    <p className="text-sm text-muted-foreground">Rating</p>
                                     <p className="font-semibold">{travelPackage.rating.toFixed(1)} / 5 ({travelPackage.reviewCount} reviews)</p>
                                 </div>
                             </div>
@@ -105,12 +105,12 @@ const PackageDetailModal = ({
 
                         <div>
                             <h3 className="text-lg font-semibold mb-2">Tour Description</h3>
-                            <p className="text-gray-700 mb-4">{travelPackage.description}</p>
+                            <p className="text-foreground mb-4">{travelPackage.description}</p>
 
                             <div className="flex items-start mb-4">
                                 <MapPin className="h-5 w-5 mr-2 text-ceylon-spice flex-shrink-0 mt-0.5" />
                                 <div>
-                                    <p className="text-sm text-gray-500">Destinations</p>
+                                    <p className="text-sm text-muted-foreground">Destinations</p>
                                     <p className="font-medium">{travelPackage.regions.join(", ")}</p>
                                 </div>
                             </div>
@@ -138,8 +138,8 @@ const PackageDetailModal = ({
                     <TabsContent value="pricing">
                         <PackagePriceBreakdown
                             basePrice={travelPackage.price}
-                            priceIncludes={travelPackage.includes}
-                            priceExcludes={travelPackage.excludes}
+                            priceIncludes={travelPackage.includes ?? []}
+                            priceExcludes={travelPackage.excludes ?? []}
                         />
                     </TabsContent>
                 </Tabs>
