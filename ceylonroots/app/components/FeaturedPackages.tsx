@@ -141,7 +141,7 @@ const FeaturedPackages = ({ packages }: FeaturedPackagesProps) => {
                                     <Card key={pkg.id} className="ceylon-card group">
                                         <div className="aspect-[4/3] overflow-hidden relative">
                                             <Image
-                                                src={pkg.imageUrl}
+                                                src={pkg.imageUrl ?? pkg.image ?? '/images/placeholder.jpg'}
                                                 alt={`${pkg.title} tour package`}
                                                 fill
                                                 className="object-cover group-hover:scale-105 transition-transform duration-500"

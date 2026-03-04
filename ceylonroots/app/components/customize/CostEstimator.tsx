@@ -25,7 +25,7 @@ const CostEstimator: React.FC<CostEstimatorProps> = ({ components, totalCost }) 
     }, {} as Record<ComponentType, TravelComponent[]>);
 
     return (
-        <div className="bg-white rounded-xl shadow-sm p-5 border border-ceylon-sand/30">
+        <div className="bg-card rounded-xl shadow-sm p-5 border border-ceylon-sand/30">
             <h2 className="text-xl font-bold text-ceylon-stone mb-4 flex items-center">
                 <span className="bg-ceylon-tea text-white rounded-full w-6 h-6 flex items-center justify-center mr-2">3</span>
                 Cost Breakdown
@@ -40,7 +40,7 @@ const CostEstimator: React.FC<CostEstimatorProps> = ({ components, totalCost }) 
                         <div className="space-y-2">
                             {items.map(item => (
                                 <div key={item.id} className="flex justify-between text-sm">
-                                    <span className="text-gray-600">{item.name}</span>
+                                    <span className="text-muted-foreground">{item.name}</span>
                                     <span className="font-medium">Rs{item.price}</span>
                                 </div>
                             ))}
