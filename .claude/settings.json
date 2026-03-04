@@ -6,7 +6,8 @@
       "Bash(node -e \":*)",
       "Bash(grep -r \"AUTH_SECRET\\\\|NEXTAUTH_SECRET\\\\|NEXTAUTH_URL\" .env*)",
       "Bash(ls .env*)",
-      "Bash(node -e \"console.log\\(require\\(''./node_modules/next-auth/package.json''\\).version\\)\")"
+      "Bash(node -e \"console.log\\(require\\(''./node_modules/next-auth/package.json''\\).version\\)\")",
+      "Bash(cat /home/udara/Documents/Github/CeylonRoots/ceylonroots/app/api/blogpost/[id]/route.ts)"
     ]
   }
 }
