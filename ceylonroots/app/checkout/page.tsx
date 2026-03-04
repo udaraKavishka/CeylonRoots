@@ -47,20 +47,56 @@ const Checkout = () => {
     const handleSubmitBooking = async (formData: any) => {
         setIsProcessing(true);
 
-        setTimeout(() => {
-            setIsProcessing(false);
-            toast({
-                title: "Booking successful!",
-                description: "Your booking has been confirmed. Check your email for details.",
+        try {
+            const price = typeof bookingPackage?.price === 'object'
+                ? Number(bookingPackage.price)
+                : Number(bookingPackage?.price ?? 0);
+            const totalAmount = price * Number(formData.travelerCount);
+
+            const res = await fetch('/api/bookings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    packageId: bookingPackage?.id,
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
+                    email: formData.email,
+                    phone: formData.phone,
+                    travelerCount: formData.travelerCount,
+                    totalAmount,
+                    paymentMethod: formData.paymentMethod,
+                    specialRequests: formData.specialRequests,
+                }),
             });
 
-            // Client-side localStorage access
-            if (typeof window !== 'undefined') {
-                localStorage.removeItem('bookingPackage');
+            if (!res.ok) {
+                const err = await res.json();
+                toast({
+                    title: "Booking failed",
+                    description: err.error || "Please try again.",
+                    variant: "destructive",
+                });
+                setIsProcessing(false);
+                return;
             }
 
-            router.push('/');
-        }, 2000);
+            const bookingData = await res.json();
+
+            if (typeof window !== 'undefined') {
+                localStorage.removeItem('bookingPackage');
+                // Store booking as fallback for confirmation page
+                localStorage.setItem('lastBooking', JSON.stringify(bookingData));
+            }
+
+            router.push(`/booking-confirmation?id=${bookingData.id}`);
+        } catch {
+            toast({
+                title: "An error occurred",
+                description: "Please try again.",
+                variant: "destructive",
+            });
+            setIsProcessing(false);
+        }
     };
 
     if (!bookingPackage) {
