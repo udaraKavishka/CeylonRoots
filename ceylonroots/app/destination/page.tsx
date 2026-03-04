@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import DestinationCard from "../components/destinations/DestinationCard";
+import DestinationDetailModal from "../components/destinations/DestinationDetailModal";
 import { Button } from "../components/ui/button";
 import { ArrowUpRight } from "lucide-react";
 import { DestinationDetails } from "../types/travel";
@@ -13,12 +14,20 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const regions = ["All Regions", "Cultural Triangle", "Hill Country", "Southern Coast", "Northern Province", "Eastern Coast"];
 
+interface PackageForCount {
+    id: number | string;
+    title: string;
+    destinations: string[];
+}
+
 const Destinations = () => {
     const [activeRegion, setActiveRegion] = useState<string>("All Regions");
     const [destinations, setDestinations] = useState<DestinationDetails[]>([]);
     const [filteredDestinations, setFilteredDestinations] = useState<DestinationDetails[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [selectedDestination, setSelectedDestination] = useState<DestinationDetails | null>(null);
+    const [packageCountMap, setPackageCountMap] = useState<Record<string, number>>({});
     const router = useRouter();
 
 
@@ -50,6 +59,23 @@ const Destinations = () => {
         fetchDestinations();
     }, []);
 
+    // Fetch all packages and count per destination name
+    useEffect(() => {
+        fetch(`${API_BASE_URL}/packages`)
+            .then(res => res.json())
+            .then((pkgs: PackageForCount[]) => {
+                if (!Array.isArray(pkgs)) return;
+                const countMap: Record<string, number> = {};
+                pkgs.forEach(pkg => {
+                    (pkg.destinations || []).forEach((dest: string) => {
+                        const key = dest.trim().toLowerCase();
+                        countMap[key] = (countMap[key] || 0) + 1;
+                    });
+                });
+                setPackageCountMap(countMap);
+            })
+            .catch(() => setPackageCountMap({}));
+    }, []);
 
     useEffect(() => {
         if (activeRegion === "All Regions") {
@@ -60,6 +86,11 @@ const Destinations = () => {
             );
         }
     }, [activeRegion, destinations]);
+
+    function getPackageCount(destination: DestinationDetails): number {
+        const key = destination.name.trim().toLowerCase();
+        return packageCountMap[key] || 0;
+    }
 
     if (loading) {
         return (
@@ -188,6 +219,8 @@ const Destinations = () => {
                                     <DestinationCard
                                         key={destination.id}
                                         destination={destination}
+                                        packageCount={getPackageCount(destination)}
+                                        onClick={() => setSelectedDestination(destination)}
                                     />
                                 ))}
                             </div>
@@ -204,6 +237,12 @@ const Destinations = () => {
                     </div>
                 </div>
             </main>
+
+            {/* Destination detail modal */}
+            <DestinationDetailModal
+                destination={selectedDestination}
+                onClose={() => setSelectedDestination(null)}
+            />
         </div>
     );
 };
