@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { useRouter } from 'next/navigation';
 import {
     Dialog,
@@ -36,7 +37,7 @@ const DestinationModal: React.FC<DestinationModalProps> = ({
     onClose
 }) => {
     const router = useRouter();
-    const relatedPackages = getRelatedPackages(destination.id);
+    const relatedPackages = getRelatedPackages(String(destination.id));
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
@@ -67,7 +68,7 @@ const DestinationModal: React.FC<DestinationModalProps> = ({
                             <Info className="h-5 w-5 mr-2 text-ceylon-tea" />
                             About
                         </h3>
-                        <p className="text-gray-700">{destination.description}</p>
+                        <p className="text-foreground">{destination.description}</p>
                     </div>
 
                     {/* Attractions */}
@@ -76,7 +77,7 @@ const DestinationModal: React.FC<DestinationModalProps> = ({
                             <Landmark className="h-5 w-5 mr-2 text-ceylon-tea" />
                             Top Attractions
                         </h3>
-                        <ul className="list-disc list-inside space-y-1 text-gray-700">
+                        <ul className="list-disc list-inside space-y-1 text-foreground">
                             {destination.attractions.map((attraction, index) => (
                                 <li key={index}>{attraction}</li>
                             ))}
@@ -85,19 +86,19 @@ const DestinationModal: React.FC<DestinationModalProps> = ({
 
                     {/* Visit Info */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="bg-gray-50 p-4 rounded-md">
+                        <div className="bg-secondary/40 p-4 rounded-md">
                             <h4 className="font-medium mb-2 flex items-center">
                                 <Calendar className="h-4 w-4 mr-2 text-ceylon-spice" />
                                 Best Time to Visit
                             </h4>
-                            <p className="text-gray-700">{destination.bestTimeToVisit}</p>
+                            <p className="text-foreground">{destination.bestTimeToVisit}</p>
                         </div>
-                        <div className="bg-gray-50 p-4 rounded-md">
+                        <div className="bg-secondary/40 p-4 rounded-md">
                             <h4 className="font-medium mb-2 flex items-center">
                                 <Clock className="h-4 w-4 mr-2 text-ceylon-spice" />
                                 Recommended Duration
                             </h4>
-                            <p className="text-gray-700">{destination.recommendedDuration}</p>
+                            <p className="text-foreground">{destination.recommendedDuration}</p>
                         </div>
                     </div>
 
@@ -107,7 +108,7 @@ const DestinationModal: React.FC<DestinationModalProps> = ({
                             <Utensils className="h-5 w-5 mr-2 text-ceylon-tea" />
                             Cultural Tips
                         </h3>
-                        <p className="text-gray-700">{destination.culturalTips}</p>
+                        <p className="text-foreground">{destination.culturalTips}</p>
                     </div>
 
                     {/* Photo Gallery */}
@@ -145,7 +146,7 @@ const DestinationModal: React.FC<DestinationModalProps> = ({
                                     <div key={pkg.id} className="border rounded-md p-3 flex">
                                         <div className="w-20 h-20 flex-shrink-0 rounded-md overflow-hidden mr-3 relative">
                                             <Image
-                                                src={pkg.imageUrl}
+                                                src={pkg.imageUrl ?? pkg.image ?? '/images/placeholder.jpg'}
                                                 alt={pkg.title}
                                                 fill
                                                 className="object-cover"
@@ -154,7 +155,7 @@ const DestinationModal: React.FC<DestinationModalProps> = ({
                                         </div>
                                         <div>
                                             <h4 className="font-medium text-sm">{pkg.title}</h4>
-                                            <p className="text-sm text-gray-500">${pkg.price} • {pkg.duration} days</p>
+                                            <p className="text-sm text-muted-foreground">${pkg.price} • {pkg.duration} days</p>
                                         </div>
                                     </div>
                                 ))}

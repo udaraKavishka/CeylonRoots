@@ -33,16 +33,16 @@ const EmailRequestModal: React.FC<EmailRequestModalProps> = ({
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl shadow-xl w-full max-w-md">
+            <div className="bg-card rounded-xl shadow-xl w-full max-w-md">
                 <div className="p-6">
                     <h2 className="text-2xl font-bold text-ceylon-stone mb-2">Request a Quotation</h2>
-                    <p className="text-gray-600 mb-6">
+                    <p className="text-muted-foreground mb-6">
                         Please enter your email address to receive your customized travel package quote.
                     </p>
 
                     <form onSubmit={handleSubmit}>
                         <div className="mb-6">
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                            <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
                                 Email Address
                             </label>
                             <input
@@ -50,7 +50,7 @@ const EmailRequestModal: React.FC<EmailRequestModalProps> = ({
                                 id="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className={`w-full px-4 py-3 border rounded-lg focus:ring focus:ring-ceylon-tea/50 ${isValidEmail ? 'border-gray-300' : 'border-red-500'
+                                className={`w-full px-4 py-3 border rounded-lg focus:ring focus:ring-ceylon-tea/50 bg-background text-foreground ${isValidEmail ? 'border-border' : 'border-red-500'
                                     }`}
                                 placeholder="your@email.com"
                                 required
@@ -64,7 +64,7 @@ const EmailRequestModal: React.FC<EmailRequestModalProps> = ({
                             <button
                                 type="button"
                                 onClick={onClose}
-                                className="px-5 py-2.5 text-ceylon-stone font-medium rounded-lg border border-gray-300 hover:bg-gray-50"
+                                className="px-5 py-2.5 text-ceylon-stone font-medium rounded-lg border border-border hover:bg-secondary/50"
                                 disabled={isSubmitting}
                             >
                                 Cancel
