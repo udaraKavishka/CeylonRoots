@@ -176,6 +176,9 @@ model TravelPackage {
   includes      PackageInclude[]
   excludes      PackageExclude[]
   itineraryDays ItineraryDay[]
+  reviews       Review[]
+  bookings      Booking[]
+  departures    PackageDeparture[]
 
   @@map("travel_package")
 }
@@ -347,4 +350,165 @@ model DestinationDetailAttraction {
   detailsId Int                @map("details_id")
 
   @@map("destination_detail_attractions")
+}
+
+// ==================== TESTIMONIALS ====================
+
+model Testimonial {
+  id          Int      @id @default(autoincrement())
+  name        String
+  location    String
+  image       String?
+  rating      Int      @default(5)
+  testimonial String   @db.Text
+  tourType    String?  @map("tour_type")
+  tourDate    String?  @map("tour_date")
+  featured    Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("testimonial")
+}
+
+// ==================== GUIDES ====================
+
+model Guide {
+  id           Int      @id @default(autoincrement())
+  name         String
+  photo        String?
+  bio          String   @db.Text
+  expertise    String[] // e.g., ["Wildlife", "Cultural", "Photography"]
+  languages    String[] // e.g., ["English", "Sinhala", "Tamil"]
+  experience   Int      // years
+  rating       Float    @default(5.0)
+  reviewCount  Int      @default(0) @map("review_count")
+  responseTime String?  @map("response_time") // e.g., "Within 2 hours"
+  featured     Boolean  @default(false)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("guide")
+}
+
+// ==================== REVIEWS ====================
+
+model Review {
+  id              Int           @id @default(autoincrement())
+  packageId       Int           @map("package_id")
+  package         TravelPackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  authorName      String        @map("author_name")
+  authorEmail     String        @map("author_email")
+  rating          Float         // overall 1–5
+  guideRating     Float?        @map("guide_rating")
+  valueRating     Float?        @map("value_rating")
+  itineraryRating Float?        @map("itinerary_rating")
+  comment         String        @db.Text
+  travelType      String?       @map("travel_type") // "Solo", "Couple", "Family", "Group"
+  tripDate        String?       @map("trip_date")   // "January 2025"
+  verified        Boolean       @default(false)
+  helpful         Int           @default(0)
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  @@map("review")
+}
+
+// ==================== AUTH (NextAuth / Auth.js v5) ====================
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime? @map("email_verified")
+  image         String?
+  password      String?   // bcrypt hashed — null for OAuth users
+  role          String    @default("user") // "user" | "admin"
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  accounts Account[]
+  sessions Session[]
+  bookings  Booking[]
+
+  @@map("user")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("account")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_token")
+}
+
+// ==================== BOOKINGS ====================
+
+model Booking {
+  id              String        @id @default(cuid())
+  userId          String?       @map("user_id")
+  user            User?         @relation(fields: [userId], references: [id])
+  packageId       Int           @map("package_id")
+  package         TravelPackage @relation(fields: [packageId], references: [id])
+  firstName       String        @map("first_name")
+  lastName        String        @map("last_name")
+  email           String
+  phone           String
+  travelerCount   Int           @map("traveler_count")
+  totalAmount     Float         @map("total_amount")
+  status          String        @default("pending") // pending, confirmed, cancelled
+  paymentMethod   String?       @map("payment_method")
+  specialRequests String?       @map("special_requests") @db.Text
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  @@map("booking")
+}
+
+// ==================== PACKAGE DEPARTURES ====================
+
+model PackageDeparture {
+  id            Int           @id @default(autoincrement())
+  packageId     Int           @map("package_id")
+  package       TravelPackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  departureDate DateTime      @map("departure_date") @db.Date
+  maxSlots      Int           @map("max_slots")
+  bookedSlots   Int           @default(0) @map("booked_slots")
+  priceOverride Float?        @map("price_override")
+  status        String        @default("available") // available, limited, full, cancelled
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+
+  @@map("package_departure")
 }
