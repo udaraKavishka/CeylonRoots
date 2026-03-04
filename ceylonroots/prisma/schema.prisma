@@ -1,0 +1,350 @@
+// This is the CeylonRoots Prisma schema
+// Mirrors the Java Spring Boot entity models
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== ENUMS ====================
+
+enum ComponentType {
+  ACCOMMODATION
+  ACTIVITY
+  DESTINATION
+  TRANSPORT
+}
+
+enum Difficulty {
+  EASY
+  MODERATE
+  CHALLENGING
+}
+
+enum TransportMode {
+  CAR
+  TRAIN
+  BUS
+  PLANE
+  BOAT
+}
+
+enum MealType {
+  BREAKFAST
+  LUNCH
+  DINNER
+  SNACKS
+}
+
+enum GalleryItemType {
+  IMAGE
+  VIDEO
+}
+
+// ==================== TRAVEL COMPONENT (Single Table Inheritance) ====================
+
+model TravelComponent {
+  id            Int           @id @default(autoincrement())
+  componentType ComponentType @map("component_type")
+  name          String
+  description   String?       @db.Text
+  location      String?
+  imageUrl      String?       @map("image_url")
+  price         Decimal?      @db.Decimal(10, 2)
+  lat           Float?
+  lng           Float?
+  duration      Int?
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+
+  // Component-specific tags
+  tags ComponentTag[]
+
+  // Accommodation-specific
+  rating    Float?
+  amenities Amenity[]
+
+  // Activity-specific
+  difficulty      Difficulty?
+  activityGallery ActivityGallery[]
+
+  // Transport-specific
+  mode              TransportMode?
+  departureLocation String?         @map("departure_location")
+  arrivalLocation   String?         @map("arrival_location")
+  departureLat      Float?          @map("departure_lat")
+  departureLng      Float?          @map("departure_lng")
+  arrivalLat        Float?          @map("arrival_lat")
+  arrivalLng        Float?          @map("arrival_lng")
+
+  // Destination-specific
+  destinationAttractions DestinationAttraction[]
+  destinationGallery     DestinationGallery[]
+
+  @@map("travel_component")
+}
+
+model ComponentTag {
+  id          Int             @id @default(autoincrement())
+  tag         String
+  component   TravelComponent @relation(fields: [componentId], references: [id], onDelete: Cascade)
+  componentId Int             @map("component_id")
+
+  @@map("component_tags")
+}
+
+model Amenity {
+  id              Int             @id @default(autoincrement())
+  amenity         String
+  accommodation   TravelComponent @relation(fields: [accommodationId], references: [id], onDelete: Cascade)
+  accommodationId Int             @map("accommodation_id")
+
+  @@map("accommodation_amenities")
+}
+
+model DestinationAttraction {
+  id            Int             @id @default(autoincrement())
+  attraction    String
+  destination   TravelComponent @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  destinationId Int             @map("destination_id")
+
+  @@map("destination_attractions")
+}
+
+// ==================== GALLERY ====================
+
+model GalleryItem {
+  id           Int             @id @default(autoincrement())
+  type         GalleryItemType
+  url          String
+  thumbnailUrl String?         @map("thumbnail_url")
+  caption      String?
+  location     String?
+  description  String?         @db.Text
+  featured     Boolean?        @default(false)
+  dateAdded    DateTime?       @map("date_added") @db.Date
+  createdAt    DateTime        @default(now()) @map("created_at")
+  updatedAt    DateTime        @updatedAt @map("updated_at")
+
+  destinations DestinationGallery[]
+  activities   ActivityGallery[]
+
+  @@map("gallery_item")
+}
+
+model DestinationGallery {
+  destination   TravelComponent @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  destinationId Int             @map("destination_id")
+  gallery       GalleryItem     @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+  galleryId     Int             @map("gallery_id")
+
+  @@id([destinationId, galleryId])
+  @@map("destination_gallery")
+}
+
+model ActivityGallery {
+  activity   TravelComponent @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  activityId Int             @map("activity_id")
+  gallery    GalleryItem     @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+  galleryId  Int             @map("gallery_id")
+
+  @@id([activityId, galleryId])
+  @@map("activity_gallery")
+}
+
+// ==================== TRAVEL PACKAGE ====================
+
+model TravelPackage {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?  @db.Text
+  imageUrl    String?  @map("image_url")
+  durationDays Int?    @map("duration_days")
+  price       Decimal? @db.Decimal(10, 2)
+  rating      Float?
+  reviewCount Int?     @map("review_count")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  destinations  PackageDestination[]
+  highlights    PackageHighlight[]
+  gallery       PackageGalleryItem[]
+  includes      PackageInclude[]
+  excludes      PackageExclude[]
+  itineraryDays ItineraryDay[]
+
+  @@map("travel_package")
+}
+
+model PackageDestination {
+  id          Int           @id @default(autoincrement())
+  destination String
+  package     TravelPackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  packageId   Int           @map("package_id")
+
+  @@map("package_destinations")
+}
+
+model PackageHighlight {
+  id        Int           @id @default(autoincrement())
+  highlight String
+  package   TravelPackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  packageId Int           @map("package_id")
+
+  @@map("package_highlights")
+}
+
+model PackageGalleryItem {
+  id        Int           @id @default(autoincrement())
+  url       String
+  package   TravelPackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  packageId Int           @map("package_id")
+
+  @@map("package_gallery")
+}
+
+model PackageInclude {
+  id        Int           @id @default(autoincrement())
+  item      String
+  package   TravelPackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  packageId Int           @map("package_id")
+
+  @@map("package_includes")
+}
+
+model PackageExclude {
+  id        Int           @id @default(autoincrement())
+  item      String
+  package   TravelPackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  packageId Int           @map("package_id")
+
+  @@map("package_excludes")
+}
+
+// ==================== ITINERARY DAY ====================
+
+model ItineraryDay {
+  id              Int           @id @default(autoincrement())
+  dayNumber       Int           @map("day_number")
+  title           String?
+  mainTown        String?       @map("main_town")
+  description     String?       @db.Text
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+  travelPackage   TravelPackage @relation(fields: [travelPackageId], references: [id], onDelete: Cascade)
+  travelPackageId Int           @map("travel_package_id")
+
+  accommodation DayAccommodation[]
+  meals         DayMeal[]
+  activities    DayActivity[]
+
+  @@map("itinerary_day")
+}
+
+model DayAccommodation {
+  id    Int          @id @default(autoincrement())
+  name  String
+  day   ItineraryDay @relation(fields: [dayId], references: [id], onDelete: Cascade)
+  dayId Int          @map("day_id")
+
+  @@map("day_accommodation")
+}
+
+model DayMeal {
+  id    Int          @id @default(autoincrement())
+  meal  MealType
+  day   ItineraryDay @relation(fields: [dayId], references: [id], onDelete: Cascade)
+  dayId Int          @map("day_id")
+
+  @@map("day_meal")
+}
+
+model DayActivity {
+  id    Int          @id @default(autoincrement())
+  name  String
+  day   ItineraryDay @relation(fields: [dayId], references: [id], onDelete: Cascade)
+  dayId Int          @map("day_id")
+
+  @@map("itinerary_day_activities")
+}
+
+// ==================== BLOG ====================
+
+model BlogPost {
+  id           Int      @id @default(autoincrement())
+  title        String
+  excerpt      String?  @db.Text
+  content      String?  @db.LongText
+  imageUrl     String?  @map("image_url")
+  postDate     DateTime? @map("post_date") @db.Date
+  author       String?
+  category     String?
+  commentCount Int?     @default(0) @map("comment_count")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  comments     BlogComment[]
+  relatedPosts RelatedPost[] @relation("PostToRelated")
+  relatedTo    RelatedPost[] @relation("RelatedToPost")
+
+  @@map("blog_post")
+}
+
+model BlogComment {
+  id          Int       @id @default(autoincrement())
+  author      String?
+  avatarUrl   String?   @map("avatar_url")
+  commentDate DateTime? @map("comment_date")
+  text        String?   @db.Text
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  post        BlogPost  @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId      Int       @map("blog_post_id")
+
+  @@map("blog_comment")
+}
+
+model RelatedPost {
+  post      BlogPost @relation("PostToRelated", fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int      @map("post_id")
+  related   BlogPost @relation("RelatedToPost", fields: [relatedId], references: [id], onDelete: Cascade)
+  relatedId Int      @map("related_id")
+
+  @@id([postId, relatedId])
+  @@map("related_posts")
+}
+
+// ==================== DESTINATION DETAILS ====================
+
+model DestinationDetails {
+  id                  Int      @id @default(autoincrement())
+  name                String
+  description         String?  @db.Text
+  region              String?
+  topAttraction       String?  @map("top_attraction")
+  bestTimeToVisit     String?  @map("best_time_to_visit")
+  recommendedDuration String?  @map("recommended_duration")
+  culturalTips        String?  @map("cultural_tips")
+  image               String?
+  latitude            Float?
+  longitude           Float?
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  attractions DestinationDetailAttraction[]
+
+  @@map("destination_details")
+}
+
+model DestinationDetailAttraction {
+  id        Int                @id @default(autoincrement())
+  attraction String
+  details   DestinationDetails @relation(fields: [detailsId], references: [id], onDelete: Cascade)
+  detailsId Int                @map("details_id")
+
+  @@map("destination_detail_attractions")
+}

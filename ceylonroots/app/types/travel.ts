@@ -204,13 +204,14 @@ export type TravelComponent =
   | TransportComponent;
 
 export interface ItineraryDay {
-  id: number;
-  dayNumber: number;
+  id?: number;
+  dayNumber?: number;
   title: string;
-  mainTown: string;
+  mainTown?: string;
+  location?: string;
   description: string;
-  accommodation: string[];
-  meals: string[];
+  accommodation: string | string[];
+  meals: string | string[];
   activities: string[];
   createdAt?: string;
   updatedAt?: string;
@@ -220,26 +221,38 @@ export type TravelPackage = {
   id: string;
   title: string;
   description: string;
-  imageUrl: string;
+  imageUrl?: string;
+  image?: string;
   duration: number;
   price: number;
   rating: number;
   reviewCount: number;
   regions: string[];
   themes: string[];
-  includes: string[];
-  excludes: string[];
-  itineraryDays: {
+  includes?: string[];
+  excludes?: string[];
+  highlights?: string[];
+  gallery: string[];
+  itineraryDays?: {
     dayNumber: number;
     title: string;
     description: string;
     activities: { name: string }[];
   }[];
-  gallery: string[];
+  itinerary?: {
+    title: string;
+    location?: string;
+    description: string;
+    accommodation?: string;
+    meals?: string;
+    activities: string[];
+  }[];
+  priceIncludes?: string[];
+  priceExcludes?: string[];
 };
 
 export type DestinationDetails = {
-  id: number;
+  id: number | string;
   name: string;
   description: string;
   region: string;
@@ -249,6 +262,8 @@ export type DestinationDetails = {
   culturalTips: string;
   image: string;
   attractions: string[];
+  coordinates?: { lat: number; lng: number };
+  gallery?: string[];
 };
 
 export type BlogPost = {
