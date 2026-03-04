@@ -70,7 +70,7 @@ const PackagePriceBreakdown: React.FC<PackagePriceBreakdownProps> = ({
                                     </li>
                                 ))
                             ) : (
-                                <li className="text-gray-500 text-sm">No inclusions listed</li>
+                                <li className="text-muted-foreground text-sm">No inclusions listed</li>
                             )}
                         </ul>
                     </CardContent>
@@ -93,15 +93,15 @@ const PackagePriceBreakdown: React.FC<PackagePriceBreakdownProps> = ({
                                     </li>
                                 ))
                             ) : (
-                                <li className="text-gray-500 text-sm">No exclusions listed</li>
+                                <li className="text-muted-foreground text-sm">No exclusions listed</li>
                             )}
                         </ul>
                     </CardContent>
                 </Card>
             </div>
 
-            <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-600">
+            <div className="bg-secondary/40 p-4 rounded-lg">
+                <p className="text-sm text-muted-foreground">
                     * Prices are subject to change based on season, group size, and availability.
                     Contact us for current pricing and special offers.
                 </p>

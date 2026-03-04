@@ -26,7 +26,7 @@ const PackageCard: React.FC<PackageCardProps> = ({
         <Card className="ceylon-card group overflow-hidden h-full flex flex-col">
             <div className="relative w-full h-56 sm:h-64">
                 <Image
-                    src={travelPackage.imageUrl}
+                    src={travelPackage.imageUrl ?? travelPackage.image ?? '/images/placeholder.jpg'}
                     alt={travelPackage.title}
                     fill
                     className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"

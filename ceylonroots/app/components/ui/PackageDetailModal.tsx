@@ -48,7 +48,7 @@ const PackageDetailModal: React.FC<PackageDetailModalProps> = ({
                     <TabsContent value="overview" className="space-y-4">
                         <div className="aspect-video overflow-hidden rounded-lg">
                             <img
-                                src={travelPackage.image}
+                                src={travelPackage.image ?? travelPackage.imageUrl ?? ''}
                                 alt={travelPackage.title}
                                 className="w-full h-full object-cover"
                             />
@@ -92,7 +92,7 @@ const PackageDetailModal: React.FC<PackageDetailModalProps> = ({
 
                             <h3 className="text-lg font-semibold mb-2">Tour Highlights</h3>
                             <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">
-                                {travelPackage.highlights.map((highlight, index) => (
+                                {(travelPackage.highlights ?? []).map((highlight, index) => (
                                     <li key={index} className="flex items-start">
                                         <CheckCircle2 className="h-5 w-5 mr-2 text-ceylon-tea flex-shrink-0 mt-0.5" />
                                         <span>{highlight}</span>
@@ -103,7 +103,7 @@ const PackageDetailModal: React.FC<PackageDetailModalProps> = ({
                     </TabsContent>
 
                     <TabsContent value="itinerary">
-                        <PackageItinerary itinerary={travelPackage.itinerary} />
+                        <PackageItinerary itinerary={(travelPackage.itinerary ?? []) as ItineraryDay[]} />
                     </TabsContent>
 
                     <TabsContent value="gallery">
@@ -113,8 +113,8 @@ const PackageDetailModal: React.FC<PackageDetailModalProps> = ({
                     <TabsContent value="pricing">
                         <PackagePriceBreakdown
                             basePrice={travelPackage.price}
-                            priceIncludes={travelPackage.priceIncludes}
-                            priceExcludes={travelPackage.priceExcludes}
+                            priceIncludes={travelPackage.priceIncludes ?? []}
+                            priceExcludes={travelPackage.priceExcludes ?? []}
                         />
                     </TabsContent>
                 </Tabs>
