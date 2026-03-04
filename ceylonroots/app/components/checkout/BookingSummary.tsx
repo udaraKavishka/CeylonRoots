@@ -23,7 +23,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({ travelPackage, isProces
             <CardContent className="space-y-4">
                 <div className="flex items-center gap-4">
                     <Image
-                        src={travelPackage.image}
+                        src={travelPackage.image ?? travelPackage.imageUrl ?? '/images/placeholder.jpg'}
                         alt={travelPackage.title}
                         className="h-full w-full object-cover"
                         width={64}
