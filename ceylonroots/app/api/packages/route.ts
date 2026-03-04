@@ -18,13 +18,33 @@ const packageInclude = {
   },
 };
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const destinationFilter = searchParams.get("destination");
+
     const packages = await prisma.travelPackage.findMany({
       include: packageInclude,
       orderBy: { createdAt: "desc" },
     });
-    return NextResponse.json(packages.map(formatTravelPackage));
+
+    const formatted = packages.map(formatTravelPackage);
+
+    if (destinationFilter) {
+      const filterLower = destinationFilter.trim().toLowerCase();
+      const filtered = formatted.filter(pkg => {
+        // Check if any destination string matches the filter
+        const destMatch = pkg.destinations.some((d: string) =>
+          d.toLowerCase().includes(filterLower)
+        );
+        // Also check title as a fallback
+        const titleMatch = pkg.title.toLowerCase().includes(filterLower);
+        return destMatch || titleMatch;
+      });
+      return NextResponse.json(filtered);
+    }
+
+    return NextResponse.json(formatted);
   } catch (error) {
     console.error("Error fetching packages:", error);
     return NextResponse.json(
