@@ -8,7 +8,7 @@ const TermsOfService = () => {
     return (
         <div className="min-h-screen flex flex-col">
             <Navbar />
-            <main className="flex-grow bg-gray-50">
+            <main className="flex-grow bg-gray-50 pt-20">
                 <div className="ceylon-container py-12">
                     <h1 className="text-4xl font-bold mb-8">Terms of Service</h1>
                     <div className="bg-white p-8 rounded-lg shadow-sm">

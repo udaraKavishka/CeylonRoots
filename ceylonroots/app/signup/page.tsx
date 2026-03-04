@@ -3,223 +3,236 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import { Label } from "../components/ui/label";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card";
-import { Separator } from "../components/ui/separator";
-import { useToast } from "../components/ui/use-toast";
-// import Navbar from '../components/Navbar';
-// import Footer from '../components/Footer';
-import { User, Mail, Lock, UserPlus, AlertCircle } from 'lucide-react';
+import { signIn } from 'next-auth/react';
+import { Eye, EyeOff, Leaf, Mail, Lock, User } from 'lucide-react';
 import { useUser } from '../contexts/UserContext';
 
-const Signup = () => {
-    // Pre-filled demo credentials
-    const [fullName, setFullName] = useState('Demo User');
-    const [email, setEmail] = useState('signup@ceylonroots.com');
-    const [password, setPassword] = useState('signup123');
+const DESTINATIONS = ['🐘 Yala Safari', '🏯 Sigiriya Rock', '🌊 Southern Coast', '🍵 Tea Country', '🕌 Galle Fort'];
+
+export default function SignupPage() {
+    const [fullName, setFullName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const { toast } = useToast();
+    const [error, setError] = useState('');
     const router = useRouter();
     const { login } = useUser();
 
     const handleSignup = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
+        setError('');
 
-        // For demo purposes - simulate signup
-        setTimeout(() => {
-            setIsLoading(false);
+        try {
+            const res = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: fullName, email, password }),
+            });
 
-            // Split the full name into first name and last name
+            const data = await res.json();
+            if (!res.ok) {
+                setError(data.error || 'Registration failed. Please try again.');
+                setIsLoading(false);
+                return;
+            }
+
+            const result = await signIn('credentials', { email, password, redirect: false });
+            if (result?.error) {
+                setError('Account created but login failed. Please log in manually.');
+                setIsLoading(false);
+                return;
+            }
+
             const nameParts = fullName.split(' ');
-            const firstName = nameParts[0] || '';
-            const lastName = nameParts.slice(1).join(' ') || '';
-
-            // Login the user after successful signup
             login({
-                firstName,
-                lastName,
+                firstName: nameParts[0] || fullName,
+                lastName: nameParts.slice(1).join(' ') || '',
                 email,
-                phone: "",
-                address: "",
-                city: "",
-                country: "",
-                zipCode: ""
+                role: 'user',
             });
 
-            toast({
-                title: "Account created",
-                description: "Welcome to CeylonRoots! Your account has been created successfully.",
-            });
             router.push('/');
-        }, 1500);
-    };
-
-    const handleGoogleSignup = () => {
-        setIsLoading(true);
-
-        // Simulate Google signup
-        setTimeout(() => {
-            login({
-                firstName: "Google",
-                lastName: "User",
-                email: "google.user@example.com",
-                phone: "",
-                address: "",
-                city: "",
-                country: "",
-                zipCode: ""
-            });
-
+        } catch {
+            setError('An error occurred. Please try again.');
             setIsLoading(false);
-            toast({
-                title: "Google Sign Up",
-                description: "Account created successfully with Google!",
-            });
-            router.push('/');
-        }, 1000);
+        }
     };
 
     return (
-        <div className="flex flex-col min-h-screen">
-            {/* <Navbar /> */}
+        <div className="min-h-screen flex flex-col lg:flex-row">
+            {/* Decorative top bar (mobile) */}
+            <div className="lg:hidden h-1 w-full" style={{ background: 'linear-gradient(90deg, #2E8B57, #1A5276, #D4AF37)' }} />
 
-            <main className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 hero-pattern mt-10">
-                <Card className="w-full max-w-md">
-                    <CardHeader className="space-y-1">
-                        <CardTitle className="text-2xl font-bold text-center">Create an account</CardTitle>
-                        <CardDescription className="text-center">
-                            Enter your details to create your CeylonRoots account
-                        </CardDescription>
-                        <div className="bg-amber-100 border border-amber-300 text-amber-800 px-4 py-3 rounded relative" role="alert">
-                            <div className="flex items-center">
-                                <AlertCircle className="h-4 w-4 mr-2" />
-                                <span className="font-medium">Demo Credentials:</span>
+            {/* Form panel */}
+            <div className="flex-1 flex items-center justify-center px-6 py-12 bg-[hsl(40,30%,98%)] order-2 lg:order-1">
+                <div className="w-full max-w-md">
+                    <div className="lg:hidden flex items-center gap-2 justify-center mb-8">
+                        <Leaf className="h-5 w-5 text-ceylon-tea" />
+                        <span className="text-xl font-bold">Ceylon<span className="text-ceylon-spice">Roots</span></span>
+                    </div>
+
+                    <div className="mb-8">
+                        <h1 className="text-3xl font-bold text-gray-900 mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
+                            Start your adventure
+                        </h1>
+                        <p className="text-gray-500 text-sm">Create your free CeylonRoots account</p>
+                    </div>
+
+                    <form onSubmit={handleSignup} className="space-y-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1.5">Full name</label>
+                            <div className="relative">
+                                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" style={{width:'17px',height:'17px'}} />
+                                <input
+                                    type="text"
+                                    autoComplete="name"
+                                    required
+                                    value={fullName}
+                                    onChange={e => setFullName(e.target.value)}
+                                    placeholder="Jane Smith"
+                                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-ceylon-tea/30 focus:border-ceylon-tea transition"
+                                />
                             </div>
-                            <p className="text-sm mt-1">Name: Demo User</p>
-                            <p className="text-sm">Email: signup@ceylonroots.com</p>
-                            <p className="text-sm">Password: signup123</p>
                         </div>
-                    </CardHeader>
 
-                    <CardContent>
-                        <form onSubmit={handleSignup} className="space-y-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="fullName">Full Name</Label>
-                                <div className="relative">
-                                    <User className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
-                                    <Input
-                                        id="fullName"
-                                        type="text"
-                                        placeholder="John Doe"
-                                        className="pl-10"
-                                        value={fullName}
-                                        onChange={(e) => setFullName(e.target.value)}
-                                        required
-                                    />
-                                </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1.5">Email address</label>
+                            <div className="relative">
+                                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" style={{width:'17px',height:'17px'}} />
+                                <input
+                                    type="email"
+                                    autoComplete="email"
+                                    required
+                                    value={email}
+                                    onChange={e => setEmail(e.target.value)}
+                                    placeholder="you@example.com"
+                                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-ceylon-tea/30 focus:border-ceylon-tea transition"
+                                />
                             </div>
+                        </div>
 
-                            <div className="space-y-2">
-                                <Label htmlFor="email">Email</Label>
-                                <div className="relative">
-                                    <Mail className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
-                                    <Input
-                                        id="email"
-                                        type="email"
-                                        placeholder="your.email@example.com"
-                                        className="pl-10"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        required
-                                    />
-                                </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+                            <div className="relative">
+                                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" style={{width:'17px',height:'17px'}} />
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    autoComplete="new-password"
+                                    required
+                                    minLength={6}
+                                    value={password}
+                                    onChange={e => setPassword(e.target.value)}
+                                    placeholder="At least 6 characters"
+                                    className="w-full pl-10 pr-11 py-3 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-ceylon-tea/30 focus:border-ceylon-tea transition"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(v => !v)}
+                                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                                >
+                                    {showPassword ? <EyeOff style={{width:'17px',height:'17px'}} /> : <Eye style={{width:'17px',height:'17px'}} />}
+                                </button>
                             </div>
+                        </div>
 
-                            <div className="space-y-2">
-                                <Label htmlFor="password">Password</Label>
-                                <div className="relative">
-                                    <Lock className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
-                                    <Input
-                                        id="password"
-                                        type="password"
-                                        placeholder="••••••••"
-                                        className="pl-10"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                                <p className="text-xs text-muted-foreground">
-                                    Password must be at least 8 characters long and include a number and a special character.
-                                </p>
+                        {error && (
+                            <div className="flex items-start gap-2 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3.5 py-3">
+                                <span className="mt-0.5">⚠️</span>
+                                <span>{error}</span>
                             </div>
+                        )}
 
-                            <Button type="submit" className="w-full ceylon-button-primary" disabled={isLoading}>
-                                {isLoading ? (
-                                    <span className="flex items-center justify-center">
-                                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                        </svg>
-                                        Creating account...
-                                    </span>
-                                ) : (
-                                    <span className="flex items-center justify-center">
-                                        <UserPlus className="mr-2 h-5 w-5" />
-                                        Sign Up
-                                    </span>
-                                )}
-                            </Button>
-                        </form>
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full py-3 mt-1 rounded-xl font-semibold text-sm text-white transition-all shadow-lg hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed"
+                            style={{ background: 'linear-gradient(135deg, #2E8B57 0%, #1A5276 100%)' }}
+                        >
+                            {isLoading ? (
+                                <span className="flex items-center justify-center gap-2">
+                                    <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                                    </svg>
+                                    Creating account...
+                                </span>
+                            ) : 'Create free account'}
+                        </button>
 
-                        <div className="relative my-6">
+                        <div className="relative my-1">
                             <div className="absolute inset-0 flex items-center">
-                                <Separator />
+                                <div className="w-full border-t border-gray-200" />
                             </div>
-                            <div className="relative flex justify-center text-xs uppercase">
-                                <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+                            <div className="relative flex justify-center">
+                                <span className="bg-[hsl(40,30%,98%)] px-3 text-xs text-gray-400 uppercase tracking-wider">or</span>
                             </div>
                         </div>
 
-                        <Button variant="outline" type="button" className="w-full" onClick={handleGoogleSignup}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 h-4 w-4">
-                                <path d="M18.657 10.5c0-.6-.057-1.193-.166-1.768H12v3.293h3.86c-.165.934-.665 1.72-1.415 2.25v1.876h2.287c1.34-1.234 2.117-3.047 2.117-5.15z" fill="#4285F4"></path>
-                                <path d="M12 19c1.912 0 3.517-.626 4.687-1.686l-2.287-1.875c-.635.42-1.45.675-2.4.675-1.848 0-3.407-1.245-3.967-2.92H5.693v1.94C6.855 17.52 9.243 19 12 19z" fill="#34A853"></path>
-                                <path d="M8.033 13.192c-.143-.427-.22-.877-.22-1.344 0-.466.077-.917.22-1.344V8.565H5.693c-.452.903-.72 1.92-.72 3.001s.268 2.098.72 3.001l2.34-1.375z" fill="#FBBC05"></path>
-                                <path d="M12 7.58c1.043 0 1.978.357 2.712 1.06l2.027-2.027C15.556 5.517 13.95 4.79 12 4.79c-3.172 0-5.843 1.81-7.165 4.457l2.34 1.375c.56-1.674 2.12-2.919 3.967-2.919z" fill="#EA4335"></path>
+                        <button
+                            type="button"
+                            onClick={() => signIn('google', { callbackUrl: '/' })}
+                            className="w-full flex items-center justify-center gap-3 py-3 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition shadow-sm"
+                        >
+                            <svg className="h-4 w-4" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                             </svg>
                             Continue with Google
-                        </Button>
-                    </CardContent>
+                        </button>
+                    </form>
 
-                    <CardFooter className="flex flex-col space-y-4">
-                        <div className="text-sm text-center">
-                            Already have an account?{' '}
-                            <Link href="/login" className="text-ceylon-tea hover:underline font-medium">
-                                Log in
-                            </Link>
+                    <p className="mt-6 text-center text-xs text-gray-400">
+                        By joining, you agree to our{' '}
+                        <Link href="/tos" className="text-ceylon-tea hover:underline">Terms</Link>
+                        {' '}and{' '}
+                        <Link href="/privacy" className="text-ceylon-tea hover:underline">Privacy Policy</Link>
+                    </p>
+
+                    <p className="mt-4 text-center text-sm text-gray-500">
+                        Already have an account?{' '}
+                        <Link href="/login" className="font-semibold text-ceylon-tea hover:underline">
+                            Sign in
+                        </Link>
+                    </p>
+                </div>
+            </div>
+
+            {/* Visual panel */}
+            <div className="lg:w-[45%] bg-gradient-to-br from-ceylon-tea via-ceylon-ocean to-ceylon-ocean/90 flex flex-col justify-between p-12 order-1 lg:order-2 min-h-[240px] lg:min-h-screen">
+                <Link href="/" className="flex items-center gap-2 text-white hidden lg:flex">
+                    <Leaf className="h-6 w-6 text-ceylon-sand" />
+                    <span className="text-2xl font-bold tracking-tight">Ceylon<span className="text-ceylon-sand">Roots</span></span>
+                </Link>
+
+                <div className="hidden lg:block space-y-8">
+                    <p className="text-ceylon-sand/80 text-sm uppercase tracking-widest font-medium">Your next adventure awaits</p>
+                    <h2 className="text-white text-4xl leading-snug" style={{ fontFamily: "'Playfair Display', serif" }}>
+                        Discover Sri Lanka like a local
+                    </h2>
+                    <div className="space-y-3">
+                        {DESTINATIONS.map((d, i) => (
+                            <div key={i} className="flex items-center gap-3 text-white/80">
+                                <div className="w-1.5 h-1.5 rounded-full bg-ceylon-sand/60 flex-shrink-0" />
+                                <span className="text-sm">{d}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Stats */}
+                <div className="hidden lg:grid grid-cols-3 gap-6 text-white">
+                    {[['10K+','Happy travelers'],['50+','Destinations'],['14','Years of expertise']].map(([n, l]) => (
+                        <div key={n}>
+                            <div className="text-2xl font-bold text-ceylon-sand">{n}</div>
+                            <div className="text-xs text-white/60 mt-0.5">{l}</div>
                         </div>
-
-                        <div className="text-xs text-center text-muted-foreground">
-                            By signing up, you agree to our{' '}
-                            <Link href="/terms" className="text-ceylon-tea hover:underline">
-                                Terms of Service
-                            </Link>{' '}
-                            and{' '}
-                            <Link href="/privacy" className="text-ceylon-tea hover:underline">
-                                Privacy Policy
-                            </Link>
-                        </div>
-                    </CardFooter>
-                </Card>
-            </main>
-
-            {/* <Footer /> */}
+                    ))}
+                </div>
+            </div>
         </div>
     );
-};
-
-export default Signup;
+}
