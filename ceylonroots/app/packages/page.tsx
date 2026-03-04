@@ -295,6 +295,34 @@ const TravelPackages = () => {
                     </div>
                 </div>
 
+                {/* Trust Signals Strip */}
+                <div className="bg-white border-b border-gray-100 shadow-sm">
+                    <div className="max-w-7xl mx-auto px-4 py-3">
+                        <div className="flex flex-wrap justify-center md:justify-between items-center gap-4 text-sm">
+                            <div className="flex items-center gap-2 text-gray-700">
+                                <span className="text-green-500 text-base">✓</span>
+                                <span>Free Cancellation up to 30 Days</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-gray-700">
+                                <span className="text-yellow-500 text-base">★</span>
+                                <span>4.9/5 Average Rating</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-gray-700">
+                                <span className="text-blue-500 text-base">🔒</span>
+                                <span>Secure Booking Guaranteed</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-gray-700">
+                                <span className="text-ceylon-tea text-base">💬</span>
+                                <span>Responds Within 2 Hours</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-gray-700">
+                                <span className="text-purple-500 text-base">🏆</span>
+                                <span>10+ Years Local Expertise</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 {/* Main Content */}
                 <div className="max-w-7xl mx-auto py-8 px-4">
                     <PackageFilter

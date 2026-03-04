@@ -3,193 +3,211 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import { Label } from "../components/ui/label";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card";
-import { Separator } from "../components/ui/separator";
-import { useToast } from "../components/ui/use-toast";
-// import Navbar from '../components/Navbar';
-// import Footer from '../components/Footer';
-import { Mail, Lock, LogIn, AlertCircle } from 'lucide-react';
+import { signIn } from 'next-auth/react';
+import { Eye, EyeOff, Leaf, Mail, Lock } from 'lucide-react';
 import { useUser } from '../contexts/UserContext';
+import Image from 'next/image';
 
-const Login = () => {
-    // Pre-filled demo credentials
-    const [email, setEmail] = useState('demo@ceylonroots.com');
-    const [password, setPassword] = useState('password123');
+export default function LoginPage() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const { toast } = useToast();
+    const [error, setError] = useState('');
     const router = useRouter();
     const { login } = useUser();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
+        setError('');
 
-        // For demo purposes - simulate login
-        setTimeout(() => {
-            // Check if admin login
-            const isAdminLogin = email === 'admin@ceylonroots.com' && password === 'admin123';
+        try {
+            const result = await signIn('credentials', {
+                email,
+                password,
+                redirect: false,
+            });
 
-            // Login using the UserContext
+            if (result?.error) {
+                setError('Invalid email or password. Please try again.');
+                setIsLoading(false);
+                return;
+            }
+
+            const isAdmin = email === 'admin@email.com';
             login({
-                firstName: isAdminLogin ? "Admin" : "Demo",
-                lastName: isAdminLogin ? "User" : "User",
-                email: email,
-                phone: "+1234567890",
-                address: "123 Main St",
-                city: "Colombo",
-                country: "Sri Lanka",
-                zipCode: "10100"
+                firstName: isAdmin ? 'Admin' : email.split('@')[0],
+                lastName: '',
+                email,
+                role: isAdmin ? 'admin' : 'user',
             });
 
-            toast({
-                title: "Login successful",
-                description: `Welcome back to CeylonRoots!${isAdminLogin ? ' (Admin Access)' : ''}`,
-            });
-
-            // Redirect admin to admin panel, regular users to home
-            router.push(isAdminLogin ? '/admin' : '/');
-        }, 1500);
-    };
-
-    const handleGoogleLogin = () => {
-        setIsLoading(true);
-        // Simulate a successful Google login
-        setTimeout(() => {
-            login({
-                firstName: "Google",
-                lastName: "User",
-                email: "google.user@example.com",
-                phone: "+1987654321",
-                address: "456 Google St",
-                city: "Mountain View",
-                country: "United States",
-                zipCode: "94043"
-            });
-
+            router.push(isAdmin ? '/admin' : '/');
+        } catch {
+            setError('An unexpected error occurred. Please try again.');
             setIsLoading(false);
-            toast({
-                title: "Google Login",
-                description: "Google authentication successful!",
-            });
-            router.push('/');
-        }, 1000);
+        }
     };
 
     return (
-        <div className="flex flex-col min-h-screen">
-            {/* <Navbar /> */}
+        <div className="min-h-screen flex">
+            {/* Left panel — scenic photo */}
+            <div className="hidden lg:flex lg:w-[45%] relative overflow-hidden">
+                <Image
+                    src="https://ceylonrootsbucket.s3.eu-north-1.amazonaws.com/upload/mainimg.jpg"
+                    alt="Sri Lanka landscape"
+                    fill
+                    className="object-cover scale-105"
+                    priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-br from-ceylon-ocean/85 via-ceylon-tea/70 to-ceylon-tea/40" />
 
-            <main className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 hero-pattern mt-10">
-                <Card className="w-full max-w-md">
-                    <CardHeader className="space-y-1">
-                        <CardTitle className="text-2xl font-bold text-center">Welcome back</CardTitle>
-                        <CardDescription className="text-center">
-                            Enter your credentials to access your account
-                        </CardDescription>
-                        <div className="bg-amber-100 border border-amber-300 text-amber-800 px-4 py-3 rounded relative" role="alert">
-                            <div className="flex items-center">
-                                <AlertCircle className="h-4 w-4 mr-2" />
-                                <span className="font-medium">Demo Credentials:</span>
-                            </div>
-                            <p className="text-sm mt-1">User: demo@ceylonroots.com / password123</p>
-                            <p className="text-sm">Admin: admin@ceylonroots.com / admin123</p>
+                <div className="relative z-10 flex flex-col justify-between p-14 h-full">
+                    <Link href="/" className="flex items-center gap-2 text-white">
+                        <Leaf className="h-6 w-6 text-ceylon-sand" />
+                        <span className="text-2xl font-bold tracking-tight">Ceylon<span className="text-ceylon-sand">Roots</span></span>
+                    </Link>
+
+                    <div className="space-y-6">
+                        <div className="w-10 h-0.5 bg-ceylon-sand/60" />
+                        <blockquote className="text-white/95 text-2xl leading-relaxed" style={{ fontFamily: "'Playfair Display', serif" }}>
+                            &ldquo;Every journey to Sri Lanka begins with a single step into the extraordinary.&rdquo;
+                        </blockquote>
+                        <div className="flex gap-6 text-white/60 text-sm">
+                            <span>🌿 Eco-Certified Tours</span>
+                            <span>⭐ 4.9/5 Rating</span>
                         </div>
-                    </CardHeader>
+                    </div>
 
-                    <CardContent>
-                        <form onSubmit={handleLogin} className="space-y-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="email">Email</Label>
-                                <div className="relative">
-                                    <Mail className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
-                                    <Input
-                                        id="email"
-                                        type="email"
-                                        placeholder="your.email@example.com"
-                                        className="pl-10"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        required
-                                    />
+                    <div className="space-y-3">
+                        <div className="flex -space-x-2">
+                            {['🇺🇸','🇬🇧','🇩🇪','🇦🇺','🇫🇷'].map((flag, i) => (
+                                <div key={i} className="w-8 h-8 rounded-full bg-white/20 backdrop-blur border-2 border-white/30 flex items-center justify-center text-sm">
+                                    {flag}
                                 </div>
+                            ))}
+                        </div>
+                        <p className="text-white/60 text-xs">Trusted by travelers from 50+ countries</p>
+                    </div>
+                </div>
+            </div>
+
+            {/* Right panel — form */}
+            <div className="flex-1 flex items-center justify-center px-6 py-12 bg-[hsl(40,30%,98%)]">
+                <div className="w-full max-w-md">
+                    {/* Logo mobile */}
+                    <div className="lg:hidden flex items-center gap-2 justify-center mb-8">
+                        <Leaf className="h-5 w-5 text-ceylon-tea" />
+                        <span className="text-xl font-bold">Ceylon<span className="text-ceylon-spice">Roots</span></span>
+                    </div>
+
+                    <div className="mb-8">
+                        <h1 className="text-3xl font-bold text-gray-900 mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
+                            Welcome back
+                        </h1>
+                        <p className="text-gray-500 text-sm">Sign in to continue your journey with us</p>
+                    </div>
+
+                    <form onSubmit={handleLogin} className="space-y-5">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1.5">Email address</label>
+                            <div className="relative">
+                                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" style={{width:'17px',height:'17px'}} />
+                                <input
+                                    type="email"
+                                    autoComplete="email"
+                                    required
+                                    value={email}
+                                    onChange={e => setEmail(e.target.value)}
+                                    placeholder="you@example.com"
+                                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-ceylon-tea/30 focus:border-ceylon-tea transition"
+                                />
                             </div>
+                        </div>
 
-                            <div className="space-y-2">
-                                <div className="flex items-center justify-between">
-                                    <Label htmlFor="password">Password</Label>
-                                    <Link href="/forgot-password" className="text-sm text-ceylon-tea hover:underline">
-                                        Forgot your password?
-                                    </Link>
-                                </div>
-                                <div className="relative">
-                                    <Lock className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
-                                    <Input
-                                        id="password"
-                                        type="password"
-                                        placeholder="••••••••"
-                                        className="pl-10"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        required
-                                    />
-                                </div>
+                        <div>
+                            <div className="flex justify-between items-center mb-1.5">
+                                <label className="block text-sm font-medium text-gray-700">Password</label>
+                                <a href="#" className="text-xs text-ceylon-tea hover:underline">Forgot password?</a>
                             </div>
+                            <div className="relative">
+                                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" style={{width:'17px',height:'17px'}} />
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    autoComplete="current-password"
+                                    required
+                                    value={password}
+                                    onChange={e => setPassword(e.target.value)}
+                                    placeholder="••••••••"
+                                    className="w-full pl-10 pr-11 py-3 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-ceylon-tea/30 focus:border-ceylon-tea transition"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(v => !v)}
+                                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                                >
+                                    {showPassword ? <EyeOff style={{width:'17px',height:'17px'}} /> : <Eye style={{width:'17px',height:'17px'}} />}
+                                </button>
+                            </div>
+                        </div>
 
-                            <Button type="submit" className="w-full ceylon-button-primary" disabled={isLoading}>
-                                {isLoading ? (
-                                    <span className="flex items-center justify-center">
-                                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                        </svg>
-                                        Logging in...
-                                    </span>
-                                ) : (
-                                    <span className="flex items-center justify-center">
-                                        <LogIn className="mr-2 h-5 w-5" />
-                                        Log In
-                                    </span>
-                                )}
-                            </Button>
-                        </form>
+                        {error && (
+                            <div className="flex items-start gap-2 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3.5 py-3">
+                                <span className="mt-0.5">⚠️</span>
+                                <span>{error}</span>
+                            </div>
+                        )}
 
-                        <div className="relative my-6">
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full py-3 rounded-xl font-semibold text-sm text-white transition-all shadow-lg hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed"
+                            style={{ background: 'linear-gradient(135deg, #2E8B57 0%, #1A5276 100%)' }}
+                        >
+                            {isLoading ? (
+                                <span className="flex items-center justify-center gap-2">
+                                    <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                                    </svg>
+                                    Signing in...
+                                </span>
+                            ) : 'Sign in to CeylonRoots'}
+                        </button>
+
+                        <div className="relative my-2">
                             <div className="absolute inset-0 flex items-center">
-                                <Separator />
+                                <div className="w-full border-t border-gray-200" />
                             </div>
-                            <div className="relative flex justify-center text-xs uppercase">
-                                <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+                            <div className="relative flex justify-center">
+                                <span className="bg-[hsl(40,30%,98%)] px-3 text-xs text-gray-400 uppercase tracking-wider">or continue with</span>
                             </div>
                         </div>
 
-                        <Button variant="outline" type="button" className="w-full" onClick={handleGoogleLogin}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 h-4 w-4">
-                                <path d="M18.657 10.5c0-.6-.057-1.193-.166-1.768H12v3.293h3.86c-.165.934-.665 1.72-1.415 2.25v1.876h2.287c1.34-1.234 2.117-3.047 2.117-5.15z" fill="#4285F4"></path>
-                                <path d="M12 19c1.912 0 3.517-.626 4.687-1.686l-2.287-1.875c-.635.42-1.45.675-2.4.675-1.848 0-3.407-1.245-3.967-2.92H5.693v1.94C6.855 17.52 9.243 19 12 19z" fill="#34A853"></path>
-                                <path d="M8.033 13.192c-.143-.427-.22-.877-.22-1.344 0-.466.077-.917.22-1.344V8.565H5.693c-.452.903-.72 1.92-.72 3.001s.268 2.098.72 3.001l2.34-1.375z" fill="#FBBC05"></path>
-                                <path d="M12 7.58c1.043 0 1.978.357 2.712 1.06l2.027-2.027C15.556 5.517 13.95 4.79 12 4.79c-3.172 0-5.843 1.81-7.165 4.457l2.34 1.375c.56-1.674 2.12-2.919 3.967-2.919z" fill="#EA4335"></path>
+                        <button
+                            type="button"
+                            onClick={() => signIn('google', { callbackUrl: '/' })}
+                            className="w-full flex items-center justify-center gap-3 py-3 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition shadow-sm"
+                        >
+                            <svg className="h-4 w-4" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                             </svg>
                             Continue with Google
-                        </Button>
-                    </CardContent>
+                        </button>
+                    </form>
 
-                    <CardFooter className="flex flex-col space-y-4">
-                        <div className="text-sm text-center">
-                            Don&apos;t have an account?{' '}
-                            <Link href="/signup" className="text-ceylon-tea hover:underline font-medium">
-                                Sign up
-                            </Link>
-                        </div>
-                    </CardFooter>
-                </Card>
-            </main>
-
-            {/* <Footer /> */}
+                    <p className="mt-8 text-center text-sm text-gray-500">
+                        Don&apos;t have an account?{' '}
+                        <Link href="/signup" className="font-semibold text-ceylon-tea hover:underline">
+                            Create one free
+                        </Link>
+                    </p>
+                </div>
+            </div>
         </div>
     );
-};
-
-export default Login;
+}
