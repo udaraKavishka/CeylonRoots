@@ -37,7 +37,7 @@ const DestinationMap: React.FC<DestinationMapProps> = ({ destinations }) => {
                 destination.coordinates && (
                     <Marker
                         key={destination.id}
-                        position={[destination.coordinates.latitude, destination.coordinates.longitude]}
+                        position={[destination.coordinates.lat, destination.coordinates.lng]}
                     >
                         <Popup>
                             <div className="max-w-xs">
@@ -54,7 +54,6 @@ const DestinationMap: React.FC<DestinationMapProps> = ({ destinations }) => {
                                         />
                                     </div>
                                 )}
-                )}
                                 <p className="mt-2 text-sm">{destination.description.substring(0, 100)}...</p>
                             </div>
                         </Popup>
