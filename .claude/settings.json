@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc --noEmit)",
+      "Bash(npx prisma db seed)",
+      "Bash(node -e \":*)",
+      "Bash(grep -r \"AUTH_SECRET\\\\|NEXTAUTH_SECRET\\\\|NEXTAUTH_URL\" .env*)",
+      "Bash(ls .env*)",
+      "Bash(node -e \"console.log\\(require\\(''./node_modules/next-auth/package.json''\\).version\\)\")"
+    ]
+  }
+}
