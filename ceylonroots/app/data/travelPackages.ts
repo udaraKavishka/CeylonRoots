@@ -465,14 +465,6 @@ export const travelPackages: TravelPackage[] = [
       "Meals not mentioned in the itinerary",
     ],
   },
-];
-
-
-import { TravelPackage } from "../types/travel";
-
-export const travelPackages: TravelPackage[] = [
-  // Existing packages here...
-  
   {
     id: "pkg-004",
     title: "Wildlife & Rainforest Adventure",

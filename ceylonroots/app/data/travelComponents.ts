@@ -4,7 +4,7 @@ import { TravelComponent } from "../types/travel";
 export const accommodations: TravelComponent[] = [
   {
     id: "acc-1",
-    type: "accommodation",
+    type: "accommodations",
     name: "Cinnamon Grand Colombo",
     description:
       "Luxury 5-star hotel in the heart of Colombo with world-class amenities.",
@@ -12,11 +12,14 @@ export const accommodations: TravelComponent[] = [
     image: "/images/home/img1.jpg",
     price: 150,
     coordinates: { lat: 6.9147, lng: 79.849 },
+    duration: 1,
     tags: ["luxury", "5-star", "pool", "spa"],
+    amenities: ["Pool", "Spa", "Restaurant", "Free WiFi"],
+    rating: 4.7,
   },
   {
     id: "acc-2",
-    type: "accommodation",
+    type: "accommodations",
     name: "Heritance Kandalama",
     description:
       "Iconic architectural hotel built into a rock cliff overlooking Kandalama Lake.",
@@ -24,11 +27,14 @@ export const accommodations: TravelComponent[] = [
     image: "/images/home/img1.jpg",
     price: 200,
     coordinates: { lat: 7.8731, lng: 80.7711 },
+    duration: 1,
     tags: ["eco-friendly", "scenic", "luxury"],
+    amenities: ["Swimming Pool", "Spa", "Restaurant", "Free WiFi"],
+    rating: 4.8,
   },
   {
     id: "acc-3",
-    type: "accommodation",
+    type: "accommodations",
     name: "Amanwella Resort",
     description:
       "Exclusive beachfront resort with private plunge pools and ocean views.",
@@ -36,18 +42,24 @@ export const accommodations: TravelComponent[] = [
     image: "/images/home/img1.jpg",
     price: 350,
     coordinates: { lat: 6.0174, lng: 80.82 },
+    duration: 1,
     tags: ["beachfront", "luxury", "private pool"],
+    amenities: ["Private Pool", "Beach Access", "Restaurant", "Spa"],
+    rating: 4.9,
   },
   {
     id: "acc-4",
-    type: "accommodation",
+    type: "accommodations",
     name: "The Secret Ella",
     description: "Cozy boutique hotel with stunning views of Ella Gap.",
     location: "Ella",
     image: "/images/home/img1.jpg",
     price: 120,
     coordinates: { lat: 6.8667, lng: 81.0466 },
+    duration: 1,
     tags: ["boutique", "mountain view", "peaceful"],
+    amenities: ["Garden", "Restaurant", "Free WiFi", "Terrace"],
+    rating: 4.5,
   },
 ];
 
@@ -63,7 +75,9 @@ export const destinations: TravelComponent[] = [
     image: "/images/home/img1.jpg",
     price: 30,
     coordinates: { lat: 7.9542, lng: 80.7527 },
+    duration: 3,
     tags: ["UNESCO", "historical", "ancient"],
+    attractions: ["Rock Fortress", "Frescoes", "Water Gardens", "Mirror Wall"],
   },
   {
     id: "dest-2",
@@ -75,7 +89,9 @@ export const destinations: TravelComponent[] = [
     image: "/images/home/img1.jpg",
     price: 15,
     coordinates: { lat: 7.2933, lng: 80.6417 },
+    duration: 2,
     tags: ["religious", "cultural", "UNESCO"],
+    attractions: ["Tooth Relic", "Museum", "Evening Puja Ceremony"],
   },
   {
     id: "dest-3",
@@ -87,7 +103,9 @@ export const destinations: TravelComponent[] = [
     image: "/images/home/img1.jpg",
     price: 40,
     coordinates: { lat: 6.3801, lng: 81.5053 },
+    duration: 8,
     tags: ["wildlife", "safari", "nature"],
+    attractions: ["Leopard Safari", "Elephant Sightings", "Bird Watching"],
   },
   {
     id: "dest-4",
@@ -99,7 +117,9 @@ export const destinations: TravelComponent[] = [
     image: "/images/home/img1.jpg",
     price: 0,
     coordinates: { lat: 6.879, lng: 81.063 },
+    duration: 1,
     tags: ["landmark", "scenic", "photography"],
+    attractions: ["Bridge Viewing", "Train Spotting", "Tea Estate Walk"],
   },
 ];
 
@@ -107,7 +127,7 @@ export const destinations: TravelComponent[] = [
 export const activities: TravelComponent[] = [
   {
     id: "act-1",
-    type: "activity",
+    type: "activities",
     name: "Whale Watching in Mirissa",
     description: "Boat tour to spot blue whales, sperm whales, and dolphins.",
     location: "Mirissa",
@@ -116,10 +136,11 @@ export const activities: TravelComponent[] = [
     coordinates: { lat: 5.9483, lng: 80.4283 },
     duration: 4,
     tags: ["ocean", "wildlife", "boat"],
+    difficulty: "EASY",
   },
   {
     id: "act-2",
-    type: "activity",
+    type: "activities",
     name: "Tea Plantation Tour",
     description:
       "Guided tour of a working tea plantation and factory with tea tasting.",
@@ -129,10 +150,11 @@ export const activities: TravelComponent[] = [
     coordinates: { lat: 6.97, lng: 80.77 },
     duration: 2,
     tags: ["cultural", "educational", "tea"],
+    difficulty: "EASY",
   },
   {
     id: "act-3",
-    type: "activity",
+    type: "activities",
     name: "Ayurvedic Spa Treatment",
     description: "Traditional Sri Lankan Ayurvedic treatment and massage.",
     location: "Beruwala",
@@ -141,10 +163,11 @@ export const activities: TravelComponent[] = [
     coordinates: { lat: 6.4738, lng: 79.9833 },
     duration: 2,
     tags: ["wellness", "relaxation", "traditional"],
+    difficulty: "EASY",
   },
   {
     id: "act-4",
-    type: "activity",
+    type: "activities",
     name: "Cooking Class",
     description: "Learn to prepare authentic Sri Lankan curry and rice dishes.",
     location: "Galle",
@@ -153,6 +176,7 @@ export const activities: TravelComponent[] = [
     coordinates: { lat: 6.0535, lng: 80.221 },
     duration: 3,
     tags: ["culinary", "cultural", "hands-on"],
+    difficulty: "EASY",
   },
 ];
 
@@ -167,8 +191,14 @@ export const transport: TravelComponent[] = [
     location: "Island-wide",
     image: "/images/home/img1.jpg",
     price: 80,
-    coordinates: { lat: 7.8731, lng: 80.7718 }, // Center of Sri Lanka
+    coordinates: { lat: 7.8731, lng: 80.7718 },
+    duration: 4,
     tags: ["private", "comfortable", "flexible"],
+    mode: "CAR",
+    departureLocation: "Colombo",
+    arrivalLocation: "Destination",
+    departureCoordinates: { lat: 6.9271, lng: 79.8612 },
+    arrivalCoordinates: { lat: 7.8731, lng: 80.7718 },
   },
   {
     id: "trans-2",
@@ -178,8 +208,14 @@ export const transport: TravelComponent[] = [
     location: "Kandy to Ella",
     image: "/images/home/img1.jpg",
     price: 15,
-    coordinates: { lat: 7.2933, lng: 80.6417 }, // Kandy
+    coordinates: { lat: 7.2933, lng: 80.6417 },
+    duration: 7,
     tags: ["scenic", "public transport", "experience"],
+    mode: "TRAIN",
+    departureLocation: "Kandy",
+    arrivalLocation: "Ella",
+    departureCoordinates: { lat: 7.2985, lng: 80.6356 },
+    arrivalCoordinates: { lat: 6.8667, lng: 81.0466 },
   },
   {
     id: "trans-3",
@@ -189,8 +225,14 @@ export const transport: TravelComponent[] = [
     location: "Multiple Airports",
     image: "/images/home/img1.jpg",
     price: 120,
-    coordinates: { lat: 7.1824, lng: 79.8841 }, // Colombo Airport
+    coordinates: { lat: 7.1824, lng: 79.8841 },
+    duration: 1,
     tags: ["fast", "convenient", "time-saving"],
+    mode: "PLANE",
+    departureLocation: "Colombo Airport",
+    arrivalLocation: "Destination",
+    departureCoordinates: { lat: 7.1803, lng: 79.8841 },
+    arrivalCoordinates: { lat: 6.9271, lng: 79.8612 },
   },
   {
     id: "trans-4",
@@ -200,8 +242,14 @@ export const transport: TravelComponent[] = [
     location: "Urban Areas",
     image: "/images/home/img1.jpg",
     price: 10,
-    coordinates: { lat: 6.9271, lng: 79.8612 }, // Colombo
+    coordinates: { lat: 6.9271, lng: 79.8612 },
+    duration: 1,
     tags: ["local", "experience", "budget"],
+    mode: "CAR",
+    departureLocation: "City Center",
+    arrivalLocation: "Destination",
+    departureCoordinates: { lat: 6.9271, lng: 79.8612 },
+    arrivalCoordinates: { lat: 6.9271, lng: 79.8612 },
   },
 ];
 
@@ -216,11 +264,11 @@ export const allTravelComponents: TravelComponent[] = [
 // Function to get components by type
 export const getComponentsByType = (type: string): TravelComponent[] => {
   switch (type) {
-    case "accommodation":
+    case "accommodations":
       return accommodations;
     case "destination":
       return destinations;
-    case "activity":
+    case "activities":
       return activities;
     case "transport":
       return transport;
