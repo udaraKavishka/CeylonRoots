@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Navbar from '../components/Navbar';
 // import Footer from '../components/Footer';
 import GalleryGrid from '../components/gallery/GalleryGrid';
-import GalleryLightbox from '../components/gallery/GalleryLightBox';
+import GalleryLightbox from '../components/gallery/GalleryLightbox';
 import SubmitPhotoForm from '../components/gallery/SubmitPhotoForm';
 import { Button } from '../components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '../components/ui/tabs';
