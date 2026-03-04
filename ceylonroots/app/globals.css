@@ -36,18 +36,7 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: hsl(40, 30%, 98%);
-    --foreground: hsl(222.2, 84%, 4.9%);
-    --card: hsl(222.2, 84%, 4.9%);
-    --card-foreground: hsl(210, 40%, 98%);
-    --secondary: hsl(217.2, 32.6%, 17.5%);
-    --secondary-foreground: hsl(210, 40%, 98%);
-    --border: hsl(217.2, 32.6%, 17.5%);
-    --input: hsl(217.2, 32.6%, 17.5%);
-  }
-}
+/* Dark mode intentionally disabled - CeylonRoots uses a consistent light theme */
 
 body {
   background: var(--background);
