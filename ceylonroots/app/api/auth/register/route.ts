@@ -1,34 +1,45 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
-import { sendWelcomeEmail } from '../../../lib/email';
+import { NextRequest, NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
+import { sendWelcomeEmail } from "../../../lib/email";
 
 const prisma = new PrismaClient();
 
 export async function POST(req: NextRequest) {
-    const { name, email, password } = await req.json();
+  const { name, email, password } = await req.json();
 
-    if (!name || !email || !password) {
-        return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
-    }
+  if (!name || !email || !password) {
+    return NextResponse.json(
+      { error: "Missing required fields" },
+      { status: 400 }
+    );
+  }
 
-    if (password.length < 6) {
-        return NextResponse.json({ error: 'Password must be at least 6 characters' }, { status: 400 });
-    }
+  if (password.length < 6) {
+    return NextResponse.json(
+      { error: "Password must be at least 6 characters" },
+      { status: 400 }
+    );
+  }
 
-    const existing = await prisma.user.findUnique({ where: { email } });
-    if (existing) {
-        return NextResponse.json({ error: 'Email already registered' }, { status: 409 });
-    }
+  const existing = await prisma.user.findUnique({ where: { email } });
+  if (existing) {
+    return NextResponse.json(
+      { error: "Email already registered" },
+      { status: 409 }
+    );
+  }
 
-    const hashed = await bcrypt.hash(password, 12);
-    const user = await prisma.user.create({
-        data: { name, email, password: hashed },
-        select: { id: true, name: true, email: true, role: true },
-    });
+  const hashed = await bcrypt.hash(password, 12);
+  const user = await prisma.user.create({
+    data: { name, email, password: hashed },
+    select: { id: true, name: true, email: true, role: true },
+  });
 
-    // Send welcome email (fire-and-forget)
-    sendWelcomeEmail({ name, email }).catch((err) => console.error('Welcome email error:', err));
+  // Send welcome email (fire-and-forget)
+  sendWelcomeEmail({ name, email }).catch((err) =>
+    console.error("Welcome email error:", err)
+  );
 
-    return NextResponse.json(user, { status: 201 });
+  return NextResponse.json(user, { status: 201 });
 }

@@ -1,40 +1,79 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-import { auth } from '../../../../auth';
+import { NextRequest, NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
+import { auth } from "../../../../auth";
 
 const prisma = new PrismaClient();
 
 export async function GET(
-    _req: NextRequest,
-    { params }: { params: Promise<{ id: string }> }
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
-    const { id } = await params;
-    const session = await auth();
+  const { id } = await params;
+  const session = await auth();
 
-    const booking = await prisma.booking.findUnique({
-        where: { id },
-        include: {
-            package: {
-                select: { id: true, title: true, imageUrl: true, durationDays: true, price: true },
-            },
+  const booking = await prisma.booking.findUnique({
+    where: { id },
+    include: {
+      package: {
+        select: {
+          id: true,
+          title: true,
+          imageUrl: true,
+          durationDays: true,
+          price: true,
         },
-    });
+      },
+    },
+  });
 
-    if (!booking) {
-        return NextResponse.json({ error: 'Booking not found' }, { status: 404 });
-    }
+  if (!booking) {
+    return NextResponse.json({ error: "Booking not found" }, { status: 404 });
+  }
 
-    // Allow viewing if: the booking email matches session user, user is admin, or booking has no userId (guest)
-    const userRole = (session?.user as { role?: string } | undefined)?.role;
-    const sessionUserId = session?.user?.id;
+  // Allow viewing if: the booking email matches session user, user is admin, or booking has no userId (guest)
+  const userRole = (session?.user as { role?: string } | undefined)?.role;
+  const sessionUserId = session?.user?.id;
 
-    const isOwner = booking.userId === sessionUserId;
-    const isAdmin = userRole === 'admin';
-    const isGuest = !booking.userId;
+  const isOwner = booking.userId === sessionUserId;
+  const isAdmin = userRole === "admin";
+  const isGuest = !booking.userId;
 
-    if (!isOwner && !isAdmin && !isGuest) {
-        return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
+  if (!isOwner && !isAdmin && !isGuest) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
-    return NextResponse.json(booking);
+  return NextResponse.json(booking);
+}
+
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  const { status, paymentMethod } = await req.json();
+
+  const booking = await prisma.booking.findUnique({ where: { id } });
+  if (!booking)
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+  const updated = await prisma.booking.update({
+    where: { id },
+    data: {
+      ...(status && { status }),
+      ...(paymentMethod && { paymentMethod }),
+    },
+    include: {
+      package: {
+        select: {
+          id: true,
+          title: true,
+          imageUrl: true,
+          durationDays: true,
+          price: true,
+        },
+      },
+    },
+  });
+
+  return NextResponse.json(updated);
 }

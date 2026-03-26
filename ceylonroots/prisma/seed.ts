@@ -55,7 +55,7 @@ async function main() {
         image:
           "https://images.unsplash.com/photo-1580803834054-c8ee4a44a71b?w=800",
         latitude: 6.0535,
-        longitude: 80.2210,
+        longitude: 80.221,
       },
       {
         name: "Ella",
@@ -356,11 +356,7 @@ async function main() {
         duration: 4,
         difficulty: "EASY",
         tags: {
-          create: [
-            { tag: "ocean" },
-            { tag: "wildlife" },
-            { tag: "morning" },
-          ],
+          create: [{ tag: "ocean" }, { tag: "wildlife" }, { tag: "morning" }],
         },
       },
     }),
@@ -458,11 +454,7 @@ async function main() {
         arrivalLat: 6.8667,
         arrivalLng: 81.0466,
         tags: {
-          create: [
-            { tag: "scenic" },
-            { tag: "iconic" },
-            { tag: "mountain" },
-          ],
+          create: [{ tag: "scenic" }, { tag: "iconic" }, { tag: "mountain" }],
         },
       },
     }),
@@ -747,9 +739,7 @@ async function main() {
             accommodation: { create: [] },
             meals: { create: [{ meal: "BREAKFAST" }] },
             activities: {
-              create: [
-                { name: "Airport Transfer" },
-              ],
+              create: [{ name: "Airport Transfer" }],
             },
           },
         ],
@@ -881,7 +871,9 @@ async function main() {
             mainTown: "Mirissa",
             description:
               "Early morning safari in Yala. Drive to Mirissa along the southern coast. Evening beach time and fresh seafood dinner.",
-            accommodation: { create: [{ name: "Secret Garden Villa Mirissa" }] },
+            accommodation: {
+              create: [{ name: "Secret Garden Villa Mirissa" }],
+            },
             meals: { create: [{ meal: "BREAKFAST" }, { meal: "DINNER" }] },
             activities: {
               create: [
@@ -1114,9 +1106,7 @@ async function main() {
     },
   });
 
-  console.log(
-    `Created packages: ${pkg1.id}, ${pkg2.id}, ${pkg3.id}`
-  );
+  console.log(`Created packages: ${pkg1.id}, ${pkg2.id}, ${pkg3.id}`);
 
   // ============================================================
   // GALLERY ITEMS
@@ -1132,7 +1122,8 @@ async function main() {
           "https://images.unsplash.com/photo-1590766940543-4ab56e0b8a40?w=400",
         caption: "Sigiriya Rock Fortress at Sunrise",
         location: "Sigiriya",
-        description: "The iconic Lion Rock fortress bathed in golden morning light",
+        description:
+          "The iconic Lion Rock fortress bathed in golden morning light",
         featured: true,
         dateAdded: new Date("2024-01-15"),
       },
@@ -1143,7 +1134,8 @@ async function main() {
           "https://images.unsplash.com/photo-1566996533071-2c578080c06f?w=400",
         caption: "Temple of the Tooth, Kandy",
         location: "Kandy",
-        description: "Sri Lanka's most revered Buddhist temple housing the relic of the Buddha",
+        description:
+          "Sri Lanka's most revered Buddhist temple housing the relic of the Buddha",
         featured: true,
         dateAdded: new Date("2024-02-10"),
       },
@@ -1166,7 +1158,8 @@ async function main() {
           "https://images.unsplash.com/photo-1580803834054-c8ee4a44a71b?w=400",
         caption: "Galle Fort Colonial Architecture",
         location: "Galle",
-        description: "Historic Dutch colonial fort walls with lighthouse and ocean views",
+        description:
+          "Historic Dutch colonial fort walls with lighthouse and ocean views",
         featured: true,
         dateAdded: new Date("2024-03-20"),
       },
@@ -1177,7 +1170,8 @@ async function main() {
           "https://images.unsplash.com/photo-1520637836993-5f5101e8b08e?w=400",
         caption: "Wild Leopard in Yala",
         location: "Yala National Park",
-        description: "A majestic leopard resting on a rock in Yala National Park",
+        description:
+          "A majestic leopard resting on a rock in Yala National Park",
         featured: true,
         dateAdded: new Date("2024-04-01"),
       },
@@ -1188,7 +1182,8 @@ async function main() {
           "https://images.unsplash.com/photo-1565073624497-7144969da6e4?w=400",
         caption: "Mirissa Beach Sunrise",
         location: "Mirissa",
-        description: "Golden hour at the crescent bay of Mirissa with coconut palms",
+        description:
+          "Golden hour at the crescent bay of Mirissa with coconut palms",
         featured: false,
         dateAdded: new Date("2024-04-15"),
       },
@@ -1280,7 +1275,8 @@ The views from the summit are absolutely spectacular - worth every step of the c
 
   const post2 = await prisma.blogPost.create({
     data: {
-      title: "Sri Lanka's Hill Country: Taking the Scenic Train from Kandy to Ella",
+      title:
+        "Sri Lanka's Hill Country: Taking the Scenic Train from Kandy to Ella",
       excerpt:
         "The train journey from Kandy to Ella is considered one of the world's most beautiful rail trips. Here's everything you need to know.",
       content: `

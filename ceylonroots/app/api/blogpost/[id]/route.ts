@@ -42,7 +42,16 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { title, excerpt, content, imageUrl, postDate, author, category, commentCount } = body;
+    const {
+      title,
+      excerpt,
+      content,
+      imageUrl,
+      postDate,
+      author,
+      category,
+      commentCount,
+    } = body;
 
     const post = await prisma.blogPost.update({
       where: { id: parseInt(id) },

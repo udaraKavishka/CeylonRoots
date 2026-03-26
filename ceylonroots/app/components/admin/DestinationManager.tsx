@@ -1,14 +1,20 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import { useEffect, useState, useCallback } from 'react';
+import Image from "next/image";
+import { useEffect, useState, useCallback } from "react";
 import { Button } from "../../components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { Textarea } from "../../components/ui/textarea";
 import { Badge } from "../../components/ui/badge";
-import { Plus, Edit, Trash2, Save } from 'lucide-react';
+import { Plus, Edit, Trash2, Save } from "lucide-react";
 import { useToast } from "../../components/ui/use-toast";
 
 type Coordinates = {
@@ -33,17 +39,17 @@ type Destination = {
 };
 
 const initialFormState = {
-  name: '',
-  description: '',
-  region: '',
-  image: '',
-  topAttraction: '',
-  bestTimeToVisit: '',
-  recommendedDuration: '',
-  culturalTips: '',
-  attractions: '',
-  lat: '',
-  lng: ''
+  name: "",
+  description: "",
+  region: "",
+  image: "",
+  topAttraction: "",
+  bestTimeToVisit: "",
+  recommendedDuration: "",
+  culturalTips: "",
+  attractions: "",
+  lat: "",
+  lng: "",
 };
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -52,7 +58,9 @@ const DestinationManager = () => {
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [loading, setLoading] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
-  const [editingDestination, setEditingDestination] = useState<string | null>(null);
+  const [editingDestination, setEditingDestination] = useState<string | null>(
+    null
+  );
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState(initialFormState);
@@ -64,7 +72,9 @@ const DestinationManager = () => {
       const response = await fetch(`${API_BASE_URL}/destinationdetail`);
 
       if (!response.ok) {
-        throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
+        throw new Error(
+          `Failed to fetch: ${response.status} ${response.statusText}`
+        );
       }
 
       const data = await response.json();
@@ -73,7 +83,7 @@ const DestinationManager = () => {
       toast({
         title: "Error",
         description: "Failed to fetch destinations. Please try again later.",
-        variant: "destructive"
+        variant: "destructive",
       });
       setDestinations([]);
     } finally {
@@ -85,7 +95,6 @@ const DestinationManager = () => {
     fetchDestinations();
   }, [fetchDestinations]);
 
-
   useEffect(() => {
     if (formData.image) {
       setImagePreview(formData.image);
@@ -96,27 +105,35 @@ const DestinationManager = () => {
 
   const createDestination = async (destinationData: Partial<Destination>) => {
     const response = await fetch(`${API_BASE_URL}/destinationdetail`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(destinationData)
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(destinationData),
     });
-    if (!response.ok) throw new Error(`Failed to create destination: ${response.status}`);
+    if (!response.ok)
+      throw new Error(`Failed to create destination: ${response.status}`);
     return response.json();
   };
 
-  const updateDestination = async (id: string, destinationData: Partial<Destination>) => {
+  const updateDestination = async (
+    id: string,
+    destinationData: Partial<Destination>
+  ) => {
     const response = await fetch(`${API_BASE_URL}/destinationdetail/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(destinationData)
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(destinationData),
     });
-    if (!response.ok) throw new Error(`Failed to update destination: ${response.status}`);
+    if (!response.ok)
+      throw new Error(`Failed to update destination: ${response.status}`);
     return response.json();
   };
 
   const deleteDestination = async (id: string) => {
-    const response = await fetch(`${API_BASE_URL}/destinationdetail/${id}`, { method: 'DELETE' });
-    if (!response.ok) throw new Error(`Failed to delete destination: ${response.status}`);
+    const response = await fetch(`${API_BASE_URL}/destinationdetail/${id}`, {
+      method: "DELETE",
+    });
+    if (!response.ok)
+      throw new Error(`Failed to delete destination: ${response.status}`);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -127,19 +144,24 @@ const DestinationManager = () => {
       // Validate coordinates
       const lat = parseFloat(formData.lat);
       const lng = parseFloat(formData.lng);
-      
+
       if (isNaN(lat)) throw new Error("Latitude must be a valid number");
       if (isNaN(lng)) throw new Error("Longitude must be a valid number");
-      if (lat < -90 || lat > 90) throw new Error("Latitude must be between -90 and 90");
-      if (lng < -180 || lng > 180) throw new Error("Longitude must be between -180 and 180");
+      if (lat < -90 || lat > 90)
+        throw new Error("Latitude must be between -90 and 90");
+      if (lng < -180 || lng > 180)
+        throw new Error("Longitude must be between -180 and 180");
 
       const destinationData = {
         ...formData,
-        attractions: formData.attractions.split(',').map(a => a.trim()).filter(Boolean),
+        attractions: formData.attractions
+          .split(",")
+          .map((a) => a.trim())
+          .filter(Boolean),
         coordinates: {
           latitude: lat,
-          longitude: lng
-        }
+          longitude: lng,
+        },
       };
 
       // Remove temporary fields
@@ -147,25 +169,37 @@ const DestinationManager = () => {
       delete (destinationData as Record<string, unknown>).lng;
 
       if (editingDestination) {
-        const updatedDestination = await updateDestination(editingDestination, destinationData);
-        setDestinations(prev =>
-          prev.map(d => d.id === editingDestination ? updatedDestination : d)
+        const updatedDestination = await updateDestination(
+          editingDestination,
+          destinationData
         );
-        toast({ title: "Destination updated", description: "Destination updated successfully." });
+        setDestinations((prev) =>
+          prev.map((d) =>
+            d.id === editingDestination ? updatedDestination : d
+          )
+        );
+        toast({
+          title: "Destination updated",
+          description: "Destination updated successfully.",
+        });
       } else {
         const newDestination = await createDestination(destinationData);
-        setDestinations(prev => [...prev, newDestination]);
-        toast({ title: "Destination saved", description: "Destination saved successfully." });
+        setDestinations((prev) => [...prev, newDestination]);
+        toast({
+          title: "Destination saved",
+          description: "Destination saved successfully.",
+        });
       }
 
       resetForm();
     } catch (error) {
       toast({
         title: "Error",
-        description: error instanceof Error 
-          ? error.message 
-          : `Failed to ${editingDestination ? 'update' : 'create'} destination.`,
-        variant: "destructive"
+        description:
+          error instanceof Error
+            ? error.message
+            : `Failed to ${editingDestination ? "update" : "create"} destination.`,
+        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
@@ -173,7 +207,7 @@ const DestinationManager = () => {
   };
 
   const handleEdit = (destinationId: string) => {
-    const destination = destinations.find(d => d.id === destinationId);
+    const destination = destinations.find((d) => d.id === destinationId);
     if (destination) {
       setFormData({
         name: destination.name,
@@ -184,9 +218,9 @@ const DestinationManager = () => {
         bestTimeToVisit: destination.bestTimeToVisit,
         recommendedDuration: destination.recommendedDuration,
         culturalTips: destination.culturalTips,
-        attractions: destination.attractions.join(', '),
+        attractions: destination.attractions.join(", "),
         lat: destination.coordinates.latitude.toString(),
-        lng: destination.coordinates.longitude.toString()
+        lng: destination.coordinates.longitude.toString(),
       });
       setEditingDestination(destinationId);
       setIsCreating(false);
@@ -197,7 +231,7 @@ const DestinationManager = () => {
     if (window.confirm("Are you sure you want to delete this destination?")) {
       try {
         await deleteDestination(destinationId);
-        setDestinations(prev => prev.filter(d => d.id !== destinationId));
+        setDestinations((prev) => prev.filter((d) => d.id !== destinationId));
         toast({
           title: "Destination deleted",
           description: "Destination was successfully deleted.",
@@ -206,7 +240,7 @@ const DestinationManager = () => {
         toast({
           title: "Error",
           description: "Failed to delete destination. Please try again.",
-          variant: "destructive"
+          variant: "destructive",
         });
       }
     }
@@ -246,7 +280,12 @@ const DestinationManager = () => {
                       <Input
                         id="name"
                         value={formData.name}
-                        onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            name: e.target.value,
+                          }))
+                        }
                         placeholder="Sigiriya"
                         required
                         disabled={isSubmitting}
@@ -257,7 +296,12 @@ const DestinationManager = () => {
                       <Input
                         id="region"
                         value={formData.region}
-                        onChange={(e) => setFormData(prev => ({ ...prev, region: e.target.value }))}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            region: e.target.value,
+                          }))
+                        }
                         placeholder="Cultural Triangle"
                         required
                         disabled={isSubmitting}
@@ -270,12 +314,17 @@ const DestinationManager = () => {
                     <Input
                       id="image"
                       value={formData.image}
-                      onChange={(e) => setFormData(prev => ({ ...prev, image: e.target.value }))}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          image: e.target.value,
+                        }))
+                      }
                       placeholder="https://images.unsplash.com/..."
                       required
                       disabled={isSubmitting}
                     />
-                    
+
                     {/* Image Preview */}
                     {imagePreview && (
                       <div className="mt-3">
@@ -286,8 +335,10 @@ const DestinationManager = () => {
                             alt="Preview"
                             fill
                             className="object-cover"
-                            style={{ objectFit: 'cover' }}
-                            onError={() => setImagePreview('/images/placeholder.jpg')}
+                            style={{ objectFit: "cover" }}
+                            onError={() =>
+                              setImagePreview("/images/placeholder.jpg")
+                            }
                             sizes="(max-width: 640px) 100vw, 400px"
                             priority
                           />
@@ -301,7 +352,12 @@ const DestinationManager = () => {
                     <Textarea
                       id="description"
                       value={formData.description}
-                      onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          description: e.target.value,
+                        }))
+                      }
                       placeholder="Sigiriya, also known as the Lion Rock, is an ancient rock fortress..."
                       rows={3}
                       required
@@ -315,18 +371,30 @@ const DestinationManager = () => {
                       <Input
                         id="topAttraction"
                         value={formData.topAttraction}
-                        onChange={(e) => setFormData(prev => ({ ...prev, topAttraction: e.target.value }))}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            topAttraction: e.target.value,
+                          }))
+                        }
                         placeholder="The Lion Rock fortress and ancient palace ruins"
                         required
                         disabled={isSubmitting}
                       />
                     </div>
                     <div>
-                      <Label htmlFor="bestTimeToVisit">Best Time to Visit *</Label>
+                      <Label htmlFor="bestTimeToVisit">
+                        Best Time to Visit *
+                      </Label>
                       <Input
                         id="bestTimeToVisit"
                         value={formData.bestTimeToVisit}
-                        onChange={(e) => setFormData(prev => ({ ...prev, bestTimeToVisit: e.target.value }))}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            bestTimeToVisit: e.target.value,
+                          }))
+                        }
                         placeholder="January to March (dry season)"
                         required
                         disabled={isSubmitting}
@@ -335,11 +403,18 @@ const DestinationManager = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor="recommendedDuration">Recommended Duration *</Label>
+                    <Label htmlFor="recommendedDuration">
+                      Recommended Duration *
+                    </Label>
                     <Input
                       id="recommendedDuration"
                       value={formData.recommendedDuration}
-                      onChange={(e) => setFormData(prev => ({ ...prev, recommendedDuration: e.target.value }))}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          recommendedDuration: e.target.value,
+                        }))
+                      }
                       placeholder="1-2 days"
                       required
                       disabled={isSubmitting}
@@ -347,11 +422,18 @@ const DestinationManager = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor="attractions">Attractions (comma-separated) *</Label>
+                    <Label htmlFor="attractions">
+                      Attractions (comma-separated) *
+                    </Label>
                     <Textarea
                       id="attractions"
                       value={formData.attractions}
-                      onChange={(e) => setFormData(prev => ({ ...prev, attractions: e.target.value }))}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          attractions: e.target.value,
+                        }))
+                      }
                       placeholder="Sigiriya Rock Fortress, Water Gardens, Mirror Wall"
                       rows={2}
                       required
@@ -364,7 +446,12 @@ const DestinationManager = () => {
                     <Textarea
                       id="culturalTips"
                       value={formData.culturalTips}
-                      onChange={(e) => setFormData(prev => ({ ...prev, culturalTips: e.target.value }))}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          culturalTips: e.target.value,
+                        }))
+                      }
                       placeholder="Dress modestly when visiting religious sites. Remove shoes before entering temples..."
                       rows={3}
                       required
@@ -380,7 +467,12 @@ const DestinationManager = () => {
                         type="number"
                         step="any"
                         value={formData.lat}
-                        onChange={(e) => setFormData(prev => ({ ...prev, lat: e.target.value }))}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            lat: e.target.value,
+                          }))
+                        }
                         placeholder="7.9570"
                         required
                         disabled={isSubmitting}
@@ -393,7 +485,12 @@ const DestinationManager = () => {
                         type="number"
                         step="any"
                         value={formData.lng}
-                        onChange={(e) => setFormData(prev => ({ ...prev, lng: e.target.value }))}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            lng: e.target.value,
+                          }))
+                        }
                         placeholder="80.7603"
                         required
                         disabled={isSubmitting}
@@ -423,8 +520,10 @@ const DestinationManager = () => {
               ) : (
                 <div className="flex flex-col md:flex-row justify-between gap-4">
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-lg font-semibold mb-2 truncate">{destination.name}</h3>
-                    
+                    <h3 className="text-lg font-semibold mb-2 truncate">
+                      {destination.name}
+                    </h3>
+
                     {/* Destination Image */}
                     <div className="relative w-full h-48 rounded-md overflow-hidden border mb-3">
                       <Image
@@ -432,27 +531,38 @@ const DestinationManager = () => {
                         alt={destination.name}
                         fill
                         className="object-cover"
-                        style={{ objectFit: 'cover' }}
+                        style={{ objectFit: "cover" }}
                         onError={() => {}}
                         sizes="(max-width: 640px) 100vw, 400px"
                         priority={false}
                       />
                     </div>
-                    
-                    <p className="text-gray-600 mb-3 line-clamp-2">{destination.description}</p>
+
+                    <p className="text-gray-600 mb-3 line-clamp-2">
+                      {destination.description}
+                    </p>
                     <div className="flex flex-wrap gap-2 mb-3">
                       <Badge variant="secondary">{destination.region}</Badge>
-                      <Badge variant="outline">{destination.bestTimeToVisit}</Badge>
-                      <Badge variant="outline">{destination.recommendedDuration}</Badge>
+                      <Badge variant="outline">
+                        {destination.bestTimeToVisit}
+                      </Badge>
+                      <Badge variant="outline">
+                        {destination.recommendedDuration}
+                      </Badge>
                     </div>
                     <p className="text-sm text-gray-500 truncate">
-                      <span className="font-medium">Top Attraction:</span> {destination.topAttraction}
+                      <span className="font-medium">Top Attraction:</span>{" "}
+                      {destination.topAttraction}
                     </p>
                     <div className="mt-2">
                       <span className="font-medium text-sm">Attractions:</span>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {destination.attractions.map((attraction, index) => (
-                          <Badge key={index} variant="secondary" className="text-xs">
+                          <Badge
+                            key={index}
+                            variant="secondary"
+                            className="text-xs"
+                          >
                             {attraction}
                           </Badge>
                         ))}
@@ -512,7 +622,9 @@ const DestinationManager = () => {
         <Card>
           <CardHeader>
             <CardTitle>Create New Destination</CardTitle>
-            <CardDescription>Fill in the details for the destination</CardDescription>
+            <CardDescription>
+              Fill in the details for the destination
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -522,7 +634,9 @@ const DestinationManager = () => {
                   <Input
                     id="name"
                     value={formData.name}
-                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({ ...prev, name: e.target.value }))
+                    }
                     placeholder="Sigiriya"
                     required
                     disabled={isSubmitting}
@@ -533,7 +647,12 @@ const DestinationManager = () => {
                   <Input
                     id="region"
                     value={formData.region}
-                    onChange={(e) => setFormData(prev => ({ ...prev, region: e.target.value }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        region: e.target.value,
+                      }))
+                    }
                     placeholder="Cultural Triangle"
                     required
                     disabled={isSubmitting}
@@ -546,12 +665,14 @@ const DestinationManager = () => {
                 <Input
                   id="image"
                   value={formData.image}
-                  onChange={(e) => setFormData(prev => ({ ...prev, image: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, image: e.target.value }))
+                  }
                   placeholder="https://images.unsplash.com/..."
                   required
                   disabled={isSubmitting}
                 />
-                
+
                 {/* Image Preview */}
                 {imagePreview && (
                   <div className="mt-3">
@@ -562,8 +683,10 @@ const DestinationManager = () => {
                         alt="Preview"
                         fill
                         className="object-cover"
-                        style={{ objectFit: 'cover' }}
-                        onError={() => setImagePreview('/images/placeholder.jpg')}
+                        style={{ objectFit: "cover" }}
+                        onError={() =>
+                          setImagePreview("/images/placeholder.jpg")
+                        }
                         sizes="(max-width: 640px) 100vw, 400px"
                         priority
                       />
@@ -577,7 +700,12 @@ const DestinationManager = () => {
                 <Textarea
                   id="description"
                   value={formData.description}
-                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      description: e.target.value,
+                    }))
+                  }
                   placeholder="Sigiriya, also known as the Lion Rock, is an ancient rock fortress..."
                   rows={3}
                   required
@@ -591,7 +719,12 @@ const DestinationManager = () => {
                   <Input
                     id="topAttraction"
                     value={formData.topAttraction}
-                    onChange={(e) => setFormData(prev => ({ ...prev, topAttraction: e.target.value }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        topAttraction: e.target.value,
+                      }))
+                    }
                     placeholder="The Lion Rock fortress and ancient palace ruins"
                     required
                     disabled={isSubmitting}
@@ -602,7 +735,12 @@ const DestinationManager = () => {
                   <Input
                     id="bestTimeToVisit"
                     value={formData.bestTimeToVisit}
-                    onChange={(e) => setFormData(prev => ({ ...prev, bestTimeToVisit: e.target.value }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        bestTimeToVisit: e.target.value,
+                      }))
+                    }
                     placeholder="January to March (dry season)"
                     required
                     disabled={isSubmitting}
@@ -611,11 +749,18 @@ const DestinationManager = () => {
               </div>
 
               <div>
-                <Label htmlFor="recommendedDuration">Recommended Duration *</Label>
+                <Label htmlFor="recommendedDuration">
+                  Recommended Duration *
+                </Label>
                 <Input
                   id="recommendedDuration"
                   value={formData.recommendedDuration}
-                  onChange={(e) => setFormData(prev => ({ ...prev, recommendedDuration: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      recommendedDuration: e.target.value,
+                    }))
+                  }
                   placeholder="1-2 days"
                   required
                   disabled={isSubmitting}
@@ -623,11 +768,18 @@ const DestinationManager = () => {
               </div>
 
               <div>
-                <Label htmlFor="attractions">Attractions (comma-separated) *</Label>
+                <Label htmlFor="attractions">
+                  Attractions (comma-separated) *
+                </Label>
                 <Textarea
                   id="attractions"
                   value={formData.attractions}
-                  onChange={(e) => setFormData(prev => ({ ...prev, attractions: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      attractions: e.target.value,
+                    }))
+                  }
                   placeholder="Sigiriya Rock Fortress, Water Gardens, Mirror Wall"
                   rows={2}
                   required
@@ -640,7 +792,12 @@ const DestinationManager = () => {
                 <Textarea
                   id="culturalTips"
                   value={formData.culturalTips}
-                  onChange={(e) => setFormData(prev => ({ ...prev, culturalTips: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      culturalTips: e.target.value,
+                    }))
+                  }
                   placeholder="Dress modestly when visiting religious sites. Remove shoes before entering temples..."
                   rows={3}
                   required
@@ -656,7 +813,9 @@ const DestinationManager = () => {
                     type="number"
                     step="any"
                     value={formData.lat}
-                    onChange={(e) => setFormData(prev => ({ ...prev, lat: e.target.value }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({ ...prev, lat: e.target.value }))
+                    }
                     placeholder="7.9570"
                     required
                     disabled={isSubmitting}
@@ -669,7 +828,9 @@ const DestinationManager = () => {
                     type="number"
                     step="any"
                     value={formData.lng}
-                    onChange={(e) => setFormData(prev => ({ ...prev, lng: e.target.value }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({ ...prev, lng: e.target.value }))
+                    }
                     placeholder="80.7603"
                     required
                     disabled={isSubmitting}

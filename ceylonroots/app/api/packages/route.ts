@@ -32,7 +32,7 @@ export async function GET(request: Request) {
 
     if (destinationFilter) {
       const filterLower = destinationFilter.trim().toLowerCase();
-      const filtered = formatted.filter(pkg => {
+      const filtered = formatted.filter((pkg) => {
         // Check if any destination string matches the filter
         const destMatch = pkg.destinations.some((d: string) =>
           d.toLowerCase().includes(filterLower)
@@ -121,9 +121,9 @@ export async function POST(request: Request) {
                 create: (day.meals || []).map((meal: string) => ({ meal })),
               },
               activities: {
-                create: (day.activities || []).map(
-                  (act: { name: string }) => ({ name: act.name })
-                ),
+                create: (day.activities || []).map((act: { name: string }) => ({
+                  name: act.name,
+                })),
               },
             })
           ),
