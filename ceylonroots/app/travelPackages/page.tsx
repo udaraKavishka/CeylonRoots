@@ -48,7 +48,6 @@ const TravelPackages = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [packages, setPackages] = useState<TravelPackage[]>(travelPackages);
   const [filteredPackages, setFilteredPackages] =
     useState<TravelPackage[]>(travelPackages);
   const [selectedPackage, setSelectedPackage] = useState<TravelPackage | null>(

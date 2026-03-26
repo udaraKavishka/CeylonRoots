@@ -3,16 +3,15 @@
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import {
   CheckCircle,
   Package,
   Calendar,
   Users,
   CreditCard,
-  MapPin,
   Leaf,
   ArrowRight,
-  Download,
 } from "lucide-react";
 
 interface BookingDetails {
@@ -183,10 +182,11 @@ function BookingConfirmationContent() {
           {/* Package banner */}
           {booking.package.imageUrl && (
             <div className="relative h-48 w-full">
-              <img
+              <Image
                 src={booking.package.imageUrl}
                 alt={booking.package.title}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
                 <div>

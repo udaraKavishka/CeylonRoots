@@ -51,7 +51,6 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
     handleSubmit,
     formState: { errors },
     setValue,
-    watch,
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {

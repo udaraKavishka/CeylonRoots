@@ -6,7 +6,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { Card, CardContent } from "../components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import { teamMembers, milestones, partners } from "../data/aboutData";
 
 export default function AboutPage() {

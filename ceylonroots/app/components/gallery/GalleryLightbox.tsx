@@ -17,6 +17,16 @@ const GalleryLightbox: React.FC<GalleryLightboxProps> = ({
   const [currentIndex, setCurrentIndex] = useState(selectedIndex);
   const currentItem = items[currentIndex];
 
+  const goToNext = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % items.length);
+  };
+
+  const goToPrevious = () => {
+    setCurrentIndex(
+      (prevIndex) => (prevIndex - 1 + items.length) % items.length
+    );
+  };
+
   // Handle keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -27,17 +37,7 @@ const GalleryLightbox: React.FC<GalleryLightboxProps> = ({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [currentIndex, items.length]);
-
-  const goToNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % items.length);
-  };
-
-  const goToPrevious = () => {
-    setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + items.length) % items.length
-    );
-  };
+  }, [currentIndex, items.length, onClose, goToNext, goToPrevious]);
 
   const shareItem = () => {
     if (navigator.share) {

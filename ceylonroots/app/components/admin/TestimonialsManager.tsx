@@ -116,7 +116,7 @@ const TestimonialsManager = () => {
     }
   };
 
-  const handleDelete = (testimonialId: number) => {
+  const handleDelete = () => {
     toast({
       title: "Testimonial deleted",
       description: "Testimonial has been deleted successfully.",

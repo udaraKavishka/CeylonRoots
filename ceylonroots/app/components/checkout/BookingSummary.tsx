@@ -12,12 +12,10 @@ import { TravelPackage } from "../../types/travel";
 
 interface BookingSummaryProps {
   travelPackage: TravelPackage;
-  isProcessing?: boolean;
 }
 
 const BookingSummary: React.FC<BookingSummaryProps> = ({
   travelPackage,
-  isProcessing,
 }) => {
   const taxAmount = travelPackage.price * 0.1;
   // Calculate total

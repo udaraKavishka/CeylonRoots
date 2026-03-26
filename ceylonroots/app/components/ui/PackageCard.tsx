@@ -7,14 +7,12 @@ import { TravelPackage } from "../../types/travel";
 interface PackageCardProps {
   travelPackage: TravelPackage;
   onView: () => void;
-  onCustomize: () => void;
   onBookNow: () => void;
 }
 
 const PackageCard: React.FC<PackageCardProps> = ({
   travelPackage,
   onView,
-  onCustomize,
   onBookNow,
 }) => {
   return (

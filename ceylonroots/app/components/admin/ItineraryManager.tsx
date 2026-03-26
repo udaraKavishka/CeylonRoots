@@ -347,6 +347,7 @@ const ItineraryManager = () => {
           updatedDays.push(updatedDay);
         } else {
           // Remove id field for new days
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { id, ...newDay } = day;
           const createdDay = await createItineraryDay(newDay);
           updatedDays.push(createdDay);

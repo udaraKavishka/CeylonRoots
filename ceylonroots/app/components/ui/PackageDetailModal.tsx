@@ -8,8 +8,6 @@ import {
   Calendar,
   DollarSign,
   Star,
-  Users,
-  Camera,
   CheckCircle2,
 } from "lucide-react";
 import PackageGallery from "./PackageGallery";
