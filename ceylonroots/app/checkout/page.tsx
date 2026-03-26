@@ -154,7 +154,6 @@ const Checkout = () => {
             <div className="lg:col-span-1">
               <BookingSummary
                 travelPackage={bookingPackage}
-                isProcessing={isProcessing}
               />
             </div>
           </div>
