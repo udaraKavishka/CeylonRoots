@@ -39,7 +39,7 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
-  type-check:
+  typecheck:
     name: TypeScript Type Check
     runs-on: ubuntu-latest
     defaults:
@@ -67,7 +67,7 @@ jobs:
       - name: Run TypeScript compiler check
         run: npx tsc --noEmit
 
-  prisma-validate:
+  prisma:
     name: Prisma Schema Validation
     runs-on: ubuntu-latest
     defaults:
@@ -95,7 +95,7 @@ jobs:
       - name: Generate Prisma Client
         run: npx prisma generate
 
-      - name: Check Prisma Schema Formatting
+      - name: Format Prisma schema check
         run: npx prisma format --check
 
   build:
@@ -145,8 +145,8 @@ jobs:
       - name: Build Next.js production bundle
         run: npm run build
 
-  format-check:
-    name: Code Formatting Check
+  prettier:
+    name: Code Formatting
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -168,7 +168,7 @@ jobs:
       - name: Check code formatting
         run: npx prettier --check "**/*.{ts,tsx,js,jsx,json,md,css}"
 
-  security-audit:
+  security:
     name: Security Audit
     runs-on: ubuntu-latest
     defaults:
