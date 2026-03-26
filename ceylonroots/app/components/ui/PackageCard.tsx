@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
@@ -7,12 +8,14 @@ import { TravelPackage } from "../../types/travel";
 interface PackageCardProps {
   travelPackage: TravelPackage;
   onView: () => void;
+  onCustomize?: () => void;
   onBookNow: () => void;
 }
 
 const PackageCard: React.FC<PackageCardProps> = ({
   travelPackage,
   onView,
+  onCustomize,
   onBookNow,
 }) => {
   return (
@@ -73,9 +76,9 @@ const PackageCard: React.FC<PackageCardProps> = ({
         <Button
           variant="outline"
           className="border-ceylon-tea text-ceylon-tea hover:bg-ceylon-tea hover:text-white w-full"
-          onClick={onView}
+          onClick={onCustomize ?? onView}
         >
-          View Details
+          {onCustomize ? "Customize" : "View Details"}
         </Button>
         <Button
           className="bg-ceylon-tea hover:bg-ceylon-tea/90 text-white w-full"

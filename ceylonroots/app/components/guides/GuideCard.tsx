@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { Star, Clock, Languages, Award, MessageCircle } from "lucide-react";

@@ -86,10 +86,10 @@ const GalleryManager = () => {
     }
   };
 
-  const handleDelete = () => {
+  const handleDelete = (itemId: string) => {
     toast({
       title: "Gallery item deleted",
-      description: "Gallery item has been deleted successfully.",
+      description: `Gallery item ${itemId} has been deleted successfully.`,
       variant: "destructive",
     });
   };

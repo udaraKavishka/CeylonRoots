@@ -102,7 +102,7 @@ const TravelPackages = () => {
 
   // Apply filters
   useEffect(() => {
-    let result = [...packages];
+    let result = [...travelPackages];
 
     // Region filter
     if (selectedRegion !== "All Regions") {
@@ -162,7 +162,6 @@ const TravelPackages = () => {
 
     setFilteredPackages(result);
   }, [
-    packages,
     selectedRegion,
     selectedDuration,
     selectedCost,

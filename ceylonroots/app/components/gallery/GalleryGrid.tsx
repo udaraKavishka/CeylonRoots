@@ -1,6 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import { GalleryItem } from "../../types/gallery";
-import { Image, Video, Play } from "lucide-react";
+import { Image as ImageIcon, Video, Play } from "lucide-react";
 
 interface GalleryGridProps {
   items: GalleryItem[];
@@ -20,14 +21,14 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({ items, onItemClick }) => {
             {item.type === "image" ? (
               <img
                 src={item.url}
-                alt={item.caption}
+                alt={item.caption || "Gallery image"}
                 className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
               />
             ) : (
               <div className="relative w-full h-full">
                 <img
                   src={item.thumbnailUrl || item.url}
-                  alt={item.caption}
+                  alt={item.caption || "Gallery video thumbnail"}
                   className="w-full h-full object-cover brightness-75"
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -37,7 +38,7 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({ items, onItemClick }) => {
             )}
           </div>
           <div className="absolute top-2 right-2 bg-black/70 text-white rounded-full p-1">
-            {item.type === "image" ? <Image size={16} /> : <Video size={16} />}
+            {item.type === "image" ? <ImageIcon size={16} /> : <Video size={16} />}
           </div>
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
             <h3 className="text-white text-sm font-medium truncate">

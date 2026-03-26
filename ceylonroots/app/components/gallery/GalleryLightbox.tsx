@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable @next/next/no-img-element */
+import React, { useState, useEffect, useCallback } from "react";
 import { GalleryItem } from "../../types/gallery";
 import { X, ChevronLeft, ChevronRight, Share2, MapPin } from "lucide-react";
 import { Button } from "../../components/ui/button";
@@ -17,15 +18,15 @@ const GalleryLightbox: React.FC<GalleryLightboxProps> = ({
   const [currentIndex, setCurrentIndex] = useState(selectedIndex);
   const currentItem = items[currentIndex];
 
-  const goToNext = () => {
+  const goToNext = useCallback(() => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % items.length);
-  };
+  }, [items.length]);
 
-  const goToPrevious = () => {
+  const goToPrevious = useCallback(() => {
     setCurrentIndex(
       (prevIndex) => (prevIndex - 1 + items.length) % items.length
     );
-  };
+  }, [items.length]);
 
   // Handle keyboard navigation
   useEffect(() => {
@@ -37,7 +38,7 @@ const GalleryLightbox: React.FC<GalleryLightboxProps> = ({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [currentIndex, items.length, onClose, goToNext, goToPrevious]);
+  }, [onClose, goToNext, goToPrevious]);
 
   const shareItem = () => {
     if (navigator.share) {

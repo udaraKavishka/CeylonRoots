@@ -47,6 +47,7 @@ interface PackageDetailModalProps {
   onClose: () => void;
   travelPackage: TravelPackage;
   onCustomize: () => void;
+  onBookNow?: () => void;
 }
 
 const PackageDetailModal = ({
@@ -54,6 +55,7 @@ const PackageDetailModal = ({
   onClose,
   travelPackage,
   onCustomize,
+  onBookNow,
 }: PackageDetailModalProps) => {
   const [activeTab, setActiveTab] = useState("overview");
   const [copied, setCopied] = useState(false);
@@ -343,7 +345,7 @@ const PackageDetailModal = ({
             Customize This Package
           </Button>
           <Button
-            onClick={handleBookNow}
+            onClick={onBookNow ?? handleBookNow}
             className="bg-ceylon-tea hover:bg-ceylon-tea/90 text-white flex-1"
           >
             Book Now
