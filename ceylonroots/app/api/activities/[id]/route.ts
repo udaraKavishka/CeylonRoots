@@ -42,7 +42,18 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { name, description, location, imageUrl, price, lat, lng, duration, tags, difficulty } = body;
+    const {
+      name,
+      description,
+      location,
+      imageUrl,
+      price,
+      lat,
+      lng,
+      duration,
+      tags,
+      difficulty,
+    } = body;
 
     const activity = await prisma.travelComponent.update({
       where: { id: parseInt(id) },
@@ -57,7 +68,10 @@ export async function PUT(
         ...(duration !== undefined && { duration }),
         ...(difficulty !== undefined && { difficulty }),
         ...(tags !== undefined && {
-          tags: { deleteMany: {}, create: tags.map((tag: string) => ({ tag })) },
+          tags: {
+            deleteMany: {},
+            create: tags.map((tag: string) => ({ tag })),
+          },
         }),
       },
       include: activityInclude,

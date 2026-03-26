@@ -34,7 +34,16 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { type, url, thumbnailUrl, caption, location, description, featured, dateAdded } = body;
+    const {
+      type,
+      url,
+      thumbnailUrl,
+      caption,
+      location,
+      description,
+      featured,
+      dateAdded,
+    } = body;
 
     const item = await prisma.galleryItem.update({
       where: { id: parseInt(id) },

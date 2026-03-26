@@ -1,0 +1,222 @@
+name: CeylonRoots Integrity Check
+
+# Trigger on pushes to any branch and pull requests that modify ceylonroots files
+on:
+  push:
+    branches: ['**']
+    paths:
+      - 'ceylonroots/**'
+      - '.github/workflows/ceylonroots-integrity.yml'
+  pull_request:
+    paths:
+      - 'ceylonroots/**'
+      - '.github/workflows/ceylonroots-integrity.yml'
+
+# Prevent concurrent runs for the same branch - cancel in-progress runs when new commits pushed
+concurrency:
+  group: ceylonroots-integrity-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ==================== JOB 1: ESLint Code Quality Check ====================
+  lint:
+    name: 🔍 ESLint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ceylonroots
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: ceylonroots/package-lock.json
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🔍 Run ESLint
+        run: npm run lint
+
+  # ==================== JOB 2: TypeScript Type Checking ====================
+  typecheck:
+    name: 🔷 TypeScript Type Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ceylonroots
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: ceylonroots/package-lock.json
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🗄️ Generate Prisma Client
+        run: npx prisma generate
+        env:
+          DATABASE_URL: "postgresql://ci:ci@localhost:5432/testdb"
+
+      - name: 🔷 Run TypeScript compiler check
+        run: npx tsc --noEmit
+
+  # ==================== JOB 3: Prisma Schema Validation ====================
+  prisma:
+    name: 🗄️ Prisma Schema Validation
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ceylonroots
+    
+    env:
+      DATABASE_URL: "postgresql://ci:ci@localhost:5432/testdb"
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: ceylonroots/package-lock.json
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: ✅ Validate Prisma schema
+        run: npx prisma validate
+
+      - name: 🔧 Generate Prisma Client
+        run: npx prisma generate
+
+      - name: 📋 Format Prisma schema (check only)
+        run: npx prisma format --check
+
+  # ==================== JOB 4: Next.js Production Build ====================
+  build:
+    name: 🏗️ Next.js Production Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ceylonroots
+    
+    env:
+      # Mock environment variables for CI build (not real credentials)
+      DATABASE_URL: "postgresql://ci:ci@localhost:5432/testdb"
+      AUTH_SECRET: "test-secret-for-ci-only-minimum-32-characters-required-for-nextauth"
+      NEXTAUTH_URL: "http://localhost:3000"
+      NEXT_PUBLIC_API_BASE_URL: "/api"
+      NEXT_PUBLIC_SITE_URL: "http://localhost:3000"
+      API_BASE_URL: "/api"
+      RESEND_API_KEY: "re_ci_test_key"
+      RESEND_FROM_EMAIL: "noreply@test.com"
+      ADMIN_EMAIL: "admin@test.com"
+      # Disable Next.js telemetry in CI
+      NEXT_TELEMETRY_DISABLED: 1
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: ceylonroots/package-lock.json
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🗄️ Generate Prisma Client
+        run: npx prisma generate
+
+      - name: 🎯 Restore Next.js build cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ceylonroots/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('ceylonroots/package-lock.json') }}-${{ hashFiles('ceylonroots/**/*.ts', 'ceylonroots/**/*.tsx', 'ceylonroots/**/*.js', 'ceylonroots/**/*.jsx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('ceylonroots/package-lock.json') }}-
+            ${{ runner.os }}-nextjs-
+
+      - name: 🏗️ Build Next.js production bundle
+        run: npm run build
+
+      - name: 📊 Display build output info
+        run: |
+          echo "✅ Build completed successfully!"
+          if [ -d ".next" ]; then
+            echo "📦 Build output size:"
+            du -sh .next
+          fi
+
+  # ==================== JOB 5: Code Formatting Check (Prettier) ====================
+  prettier:
+    name: 💅 Code Formatting
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ceylonroots
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: ceylonroots/package-lock.json
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 💅 Check code formatting
+        run: npx prettier --check "**/*.{ts,tsx,js,jsx,json,md,css}"
+
+  # ==================== JOB 6: Security Audit ====================
+  security:
+    name: 🔒 Security Audit
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ceylonroots
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: ceylonroots/package-lock.json
+
+      - name: 🔒 Run npm security audit
+        run: npm audit --audit-level=high
+        continue-on-error: true  # Don't fail build on vulnerabilities, just warn
+
+      - name: 📊 Display audit summary
+        if: always()
+        run: |
+          echo "🔍 Security audit completed. Review any warnings above."
+          echo "💡 Run 'npm audit fix' locally to auto-fix vulnerabilities."

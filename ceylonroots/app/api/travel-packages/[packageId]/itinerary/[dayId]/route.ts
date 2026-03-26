@@ -44,7 +44,15 @@ export async function PUT(
   try {
     const { packageId, dayId } = await params;
     const body = await request.json();
-    const { dayNumber, title, mainTown, description, accommodation, meals, activities } = body;
+    const {
+      dayNumber,
+      title,
+      mainTown,
+      description,
+      accommodation,
+      meals,
+      activities,
+    } = body;
 
     const day = await prisma.itineraryDay.update({
       where: { id: parseInt(dayId) },

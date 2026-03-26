@@ -21,7 +21,8 @@ async function main() {
       recommendedDuration: "2-3 days",
       culturalTips:
         "Morning visits to tea factories offer fresh brews. Bring warm clothing as temperatures drop below 10°C at night.",
-      image: "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?w=800",
+      image:
+        "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?w=800",
       latitude: 6.9497,
       longitude: 80.7891,
       attractions: {
@@ -47,7 +48,8 @@ async function main() {
       recommendedDuration: "2-3 days",
       culturalTips:
         "Koneswaram Temple requires modest dress. Pigeon Island is a marine national park — no littering allowed.",
-      image: "https://images.unsplash.com/photo-1500916434205-0c77489c6cf7?w=800",
+      image:
+        "https://images.unsplash.com/photo-1500916434205-0c77489c6cf7?w=800",
       latitude: 8.5874,
       longitude: 81.2152,
       attractions: {
@@ -62,7 +64,9 @@ async function main() {
     },
   });
 
-  console.log(`Created destination details: Nuwara Eliya (${nuwara.id}), Trincomalee (${trinco.id})`);
+  console.log(
+    `Created destination details: Nuwara Eliya (${nuwara.id}), Trincomalee (${trinco.id})`
+  );
 
   // ============================================================
   // DESTINATION TRAVEL COMPONENTS
@@ -74,9 +78,11 @@ async function main() {
       {
         componentType: "DESTINATION",
         name: "Sigiriya Rock Fortress",
-        description: "Ancient rock fortress with stunning 5th-century frescoes and panoramic views across the jungle.",
+        description:
+          "Ancient rock fortress with stunning 5th-century frescoes and panoramic views across the jungle.",
         location: "Sigiriya",
-        imageUrl: "https://images.unsplash.com/photo-1590766940543-4ab56e0b8a40?w=800",
+        imageUrl:
+          "https://images.unsplash.com/photo-1590766940543-4ab56e0b8a40?w=800",
         price: 30,
         lat: 7.9569,
         lng: 80.7603,
@@ -85,9 +91,11 @@ async function main() {
       {
         componentType: "DESTINATION",
         name: "Temple of the Tooth Relic",
-        description: "Sacred Buddhist temple in Kandy housing the relic of the tooth of the Buddha.",
+        description:
+          "Sacred Buddhist temple in Kandy housing the relic of the tooth of the Buddha.",
         location: "Kandy",
-        imageUrl: "https://images.unsplash.com/photo-1567598460019-64c40c23a8cf?w=800",
+        imageUrl:
+          "https://images.unsplash.com/photo-1567598460019-64c40c23a8cf?w=800",
         price: 15,
         lat: 7.2933,
         lng: 80.6413,
@@ -96,9 +104,11 @@ async function main() {
       {
         componentType: "DESTINATION",
         name: "Galle Dutch Fort",
-        description: "UNESCO World Heritage Site — a 17th-century Dutch colonial fortification on the southern tip of Sri Lanka.",
+        description:
+          "UNESCO World Heritage Site — a 17th-century Dutch colonial fortification on the southern tip of Sri Lanka.",
         location: "Galle",
-        imageUrl: "https://images.unsplash.com/photo-1586500036706-41963de24d8c?w=800",
+        imageUrl:
+          "https://images.unsplash.com/photo-1586500036706-41963de24d8c?w=800",
         price: 0,
         lat: 6.0269,
         lng: 80.2169,
@@ -107,9 +117,11 @@ async function main() {
       {
         componentType: "DESTINATION",
         name: "Nine Arch Bridge",
-        description: "Iconic colonial-era railway viaduct surrounded by lush tea plantations in the highlands.",
+        description:
+          "Iconic colonial-era railway viaduct surrounded by lush tea plantations in the highlands.",
         location: "Ella",
-        imageUrl: "https://images.unsplash.com/photo-1620766786530-7fa86dee13cb?w=800",
+        imageUrl:
+          "https://images.unsplash.com/photo-1620766786530-7fa86dee13cb?w=800",
         price: 0,
         lat: 6.879,
         lng: 81.063,
@@ -118,9 +130,11 @@ async function main() {
       {
         componentType: "DESTINATION",
         name: "Yala National Park",
-        description: "Sri Lanka's most famous wildlife sanctuary with the highest density of leopards in the world.",
+        description:
+          "Sri Lanka's most famous wildlife sanctuary with the highest density of leopards in the world.",
         location: "Yala",
-        imageUrl: "https://images.unsplash.com/photo-1549366021-9f761d040a94?w=800",
+        imageUrl:
+          "https://images.unsplash.com/photo-1549366021-9f761d040a94?w=800",
         price: 40,
         lat: 6.3801,
         lng: 81.5053,
@@ -138,7 +152,12 @@ async function main() {
 
   const destTags: Record<string, string[]> = {
     "Sigiriya Rock Fortress": ["UNESCO", "historical", "ancient", "climbing"],
-    "Temple of the Tooth Relic": ["religious", "cultural", "Buddhist", "UNESCO"],
+    "Temple of the Tooth Relic": [
+      "religious",
+      "cultural",
+      "Buddhist",
+      "UNESCO",
+    ],
     "Galle Dutch Fort": ["UNESCO", "colonial", "historical", "coastal"],
     "Nine Arch Bridge": ["landmark", "scenic", "photography", "train"],
     "Yala National Park": ["wildlife", "safari", "leopard", "nature"],
@@ -163,7 +182,8 @@ async function main() {
       title: "Wildlife & Rainforest Adventure",
       description:
         "Immerse yourself in Sri Lanka's extraordinary biodiversity. Track leopards in Yala, witness elephant herds in Udawalawe, and trek through the UNESCO Sinharaja Rainforest with expert naturalist guides.",
-      imageUrl: "https://images.unsplash.com/photo-1549366021-9f761d040a94?w=800",
+      imageUrl:
+        "https://images.unsplash.com/photo-1549366021-9f761d040a94?w=800",
       durationDays: 6,
       price: 949,
       rating: 4.9,
@@ -187,10 +207,18 @@ async function main() {
       },
       gallery: {
         create: [
-          { url: "https://images.unsplash.com/photo-1549366021-9f761d040a94?w=800" },
-          { url: "https://images.unsplash.com/photo-1573512449171-1a8b7e4a4143?w=800" },
-          { url: "https://images.unsplash.com/photo-1624461063672-fb93119c9abb?w=800" },
-          { url: "https://images.unsplash.com/photo-1598024055260-9d9a0e1236d4?w=800" },
+          {
+            url: "https://images.unsplash.com/photo-1549366021-9f761d040a94?w=800",
+          },
+          {
+            url: "https://images.unsplash.com/photo-1573512449171-1a8b7e4a4143?w=800",
+          },
+          {
+            url: "https://images.unsplash.com/photo-1624461063672-fb93119c9abb?w=800",
+          },
+          {
+            url: "https://images.unsplash.com/photo-1598024055260-9d9a0e1236d4?w=800",
+          },
         ],
       },
       includes: {
@@ -218,54 +246,99 @@ async function main() {
             dayNumber: 1,
             title: "Arrival & Transfer to Udawalawe",
             mainTown: "Udawalawe",
-            description: "Airport pickup and scenic drive to Udawalawe. Evening orientation and nature documentary screening at the lodge.",
-            accommodation: { create: [{ name: "Grand Udawalawe Safari Resort" }] },
+            description:
+              "Airport pickup and scenic drive to Udawalawe. Evening orientation and nature documentary screening at the lodge.",
+            accommodation: {
+              create: [{ name: "Grand Udawalawe Safari Resort" }],
+            },
             meals: { create: [{ meal: "DINNER" }] },
-            activities: { create: [{ name: "Transfer from airport" }, { name: "Resort orientation" }] },
+            activities: {
+              create: [
+                { name: "Transfer from airport" },
+                { name: "Resort orientation" },
+              ],
+            },
           },
           {
             dayNumber: 2,
             title: "Udawalawe Elephant Safari",
             mainTown: "Udawalawe",
-            description: "Morning safari focusing on elephant herds. Afternoon visit to Elephant Transit Home. Evening nature walk.",
-            accommodation: { create: [{ name: "Grand Udawalawe Safari Resort" }] },
+            description:
+              "Morning safari focusing on elephant herds. Afternoon visit to Elephant Transit Home. Evening nature walk.",
+            accommodation: {
+              create: [{ name: "Grand Udawalawe Safari Resort" }],
+            },
             meals: { create: [{ meal: "BREAKFAST" }, { meal: "LUNCH" }] },
-            activities: { create: [{ name: "Morning 4x4 wildlife safari" }, { name: "Elephant orphanage visit" }, { name: "Guided nature walk" }] },
+            activities: {
+              create: [
+                { name: "Morning 4x4 wildlife safari" },
+                { name: "Elephant orphanage visit" },
+                { name: "Guided nature walk" },
+              ],
+            },
           },
           {
             dayNumber: 3,
             title: "Sinharaja Rainforest Trek",
             mainTown: "Sinharaja",
-            description: "Transfer to Sinharaja UNESCO Biosphere Reserve. Guided trek through primary rainforest with endemic species spotting.",
+            description:
+              "Transfer to Sinharaja UNESCO Biosphere Reserve. Guided trek through primary rainforest with endemic species spotting.",
             accommodation: { create: [{ name: "Rainforest Eco Lodge" }] },
             meals: { create: [{ meal: "BREAKFAST" }, { meal: "DINNER" }] },
-            activities: { create: [{ name: "Rainforest trekking (full day)" }, { name: "Endemic bird watching" }, { name: "Hidden waterfall swim" }] },
+            activities: {
+              create: [
+                { name: "Rainforest trekking (full day)" },
+                { name: "Endemic bird watching" },
+                { name: "Hidden waterfall swim" },
+              ],
+            },
           },
           {
             dayNumber: 4,
             title: "Kitulgala River Adventure",
             mainTown: "Kitulgala",
-            description: "River tubing on the Kelani River. Afternoon rainforest canopy walk and spice garden visit.",
+            description:
+              "River tubing on the Kelani River. Afternoon rainforest canopy walk and spice garden visit.",
             accommodation: { create: [{ name: "The Plantation Hotel" }] },
             meals: { create: [{ meal: "BREAKFAST" }, { meal: "LUNCH" }] },
-            activities: { create: [{ name: "River tubing" }, { name: "Canopy walkway" }, { name: "Village and spice garden tour" }] },
+            activities: {
+              create: [
+                { name: "River tubing" },
+                { name: "Canopy walkway" },
+                { name: "Village and spice garden tour" },
+              ],
+            },
           },
           {
             dayNumber: 5,
             title: "Yala Leopard Safari",
             mainTown: "Yala",
-            description: "Full day in Yala National Park — morning and afternoon safaris with packed lunch. Focus on leopard habitats and wetland birds.",
+            description:
+              "Full day in Yala National Park — morning and afternoon safaris with packed lunch. Focus on leopard habitats and wetland birds.",
             accommodation: { create: [{ name: "Cinnamon Wild Yala" }] },
             meals: { create: [{ meal: "BREAKFAST" }, { meal: "LUNCH" }] },
-            activities: { create: [{ name: "Morning wildlife safari" }, { name: "Afternoon safari" }, { name: "Wildlife photography session" }] },
+            activities: {
+              create: [
+                { name: "Morning wildlife safari" },
+                { name: "Afternoon safari" },
+                { name: "Wildlife photography session" },
+              ],
+            },
           },
           {
             dayNumber: 6,
             title: "Coastal Drive & Departure",
             mainTown: "Colombo",
-            description: "Scenic coastal drive to Colombo with stop at turtle conservation centre. Airport transfer.",
+            description:
+              "Scenic coastal drive to Colombo with stop at turtle conservation centre. Airport transfer.",
             meals: { create: [{ meal: "BREAKFAST" }] },
-            activities: { create: [{ name: "Sea turtle conservation centre" }, { name: "Coastal scenic drive" }, { name: "Airport transfer" }] },
+            activities: {
+              create: [
+                { name: "Sea turtle conservation centre" },
+                { name: "Coastal scenic drive" },
+                { name: "Airport transfer" },
+              ],
+            },
           },
         ],
       },
@@ -277,7 +350,8 @@ async function main() {
       title: "East Coast Tropical Escape",
       description:
         "Discover Sri Lanka's unspoiled eastern coastline — crystal-clear turquoise waters, vibrant coral reefs, ancient Hindu temples, and traditional fishing villages untouched by mass tourism.",
-      imageUrl: "https://images.unsplash.com/photo-1500916434205-0c77489c6cf7?w=800",
+      imageUrl:
+        "https://images.unsplash.com/photo-1500916434205-0c77489c6cf7?w=800",
       durationDays: 5,
       price: 799,
       rating: 4.7,
@@ -300,9 +374,15 @@ async function main() {
       },
       gallery: {
         create: [
-          { url: "https://images.unsplash.com/photo-1500916434205-0c77489c6cf7?w=800" },
-          { url: "https://images.unsplash.com/photo-1509233725247-49e657c54213?w=800" },
-          { url: "https://images.unsplash.com/photo-1597466760503-7efab5b74c9b?w=800" },
+          {
+            url: "https://images.unsplash.com/photo-1500916434205-0c77489c6cf7?w=800",
+          },
+          {
+            url: "https://images.unsplash.com/photo-1509233725247-49e657c54213?w=800",
+          },
+          {
+            url: "https://images.unsplash.com/photo-1597466760503-7efab5b74c9b?w=800",
+          },
         ],
       },
       includes: {
@@ -330,45 +410,78 @@ async function main() {
             dayNumber: 1,
             title: "Arrival in Trincomalee",
             mainTown: "Trincomalee",
-            description: "Transfer from Colombo to Trincomalee. Evening beach welcome ceremony with traditional drumming.",
+            description:
+              "Transfer from Colombo to Trincomalee. Evening beach welcome ceremony with traditional drumming.",
             accommodation: { create: [{ name: "Trinco Blu by Cinnamon" }] },
             meals: { create: [{ meal: "DINNER" }] },
-            activities: { create: [{ name: "Transfer from Colombo" }, { name: "Beach welcome ceremony" }] },
+            activities: {
+              create: [
+                { name: "Transfer from Colombo" },
+                { name: "Beach welcome ceremony" },
+              ],
+            },
           },
           {
             dayNumber: 2,
             title: "Marine Adventure Day",
             mainTown: "Trincomalee",
-            description: "Morning whale watching excursion. Afternoon snorkelling at Pigeon Island National Park with abundant marine life.",
+            description:
+              "Morning whale watching excursion. Afternoon snorkelling at Pigeon Island National Park with abundant marine life.",
             accommodation: { create: [{ name: "Trinco Blu by Cinnamon" }] },
             meals: { create: [{ meal: "BREAKFAST" }, { meal: "LUNCH" }] },
-            activities: { create: [{ name: "Whale watching boat tour" }, { name: "Pigeon Island snorkelling" }] },
+            activities: {
+              create: [
+                { name: "Whale watching boat tour" },
+                { name: "Pigeon Island snorkelling" },
+              ],
+            },
           },
           {
             dayNumber: 3,
             title: "Cultural Exploration",
             mainTown: "Trincomalee",
-            description: "Visit Koneswaram Temple perched on Swami Rock. Afternoon cooking class and fishing village tour.",
+            description:
+              "Visit Koneswaram Temple perched on Swami Rock. Afternoon cooking class and fishing village tour.",
             accommodation: { create: [{ name: "Trinco Blu by Cinnamon" }] },
             meals: { create: [{ meal: "BREAKFAST" }, { meal: "DINNER" }] },
-            activities: { create: [{ name: "Koneswaram Temple visit" }, { name: "Sri Lankan cooking class" }, { name: "Fishing village tour" }] },
+            activities: {
+              create: [
+                { name: "Koneswaram Temple visit" },
+                { name: "Sri Lankan cooking class" },
+                { name: "Fishing village tour" },
+              ],
+            },
           },
           {
             dayNumber: 4,
             title: "Batticaloa Lagoon Discovery",
             mainTown: "Batticaloa",
-            description: "Transfer to Batticaloa. Sunset kayaking on the famous lagoon. Experience the 'singing fish' phenomenon at Kallady.",
+            description:
+              "Transfer to Batticaloa. Sunset kayaking on the famous lagoon. Experience the 'singing fish' phenomenon at Kallady.",
             accommodation: { create: [{ name: "Amaya Beach Resort" }] },
             meals: { create: [{ meal: "BREAKFAST" }, { meal: "LUNCH" }] },
-            activities: { create: [{ name: "Lagoon kayaking" }, { name: "Kallady musical sands" }, { name: "Dutch Fort exploration" }] },
+            activities: {
+              create: [
+                { name: "Lagoon kayaking" },
+                { name: "Kallady musical sands" },
+                { name: "Dutch Fort exploration" },
+              ],
+            },
           },
           {
             dayNumber: 5,
             title: "Departure with Coastal Memories",
             mainTown: "Colombo",
-            description: "Scenic return drive with stop at local artisan markets. Airport transfer.",
+            description:
+              "Scenic return drive with stop at local artisan markets. Airport transfer.",
             meals: { create: [{ meal: "BREAKFAST" }] },
-            activities: { create: [{ name: "Artisan market visit" }, { name: "Scenic coastal drive" }, { name: "Airport transfer" }] },
+            activities: {
+              create: [
+                { name: "Artisan market visit" },
+                { name: "Scenic coastal drive" },
+                { name: "Airport transfer" },
+              ],
+            },
           },
         ],
       },
@@ -380,7 +493,8 @@ async function main() {
       title: "Wellness & Ayurveda Retreat",
       description:
         "Rejuvenate body and mind with authentic Sri Lankan Ayurvedic treatments, guided yoga, forest bathing, and mindful living in serene beachside and hillside wellness sanctuaries.",
-      imageUrl: "https://images.unsplash.com/photo-1549576490-b0b4831a60b1?w=800",
+      imageUrl:
+        "https://images.unsplash.com/photo-1549576490-b0b4831a60b1?w=800",
       durationDays: 7,
       price: 1299,
       rating: 4.9,
@@ -393,7 +507,10 @@ async function main() {
       },
       highlights: {
         create: [
-          { highlight: "Personalised Ayurveda consultation with resident doctor" },
+          {
+            highlight:
+              "Personalised Ayurveda consultation with resident doctor",
+          },
           { highlight: "Daily sunrise yoga and beach meditation" },
           { highlight: "Herbal garden tour and medicinal plant workshop" },
           { highlight: "Forest bathing and mindfulness immersion" },
@@ -402,9 +519,15 @@ async function main() {
       },
       gallery: {
         create: [
-          { url: "https://images.unsplash.com/photo-1549576490-b0b4831a60b1?w=800" },
-          { url: "https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?w=800" },
-          { url: "https://images.unsplash.com/photo-1591348122449-02525d703f45?w=800" },
+          {
+            url: "https://images.unsplash.com/photo-1549576490-b0b4831a60b1?w=800",
+          },
+          {
+            url: "https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?w=800",
+          },
+          {
+            url: "https://images.unsplash.com/photo-1591348122449-02525d703f45?w=800",
+          },
         ],
       },
       includes: {
@@ -432,63 +555,141 @@ async function main() {
             dayNumber: 1,
             title: "Arrival & Wellness Orientation",
             mainTown: "Weligama",
-            description: "Transfer to beachside wellness resort. Initial Ayurvedic dosha consultation with resident physician.",
+            description:
+              "Transfer to beachside wellness resort. Initial Ayurvedic dosha consultation with resident physician.",
             accommodation: { create: [{ name: "Santani Wellness Resort" }] },
             meals: { create: [{ meal: "DINNER" }] },
-            activities: { create: [{ name: "Airport transfer" }, { name: "Doctor consultation" }, { name: "Resort orientation" }] },
+            activities: {
+              create: [
+                { name: "Airport transfer" },
+                { name: "Doctor consultation" },
+                { name: "Resort orientation" },
+              ],
+            },
           },
           {
             dayNumber: 2,
             title: "Holistic Healing Begins",
             mainTown: "Weligama",
-            description: "Sunrise yoga session on the beach. Herbal compress massage. Nutrition workshop and cooking demonstration.",
+            description:
+              "Sunrise yoga session on the beach. Herbal compress massage. Nutrition workshop and cooking demonstration.",
             accommodation: { create: [{ name: "Santani Wellness Resort" }] },
-            meals: { create: [{ meal: "BREAKFAST" }, { meal: "LUNCH" }, { meal: "DINNER" }] },
-            activities: { create: [{ name: "Sunrise yoga (1.5 hrs)" }, { name: "Abhyanga oil massage" }, { name: "Nutrition & cooking workshop" }] },
+            meals: {
+              create: [
+                { meal: "BREAKFAST" },
+                { meal: "LUNCH" },
+                { meal: "DINNER" },
+              ],
+            },
+            activities: {
+              create: [
+                { name: "Sunrise yoga (1.5 hrs)" },
+                { name: "Abhyanga oil massage" },
+                { name: "Nutrition & cooking workshop" },
+              ],
+            },
           },
           {
             dayNumber: 3,
             title: "Nature Immersion",
             mainTown: "Weligama",
-            description: "Forest bathing therapy. Sound healing with traditional instruments. Mindfulness beach walk at sunset.",
+            description:
+              "Forest bathing therapy. Sound healing with traditional instruments. Mindfulness beach walk at sunset.",
             accommodation: { create: [{ name: "Santani Wellness Resort" }] },
-            meals: { create: [{ meal: "BREAKFAST" }, { meal: "LUNCH" }, { meal: "DINNER" }] },
-            activities: { create: [{ name: "Forest bathing therapy" }, { name: "Sound healing session" }, { name: "Sunset beach walk" }] },
+            meals: {
+              create: [
+                { meal: "BREAKFAST" },
+                { meal: "LUNCH" },
+                { meal: "DINNER" },
+              ],
+            },
+            activities: {
+              create: [
+                { name: "Forest bathing therapy" },
+                { name: "Sound healing session" },
+                { name: "Sunset beach walk" },
+              ],
+            },
           },
           {
             dayNumber: 4,
             title: "Mountain Retreat Transfer",
             mainTown: "Kanneliya",
-            description: "Scenic drive to hill country eco-retreat. Afternoon herbal garden tour and traditional tea ceremony.",
+            description:
+              "Scenic drive to hill country eco-retreat. Afternoon herbal garden tour and traditional tea ceremony.",
             accommodation: { create: [{ name: "The Rainforest Ecolodge" }] },
-            meals: { create: [{ meal: "BREAKFAST" }, { meal: "LUNCH" }, { meal: "DINNER" }] },
-            activities: { create: [{ name: "Herbal garden tour" }, { name: "Traditional tea ceremony" }, { name: "Sunset hilltop meditation" }] },
+            meals: {
+              create: [
+                { meal: "BREAKFAST" },
+                { meal: "LUNCH" },
+                { meal: "DINNER" },
+              ],
+            },
+            activities: {
+              create: [
+                { name: "Herbal garden tour" },
+                { name: "Traditional tea ceremony" },
+                { name: "Sunset hilltop meditation" },
+              ],
+            },
           },
           {
             dayNumber: 5,
             title: "Water Healing Day",
             mainTown: "Kanneliya",
-            description: "Waterfall meditation in a secluded forest pool. Hydrotherapy session. Evening yoga nidra (yogic sleep).",
+            description:
+              "Waterfall meditation in a secluded forest pool. Hydrotherapy session. Evening yoga nidra (yogic sleep).",
             accommodation: { create: [{ name: "The Rainforest Ecolodge" }] },
-            meals: { create: [{ meal: "BREAKFAST" }, { meal: "LUNCH" }, { meal: "DINNER" }] },
-            activities: { create: [{ name: "Waterfall meditation" }, { name: "Hydrotherapy session" }, { name: "Yoga nidra (deep relaxation)" }] },
+            meals: {
+              create: [
+                { meal: "BREAKFAST" },
+                { meal: "LUNCH" },
+                { meal: "DINNER" },
+              ],
+            },
+            activities: {
+              create: [
+                { name: "Waterfall meditation" },
+                { name: "Hydrotherapy session" },
+                { name: "Yoga nidra (deep relaxation)" },
+              ],
+            },
           },
           {
             dayNumber: 6,
             title: "Integration & Reflection",
             mainTown: "Kanneliya",
-            description: "Personalised wellness plan development for home practice. Final signature Ayurveda treatment. Closing circle ceremony.",
+            description:
+              "Personalised wellness plan development for home practice. Final signature Ayurveda treatment. Closing circle ceremony.",
             accommodation: { create: [{ name: "The Rainforest Ecolodge" }] },
-            meals: { create: [{ meal: "BREAKFAST" }, { meal: "LUNCH" }, { meal: "DINNER" }] },
-            activities: { create: [{ name: "Personalised wellness planning" }, { name: "Signature final treatment" }, { name: "Closing ceremony" }] },
+            meals: {
+              create: [
+                { meal: "BREAKFAST" },
+                { meal: "LUNCH" },
+                { meal: "DINNER" },
+              ],
+            },
+            activities: {
+              create: [
+                { name: "Personalised wellness planning" },
+                { name: "Signature final treatment" },
+                { name: "Closing ceremony" },
+              ],
+            },
           },
           {
             dayNumber: 7,
             title: "Departure Renewed",
             mainTown: "Colombo",
-            description: "Transfer to Colombo with herbal tea hamper gift. Optional Colombo city spa stop before airport.",
+            description:
+              "Transfer to Colombo with herbal tea hamper gift. Optional Colombo city spa stop before airport.",
             meals: { create: [{ meal: "BREAKFAST" }] },
-            activities: { create: [{ name: "Herbal gift hamper presentation" }, { name: "Transfer to airport" }] },
+            activities: {
+              create: [
+                { name: "Herbal gift hamper presentation" },
+                { name: "Transfer to airport" },
+              ],
+            },
           },
         ],
       },
@@ -507,109 +708,133 @@ async function main() {
       {
         type: "IMAGE",
         url: "https://images.unsplash.com/photo-1592194996308-7b43878e84a6?w=800",
-        thumbnailUrl: "https://images.unsplash.com/photo-1592194996308-7b43878e84a6?w=400",
+        thumbnailUrl:
+          "https://images.unsplash.com/photo-1592194996308-7b43878e84a6?w=400",
         caption: "Blue whale surfacing in Mirissa",
         location: "Mirissa",
-        description: "The blue whale, the largest animal on Earth, breaches off the coast of Mirissa during peak season.",
+        description:
+          "The blue whale, the largest animal on Earth, breaches off the coast of Mirissa during peak season.",
         featured: true,
       },
       {
         type: "IMAGE",
         url: "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?w=800",
-        thumbnailUrl: "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?w=400",
+        thumbnailUrl:
+          "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?w=400",
         caption: "Tea estate at sunrise, Nuwara Eliya",
         location: "Nuwara Eliya",
-        description: "Rolling green tea estates catch the early morning light in Sri Lanka's hill country.",
+        description:
+          "Rolling green tea estates catch the early morning light in Sri Lanka's hill country.",
         featured: true,
       },
       {
         type: "IMAGE",
         url: "https://images.unsplash.com/photo-1567598460019-64c40c23a8cf?w=800",
-        thumbnailUrl: "https://images.unsplash.com/photo-1567598460019-64c40c23a8cf?w=400",
+        thumbnailUrl:
+          "https://images.unsplash.com/photo-1567598460019-64c40c23a8cf?w=400",
         caption: "Temple of the Tooth Relic, Kandy",
         location: "Kandy",
-        description: "The sacred Dalada Maligawa, housing the relic of the Buddha's tooth, illuminated during Esala Perahera.",
+        description:
+          "The sacred Dalada Maligawa, housing the relic of the Buddha's tooth, illuminated during Esala Perahera.",
         featured: false,
       },
       {
         type: "IMAGE",
         url: "https://images.unsplash.com/photo-1620766786530-7fa86dee13cb?w=800",
-        thumbnailUrl: "https://images.unsplash.com/photo-1620766786530-7fa86dee13cb?w=400",
+        thumbnailUrl:
+          "https://images.unsplash.com/photo-1620766786530-7fa86dee13cb?w=400",
         caption: "Nine Arch Bridge through the mist",
         location: "Ella",
-        description: "The iconic Nine Arch Bridge emerges from the morning jungle mist as a train crosses through tea country.",
+        description:
+          "The iconic Nine Arch Bridge emerges from the morning jungle mist as a train crosses through tea country.",
         featured: true,
       },
       {
         type: "IMAGE",
         url: "https://images.unsplash.com/photo-1549366021-9f761d040a94?w=800",
-        thumbnailUrl: "https://images.unsplash.com/photo-1549366021-9f761d040a94?w=400",
+        thumbnailUrl:
+          "https://images.unsplash.com/photo-1549366021-9f761d040a94?w=400",
         caption: "Sri Lankan elephant herd",
         location: "Udawalawe",
-        description: "A family herd of wild elephants at a waterhole in Udawalawe National Park at dusk.",
+        description:
+          "A family herd of wild elephants at a waterhole in Udawalawe National Park at dusk.",
         featured: true,
       },
       {
         type: "IMAGE",
         url: "https://images.unsplash.com/photo-1586500036706-41963de24d8c?w=800",
-        thumbnailUrl: "https://images.unsplash.com/photo-1586500036706-41963de24d8c?w=400",
+        thumbnailUrl:
+          "https://images.unsplash.com/photo-1586500036706-41963de24d8c?w=400",
         caption: "Galle Fort lighthouse at dusk",
         location: "Galle",
-        description: "The colonial-era Galle Fort lighthouse against a vivid tropical sunset.",
+        description:
+          "The colonial-era Galle Fort lighthouse against a vivid tropical sunset.",
         featured: false,
       },
       {
         type: "IMAGE",
         url: "https://images.unsplash.com/photo-1500916434205-0c77489c6cf7?w=800",
-        thumbnailUrl: "https://images.unsplash.com/photo-1500916434205-0c77489c6cf7?w=400",
+        thumbnailUrl:
+          "https://images.unsplash.com/photo-1500916434205-0c77489c6cf7?w=400",
         caption: "Pristine Marble Beach, Trincomalee",
         location: "Trincomalee",
-        description: "Crystal-clear waters and white sand at Marble Beach on Sri Lanka's unspoiled eastern coast.",
+        description:
+          "Crystal-clear waters and white sand at Marble Beach on Sri Lanka's unspoiled eastern coast.",
         featured: false,
       },
       {
         type: "IMAGE",
         url: "https://images.unsplash.com/photo-1509233725247-49e657c54213?w=800",
-        thumbnailUrl: "https://images.unsplash.com/photo-1509233725247-49e657c54213?w=400",
+        thumbnailUrl:
+          "https://images.unsplash.com/photo-1509233725247-49e657c54213?w=400",
         caption: "Pigeon Island coral reef",
         location: "Trincomalee",
-        description: "Vibrant coral gardens teeming with tropical fish at Pigeon Island Marine National Park.",
+        description:
+          "Vibrant coral gardens teeming with tropical fish at Pigeon Island Marine National Park.",
         featured: false,
       },
       {
         type: "IMAGE",
         url: "https://images.unsplash.com/photo-1573512449171-1a8b7e4a4143?w=800",
-        thumbnailUrl: "https://images.unsplash.com/photo-1573512449171-1a8b7e4a4143?w=400",
+        thumbnailUrl:
+          "https://images.unsplash.com/photo-1573512449171-1a8b7e4a4143?w=400",
         caption: "Leopard in Yala",
         location: "Yala",
-        description: "A majestic Sri Lankan leopard rests on a rock in Yala National Park, home to the world's highest leopard density.",
+        description:
+          "A majestic Sri Lankan leopard rests on a rock in Yala National Park, home to the world's highest leopard density.",
         featured: true,
       },
       {
         type: "IMAGE",
         url: "https://images.unsplash.com/photo-1624461063672-fb93119c9abb?w=800",
-        thumbnailUrl: "https://images.unsplash.com/photo-1624461063672-fb93119c9abb?w=400",
+        thumbnailUrl:
+          "https://images.unsplash.com/photo-1624461063672-fb93119c9abb?w=400",
         caption: "Ayurvedic herbal treatment",
         location: "Weligama",
-        description: "Traditional Ayurvedic oil massage using centuries-old herbal formulations at a coastal wellness retreat.",
+        description:
+          "Traditional Ayurvedic oil massage using centuries-old herbal formulations at a coastal wellness retreat.",
         featured: false,
       },
       {
         type: "IMAGE",
         url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800",
-        thumbnailUrl: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=400",
+        thumbnailUrl:
+          "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=400",
         caption: "Traditional Sri Lankan cuisine",
         location: "Colombo",
-        description: "An authentic rice and curry spread featuring dhal, jackfruit curry, pol sambol, and papadam.",
+        description:
+          "An authentic rice and curry spread featuring dhal, jackfruit curry, pol sambol, and papadam.",
         featured: false,
       },
       {
         type: "IMAGE",
         url: "https://images.unsplash.com/photo-1590168557862-3b8c59a17324?w=800",
-        thumbnailUrl: "https://images.unsplash.com/photo-1590168557862-3b8c59a17324?w=400",
+        thumbnailUrl:
+          "https://images.unsplash.com/photo-1590168557862-3b8c59a17324?w=400",
         caption: "Kandyan cultural dance performance",
         location: "Kandy",
-        description: "Traditional Kandyan dancers in vibrant costume perform during the famous Esala Perahera festival.",
+        description:
+          "Traditional Kandyan dancers in vibrant costume perform during the famous Esala Perahera festival.",
         featured: false,
       },
     ],
@@ -625,7 +850,8 @@ async function main() {
   const blog4 = await prisma.blogPost.create({
     data: {
       title: "Planning Your Sri Lanka Safari: Yala vs Udawalawe vs Wilpattu",
-      excerpt: "Comparing the three best national parks for wildlife viewing — which one is right for your trip?",
+      excerpt:
+        "Comparing the three best national parks for wildlife viewing — which one is right for your trip?",
       content: `Sri Lanka packs an extraordinary amount of wildlife into a surprisingly small island. Three national parks dominate most safari itineraries: Yala, Udawalawe, and Wilpattu — and each delivers a very different experience.
 
 Yala National Park in the southeast is the headline act. With the world's highest density of wild leopards, seeing one here is almost a guarantee on a full-day visit. Block 1 (the most visited section) also features elephants, sloth bears, crocodiles, and over 200 bird species in a dramatic landscape of scrub jungle, lagoons, and rocky outcrops. The best time to visit is February to July when water levels drop and animals congregate around remaining waterholes.
@@ -635,7 +861,8 @@ Udawalawe, by contrast, is Sri Lanka's elephant park. The reservoir at its centr
 Wilpattu, in the northwest, is the largest and most remote of the three. Its signature feature is the natural 'willus' — white sand-rimmed natural lakes that attract leopards and sloth bears. Far fewer visitors than Yala means the experience is more exclusive and the wildlife less habituated. The park reopened after a 30-year civil war closure in 2010 and is rapidly rehabilitating its leopard population.
 
 For most visitors on a 10-day trip, combining Yala (or Wilpattu) with Udawalawe gives the best breadth of wildlife. Budget safari jeep costs from $50-90 per vehicle plus park entrance fees of $15-40 per person.`,
-      imageUrl: "https://images.unsplash.com/photo-1549366021-9f761d040a94?w=800",
+      imageUrl:
+        "https://images.unsplash.com/photo-1549366021-9f761d040a94?w=800",
       postDate: new Date("2025-02-10"),
       author: "Chaminda Rajapaksa",
       category: "Wildlife",
@@ -668,7 +895,8 @@ For most visitors on a 10-day trip, combining Yala (or Wilpattu) with Udawalawe 
   const blog5 = await prisma.blogPost.create({
     data: {
       title: "Sri Lanka Street Food: 15 Dishes You Must Try",
-      excerpt: "From kottu roti to hoppers — a complete guide to eating your way through Sri Lanka's vibrant street food scene.",
+      excerpt:
+        "From kottu roti to hoppers — a complete guide to eating your way through Sri Lanka's vibrant street food scene.",
       content: `Sri Lanka's street food culture is one of the most rewarding and affordable ways to experience the island. Here are 15 dishes you cannot leave without trying.
 
 **Kottu Roti** is the street food soundtrack of Sri Lanka — you hear the rhythmic clatter of metal blades on a flat griddle before you see it. Shredded roti bread is chopped and mixed with egg, vegetables, and your choice of chicken, mutton, beef, or seafood. Available everywhere from midnight food stalls to restaurant kitchens.
@@ -686,7 +914,8 @@ For most visitors on a 10-day trip, combining Yala (or Wilpattu) with Udawalawe 
 Other must-tries: **Wood apple juice**, **king coconut water** (thambili), **ISSO WADE**, **vade** (savoury lentil donuts), **pittu** (steamed rice cylinders), **watalappan** (coconut jaggery pudding), **aluwa** (cashew-jaggery sweets), **pol pani** (coconut pancakes), and **banana flower curry**.
 
 Best cities for street eating: Colombo's Pettah Market, Galle Fort's evening stalls, Kandy's central market, and any coastal town at sunset.`,
-      imageUrl: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800",
+      imageUrl:
+        "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800",
       postDate: new Date("2025-03-01"),
       author: "Dilani Fernando",
       category: "Food & Culture",
@@ -713,7 +942,8 @@ Best cities for street eating: Colombo's Pettah Market, Galle Fort's evening sta
   const blog6 = await prisma.blogPost.create({
     data: {
       title: "Galle Fort: The Complete Visitor's Guide",
-      excerpt: "Everything you need to know to explore one of South Asia's best preserved colonial fortifications.",
+      excerpt:
+        "Everything you need to know to explore one of South Asia's best preserved colonial fortifications.",
       content: `Galle Fort on Sri Lanka's southern tip is one of the best-preserved examples of European colonial architecture in South and Southeast Asia, and with good reason — UNESCO listed it as a World Heritage Site in 1988. Yet it remains a living, breathing town of 400+ residents, boutique hotels, art galleries, and some of the island's finest restaurants.
 
 **History**: The Portuguese built the original fortification in 1588. The Dutch, who captured Galle in 1640, expanded it massively into the formidable structure you see today — 36 hectares enclosed by 1.5km of walls up to 3 stories high. The British took over in 1796 but largely left the Dutch infrastructure intact, preferring to develop Colombo as their administrative capital.
@@ -727,7 +957,8 @@ Best cities for street eating: Colombo's Pettah Market, Galle Fort's evening sta
 **Getting there**: 2.5 hours by road from Colombo, or 2 hours on the Coastal Line train. Trains are scenic and worth the minor scheduling effort. From Colombo's Maradana or Fort stations, book 2nd class observation car seats in advance.
 
 **Practical**: Entry to the fort is free. The main car park is just outside the outer gate. Most attractions are closed on Sundays or Poya (full moon) holidays.`,
-      imageUrl: "https://images.unsplash.com/photo-1586500036706-41963de24d8c?w=800",
+      imageUrl:
+        "https://images.unsplash.com/photo-1586500036706-41963de24d8c?w=800",
       postDate: new Date("2025-03-15"),
       author: "Nimal Perera",
       category: "Destinations",
@@ -754,7 +985,8 @@ Best cities for street eating: Colombo's Pettah Market, Galle Fort's evening sta
   const blog7 = await prisma.blogPost.create({
     data: {
       title: "Best Time to Visit Sri Lanka: A Month-by-Month Guide",
-      excerpt: "Sri Lanka has two distinct monsoon seasons. Here's exactly when to visit for the best weather in each region.",
+      excerpt:
+        "Sri Lanka has two distinct monsoon seasons. Here's exactly when to visit for the best weather in each region.",
       content: `Sri Lanka's weather is governed by two monsoon seasons, which means — uniquely — you can find sunshine somewhere on the island year-round. The key is knowing which coast to visit when.
 
 **The Southwest Monsoon (Yala: May–September)** brings heavy rain to the western and southern coasts including Colombo, Galle, and Mirissa. This is the best time for the eastern coast (Trincomalee, Arugam Bay) and the Cultural Triangle (Sigiriya, Polonnaruwa, Anuradhapura), which remain largely dry.
@@ -772,7 +1004,8 @@ Best cities for street eating: Colombo's Pettah Market, Galle Fort's evening sta
 **December**: Festive season. The whole southwest coast is glorious — Galle Literature Festival draws international writers. Beach hotels book out months in advance.
 
 **Year-round highlights**: Kandy (hill country is good most of the year), Sigiriya, and all cultural sites. The temperature in the highlands stays cool 15–25°C regardless of season.`,
-      imageUrl: "https://images.unsplash.com/photo-1590766940543-4ab56e0b8a40?w=800",
+      imageUrl:
+        "https://images.unsplash.com/photo-1590766940543-4ab56e0b8a40?w=800",
       postDate: new Date("2025-03-20"),
       author: "Ishara Wijesinghe",
       category: "Travel Tips",
@@ -799,7 +1032,8 @@ Best cities for street eating: Colombo's Pettah Market, Galle Fort's evening sta
   const blog8 = await prisma.blogPost.create({
     data: {
       title: "Sigiriya Rock Fortress: How to Climb It & What to Expect",
-      excerpt: "The complete guide to visiting Sri Lanka's most iconic landmark — logistics, history, and insider tips.",
+      excerpt:
+        "The complete guide to visiting Sri Lanka's most iconic landmark — logistics, history, and insider tips.",
       content: `Rising 200 metres from the jungle floor, Sigiriya is Sri Lanka's most photographed landmark and one of the most dramatic archaeological sites in Asia. Built by King Kashyapa I in the 5th century, this 'Lion Rock' fortress combines extraordinary engineering with artistic genius — the frescoes painted on the rock face are considered masterpieces of ancient art.
 
 **The climb**: The route from the base takes 1–1.5 hours to the summit and involves several distinct sections. First, the water gardens at the base — formal pools and fountains still functional after 1,500 years. Next, the boulder gardens with ancient cave inscriptions. Then the spiral staircase to the Mirror Wall and the famous Sigiriya Damsels (vivid frescoes of celestially beautiful women, most likely apsaras or lightning princesses from the king's court). Finally, the giant Lion's Paws mark the entrance to the summit staircase through the cliff face.
@@ -809,7 +1043,8 @@ Best cities for street eating: Colombo's Pettah Market, Galle Fort's evening sta
 **Practical information**: Entrance fee is $30 per adult (2025 rates). Open daily 7am–5:30pm. Go as early as possible — by 9am the queue for the frescoes section can be 40 minutes. Bring water; there are no facilities on the rock itself. Around 1,200 steps to the top — manageable for most fitness levels but not recommended in the midday heat.
 
 Insider tips: Book a certified Sigiriya guide from the ticket office for historical context. Visit Pidurangala Rock the afternoon before — a 45-minute climb rewards with the best photograph of Sigiriya at sunrise. Stay in nearby Dambulla or a jungle lodge outside the village for same-morning access.`,
-      imageUrl: "https://images.unsplash.com/photo-1590766940543-4ab56e0b8a40?w=800",
+      imageUrl:
+        "https://images.unsplash.com/photo-1590766940543-4ab56e0b8a40?w=800",
       postDate: new Date("2025-03-28"),
       author: "Nimal Perera",
       category: "Destinations",
@@ -844,7 +1079,9 @@ Insider tips: Book a certified Sigiriya guide from the ticket office for histori
     ],
   });
 
-  console.log(`Created 5 more blog posts (ids: ${blog4.id}, ${blog5.id}, ${blog6.id}, ${blog7.id}, ${blog8.id})`);
+  console.log(
+    `Created 5 more blog posts (ids: ${blog4.id}, ${blog5.id}, ${blog6.id}, ${blog7.id}, ${blog8.id})`
+  );
 
   // ============================================================
   // SUMMARY

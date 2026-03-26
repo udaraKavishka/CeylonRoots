@@ -40,8 +40,22 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
     const {
-      name, description, location, imageUrl, price, lat, lng, duration, tags,
-      mode, departureLocation, arrivalLocation, departureLat, departureLng, arrivalLat, arrivalLng,
+      name,
+      description,
+      location,
+      imageUrl,
+      price,
+      lat,
+      lng,
+      duration,
+      tags,
+      mode,
+      departureLocation,
+      arrivalLocation,
+      departureLat,
+      departureLng,
+      arrivalLat,
+      arrivalLng,
     } = body;
 
     const transport = await prisma.travelComponent.update({
@@ -63,7 +77,10 @@ export async function PUT(
         ...(arrivalLat !== undefined && { arrivalLat }),
         ...(arrivalLng !== undefined && { arrivalLng }),
         ...(tags !== undefined && {
-          tags: { deleteMany: {}, create: tags.map((tag: string) => ({ tag })) },
+          tags: {
+            deleteMany: {},
+            create: tags.map((tag: string) => ({ tag })),
+          },
         }),
       },
       include: transportInclude,
