@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { Button } from "./components/ui/button";
 import {
   MapPin,
@@ -14,12 +15,14 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import FeaturedPackages from "./components/FeaturedPackages";
-import Testimonials from "./components/Testimonials";
-import BlogPreview from "./components/BlogPreview";
 import HeroSection from "./components/HeroSection";
+import SeoJsonLd from "./components/SeoJsonLd";
 import { useEffect, useState, useRef } from "react";
 import { TravelPackage, DestinationDetails, BlogPost } from "./types/travel";
+
+const FeaturedPackages = dynamic(() => import("./components/FeaturedPackages"));
+const Testimonials = dynamic(() => import("./components/Testimonials"));
+const BlogPreview = dynamic(() => import("./components/BlogPreview"));
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -100,37 +103,67 @@ export default function HomePage() {
     DestinationDetails[]
   >([]);
   const [latestBlogPosts, setLatestBlogPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [statsStarted, setStatsStarted] = useState(false);
   const statsRef = useRef<HTMLElement>(null);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ceylonroots.com";
+
+  const webSiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "CeylonRoots",
+    url: siteUrl,
+    inLanguage: "en",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${siteUrl}/packages?search={search_term_string}`,
+      "query-input": "required name=search_term_string",
+    },
+  };
 
   useEffect(() => {
     const fetchData = async () => {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8000);
+
       try {
-        setLoading(true);
         setError(null);
 
-        const [packagesRes, destinationsRes, blogRes] = await Promise.all([
-          fetch(`${API_BASE_URL}/packages`),
-          fetch(`${API_BASE_URL}/destinationdetail`),
-          fetch(`${API_BASE_URL}/blogpost`),
-        ]);
+        const [packagesRes, destinationsRes, blogRes] =
+          await Promise.allSettled([
+            fetch(`${API_BASE_URL}/packages`, { signal: controller.signal }),
+            fetch(`${API_BASE_URL}/destinationdetail`, {
+              signal: controller.signal,
+            }),
+            fetch(`${API_BASE_URL}/blogpost`, { signal: controller.signal }),
+          ]);
 
-        if (!packagesRes.ok) throw new Error("Failed to fetch travel packages");
-        const packagesData: TravelPackage[] = await packagesRes.json();
+        if (packagesRes.status === "fulfilled" && packagesRes.value.ok) {
+          const packagesData: TravelPackage[] = await packagesRes.value.json();
+          setFeaturedPackages(packagesData);
+        }
 
-        if (!destinationsRes.ok)
-          throw new Error("Failed to fetch destinations");
-        const destinationsData: DestinationDetails[] =
-          await destinationsRes.json();
+        if (
+          destinationsRes.status === "fulfilled" &&
+          destinationsRes.value.ok
+        ) {
+          const destinationsData: DestinationDetails[] =
+            await destinationsRes.value.json();
+          setPopularDestinations(destinationsData);
+        }
 
-        if (!blogRes.ok) throw new Error("Failed to fetch blog posts");
-        const blogData: BlogPost[] = await blogRes.json();
+        if (blogRes.status === "fulfilled" && blogRes.value.ok) {
+          const blogData: BlogPost[] = await blogRes.value.json();
+          setLatestBlogPosts(blogData);
+        }
 
-        setFeaturedPackages(packagesData);
-        setPopularDestinations(destinationsData);
-        setLatestBlogPosts(blogData);
+        if (
+          packagesRes.status === "rejected" &&
+          destinationsRes.status === "rejected" &&
+          blogRes.status === "rejected"
+        ) {
+          setError("Content is taking longer than expected to load.");
+        }
       } catch (err) {
         if (err instanceof Error) {
           setError(err.message);
@@ -139,7 +172,8 @@ export default function HomePage() {
         }
         console.error("Fetch error:", err);
       } finally {
-        setLoading(false);
+        clearTimeout(timeout);
+        // no-op
       }
     };
 
@@ -250,42 +284,18 @@ export default function HomePage() {
     },
   ];
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-ceylon-tea mx-auto"></div>
-          <p className="mt-4 text-gray-600">
-            Loading amazing <br />
-            Sri Lanka experiences...
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center max-w-md p-6 bg-red-50 rounded-lg">
-          <h2 className="text-xl font-bold text-red-700 mb-2">
-            Oops! Something went wrong
-          </h2>
-          <p className="text-gray-600 mb-4">{error}</p>
-          <Button
-            className="ceylon-button-primary"
-            onClick={() => window.location.reload()}
-          >
-            Try Again
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <>
+      <SeoJsonLd data={webSiteSchema} />
       <HeroSection />
+
+      {error && (
+        <div className="ceylon-container py-4">
+          <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 text-sm text-amber-800">
+            {error}
+          </div>
+        </div>
+      )}
 
       {/* Animated Statistics Section */}
       <section

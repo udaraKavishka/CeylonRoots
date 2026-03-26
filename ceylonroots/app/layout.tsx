@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || "https://ceylonroots.com"
   ),
+  applicationName: "CeylonRoots",
   title: {
     default: "CeylonRoots — Authentic Sri Lanka Travel Experiences",
     template: "%s | CeylonRoots",
@@ -26,24 +27,54 @@ export const metadata: Metadata = {
   keywords: [
     "Sri Lanka travel",
     "Ceylon tourism",
+    "Sri Lanka tour packages",
+    "Sri Lanka itinerary planner",
+    "Sri Lanka travel agency",
     "cultural experiences",
     "custom packages",
     "luxury tours",
     "Sri Lanka tour operator",
   ],
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
     siteName: "CeylonRoots",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://ceylonroots.com",
     title: "CeylonRoots — Authentic Sri Lanka Travel Experiences",
     description:
       "Expert-curated Sri Lanka travel packages, cultural experiences, and personalized itineraries.",
+    images: [
+      {
+        url: "/og/home.jpg",
+        width: 1200,
+        height: 630,
+        alt: "CeylonRoots Sri Lanka travel",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     site: "@ceylonroots",
+    title: "CeylonRoots — Authentic Sri Lanka Travel Experiences",
+    description:
+      "Expert-curated Sri Lanka travel packages, cultural experiences, and personalized itineraries.",
+    images: ["/og/home.jpg"],
   },
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  category: "travel",
 };
 
 export default function RootLayout({

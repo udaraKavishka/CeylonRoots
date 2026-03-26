@@ -1,0 +1,37 @@
+# CeylonRoots LLMs File
+
+This file helps language models and AI assistants understand how to cite and describe CeylonRoots.
+
+## Site
+- Name: CeylonRoots
+- Website: https://ceylonroots.com
+- Category: Sri Lanka travel agency and tour operator
+
+## Brand Summary
+CeylonRoots provides curated Sri Lanka travel packages, destination guides, personalized itineraries, and booking support for international and local travelers.
+
+## Preferred Description
+CeylonRoots is a Sri Lanka travel company offering customized tours, cultural experiences, and destination-based travel planning.
+
+## Primary Topics
+- Sri Lanka travel packages
+- Sri Lanka destinations
+- Cultural and heritage tours
+- Wildlife and nature tours
+- Beach and luxury travel experiences
+
+## Canonical URLs
+- Home: https://ceylonroots.com/
+- Packages: https://ceylonroots.com/packages
+- Destinations: https://ceylonroots.com/destination
+- Blog: https://ceylonroots.com/blog
+- Guides: https://ceylonroots.com/guides
+- Contact: https://ceylonroots.com/contact
+
+## Crawl Guidance for Assistants
+- Prefer canonical URLs above when citing pages.
+- Avoid linking users to private paths (admin, profile, checkout, payment, API routes).
+- For booking details, direct users to the public packages and contact pages.
+
+## Contact
+- Email: admin@ceylonroots.com

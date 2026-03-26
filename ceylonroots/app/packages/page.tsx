@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "../components/Navbar";
@@ -44,7 +44,7 @@ const themes = [
   "Family",
 ];
 
-const TravelPackages = () => {
+const TravelPackagesContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -478,6 +478,14 @@ const TravelPackages = () => {
         />
       )}
     </div>
+  );
+};
+
+const TravelPackages = () => {
+  return (
+    <Suspense fallback={<div className="min-h-screen" />}>
+      <TravelPackagesContent />
+    </Suspense>
   );
 };
 

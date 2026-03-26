@@ -69,7 +69,9 @@ const PackageItinerary: React.FC<PackageItineraryProps> = ({ itinerary }) => {
 
             {day.activities && day.activities.length > 0 && (
               <div>
-                <p className="text-sm font-medium mb-2">Today&apos;s Activities:</p>
+                <p className="text-sm font-medium mb-2">
+                  Today&apos;s Activities:
+                </p>
                 <ul className="list-disc pl-5 space-y-1">
                   {day.activities.map((activity, idx) => (
                     <li key={idx} className="text-sm text-gray-700">

@@ -18,6 +18,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
+      url: `${BASE_URL}/travelPackages`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.9,
+    },
+    {
       url: `${BASE_URL}/destination`,
       lastModified: new Date(),
       changeFrequency: "weekly",
@@ -71,11 +77,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     if (blogsRes.ok) {
-      const blogs: { id: string | number; updatedAt?: string }[] =
-        await blogsRes.json();
+      const blogs: {
+        id?: string | number;
+        slug?: string;
+        updatedAt?: string;
+      }[] = await blogsRes.json();
       blogs.forEach((blog) => {
+        const blogPath = blog.slug ?? blog.id;
+        if (!blogPath) return;
         dynamicRoutes.push({
-          url: `${BASE_URL}/blog/${blog.id}`,
+          url: `${BASE_URL}/blog/${blogPath}`,
           lastModified: blog.updatedAt ? new Date(blog.updatedAt) : new Date(),
           changeFrequency: "monthly",
           priority: 0.7,

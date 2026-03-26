@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "../components/ui/button";
 import { useToast } from "../components/ui/use-toast";
@@ -43,7 +43,7 @@ const themes = [
   "Family",
 ];
 
-const TravelPackages = () => {
+const TravelPackagesContent = () => {
   const { toast } = useToast();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -287,6 +287,14 @@ const TravelPackages = () => {
         />
       )}
     </div>
+  );
+};
+
+const TravelPackages = () => {
+  return (
+    <Suspense fallback={<div className="min-h-screen" />}>
+      <TravelPackagesContent />
+    </Suspense>
   );
 };
 
