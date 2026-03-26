@@ -4,13 +4,7 @@ import { Button } from "./button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
 import { TravelPackage, ItineraryDay } from "../../types/travel";
-import {
-  MapPin,
-  Calendar,
-  DollarSign,
-  Star,
-  CheckCircle2,
-} from "lucide-react";
+import { MapPin, Calendar, DollarSign, Star, CheckCircle2 } from "lucide-react";
 import PackageGallery from "./PackageGallery";
 import PackagePriceBreakdown from "./PackagePriceBreakdown";
 import PackageItinerary from "./PackageItinerary";

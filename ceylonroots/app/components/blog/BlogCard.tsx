@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Calendar, User } from "lucide-react";
 
 type BlogCardPost = {
-  id: number;
+  slug: string;
   title: string;
   excerpt: string;
   image: string;
@@ -20,7 +20,7 @@ interface BlogCardProps {
 const BlogCard = ({ post }: BlogCardProps) => {
   return (
     <article className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
-      <Link href={`/blog/${post.id}`} className="block">
+      <Link href={`/blog/${post.slug}`} className="block">
         <div className="relative h-48">
           <Image
             src={post.image}

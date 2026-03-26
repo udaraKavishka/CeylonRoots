@@ -171,7 +171,7 @@ async function main() {
   // ============================================================
   console.log("Creating accommodations...");
 
-  const accommodations = await Promise.all([
+  await Promise.all([
     prisma.travelComponent.create({
       data: {
         componentType: "ACCOMMODATION",

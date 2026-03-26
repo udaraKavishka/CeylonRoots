@@ -95,7 +95,7 @@ const BlogPreview = ({ posts }: BlogPreviewProps) => {
                 </CardContent>
                 <CardFooter className="pt-0">
                   <Link
-                    href={`/blog/${post.slug}`}
+                    href={`/blog/${post.slug || post.id}`}
                     className="text-ceylon-tea hover:text-ceylon-tea/80 font-medium inline-flex items-center text-sm"
                     aria-label={`Read full article: ${post.title}`}
                   >

@@ -152,9 +152,7 @@ const Checkout = () => {
             </div>
 
             <div className="lg:col-span-1">
-              <BookingSummary
-                travelPackage={bookingPackage}
-              />
+              <BookingSummary travelPackage={bookingPackage} />
             </div>
           </div>
         </div>

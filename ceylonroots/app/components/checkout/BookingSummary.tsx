@@ -14,9 +14,7 @@ interface BookingSummaryProps {
   travelPackage: TravelPackage;
 }
 
-const BookingSummary: React.FC<BookingSummaryProps> = ({
-  travelPackage,
-}) => {
+const BookingSummary: React.FC<BookingSummaryProps> = ({ travelPackage }) => {
   const taxAmount = travelPackage.price * 0.1;
   // Calculate total
   const totalAmount = travelPackage.price + taxAmount;

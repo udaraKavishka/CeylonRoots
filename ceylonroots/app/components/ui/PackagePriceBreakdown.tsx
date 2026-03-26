@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-} from "./table";
+import { Table, TableBody, TableCell, TableRow } from "./table";
 import {
   Card,
   CardContent,
