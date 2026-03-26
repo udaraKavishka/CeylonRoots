@@ -187,6 +187,7 @@ export const allDestinations: DestinationDetails[] = [
 
 // This would typically come from a relational database
 // Here we're hard-coding the relationships between packages and destinations
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const destinationPackageMap: Record<string, string[]> = {
   "dest-sigiriya": ["pkg-1", "pkg-3", "pkg-4"],
   "dest-kandy": ["pkg-1", "pkg-2", "pkg-5"],
@@ -197,6 +198,7 @@ const destinationPackageMap: Record<string, string[]> = {
 };
 
 // Function to get packages that include a specific destination
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getRelatedPackages = (destinationId: string): TravelPackage[] => {
   // In a real app, this would query a database
   // For this example, we'll return a few hardcoded packages

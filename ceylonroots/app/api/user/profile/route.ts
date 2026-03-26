@@ -26,7 +26,7 @@ export async function PATCH(req: NextRequest) {
 }
 
 // DELETE — delete user account and all related data
-export async function DELETE(_req: NextRequest) {
+export async function DELETE() {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

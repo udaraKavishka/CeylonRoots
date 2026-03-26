@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
-import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Users, DollarSign, Calendar } from "lucide-react";
 

@@ -25,6 +25,15 @@ const Checkout = () => {
   const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
+    const handleInvalidBooking = () => {
+      toast({
+        title: "No booking information found",
+        description: "Please select a package to book",
+        variant: "destructive",
+      });
+      router.push("/packages");
+    };
+
     // Client-side check for localStorage
     const storedPackage =
       typeof window !== "undefined"
@@ -41,18 +50,9 @@ const Checkout = () => {
     } else {
       handleInvalidBooking();
     }
-  }, []);
+  }, [router, toast]);
 
-  const handleInvalidBooking = () => {
-    toast({
-      title: "No booking information found",
-      description: "Please select a package to book",
-      variant: "destructive",
-    });
-    router.push("/packages");
-  };
-
-  const handleSubmitBooking = async (formData: any) => {
+  const handleSubmitBooking = async (formData: Record<string, unknown>) => {
     setIsProcessing(true);
 
     try {

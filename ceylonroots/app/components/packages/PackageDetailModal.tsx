@@ -47,7 +47,6 @@ interface PackageDetailModalProps {
   onClose: () => void;
   travelPackage: TravelPackage;
   onCustomize: () => void;
-  onBookNow: () => void;
 }
 
 const PackageDetailModal = ({
@@ -55,7 +54,6 @@ const PackageDetailModal = ({
   onClose,
   travelPackage,
   onCustomize,
-  onBookNow,
 }: PackageDetailModalProps) => {
   const [activeTab, setActiveTab] = useState("overview");
   const [copied, setCopied] = useState(false);
