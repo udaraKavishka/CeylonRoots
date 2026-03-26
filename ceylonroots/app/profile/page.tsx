@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { TravelPackage } from "../types/travel";
 import { useCurrency } from "../contexts/CurrencyContext";
+import { getAdminDashboardUrl } from "../lib/admin-url";
 
 interface Booking {
   id: string;
@@ -308,7 +309,7 @@ export default function ProfilePage() {
 
                 <div className="space-y-2">
                   {isAdmin && (
-                    <Link href="/admin">
+                    <Link href={getAdminDashboardUrl()}>
                       <Button
                         variant="outline"
                         size="sm"

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Eye, EyeOff, Mail, Lock, Star, Award, Globe } from "lucide-react";
 import { useUser } from "../contexts/UserContext";
+import { getAdminDashboardUrl } from "../lib/admin-url";
 
 const COUNTRY_FLAGS = ["🇺🇸", "🇬🇧", "🇩🇪", "🇦🇺", "🇫🇷", "🇯🇵"];
 
@@ -45,7 +46,12 @@ export default function LoginPage() {
         role: isAdmin ? "admin" : "user",
       });
 
-      router.push(isAdmin ? "/admin" : "/");
+      if (isAdmin) {
+        window.location.href = getAdminDashboardUrl();
+        return;
+      }
+
+      router.push("/");
     } catch {
       setError("An unexpected error occurred. Please try again.");
       setIsLoading(false);

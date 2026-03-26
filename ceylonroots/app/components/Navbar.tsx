@@ -24,6 +24,7 @@ import { Button } from "../components/ui/button";
 import { useCurrency, Currency } from "../contexts/CurrencyContext";
 import { useSession, signOut } from "next-auth/react";
 import { useUser } from "../contexts/UserContext";
+import { getAdminDashboardUrl } from "../lib/admin-url";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -260,7 +261,7 @@ const Navbar = () => {
 
                     {isAdmin && (
                       <Link
-                        href="/admin"
+                        href={getAdminDashboardUrl()}
                         className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-ceylon-tea transition-colors"
                         role="menuitem"
                         onClick={() => setIsUserDropdownOpen(false)}
@@ -422,7 +423,7 @@ const Navbar = () => {
                     </Link>
                     {isAdmin && (
                       <Link
-                        href="/admin"
+                        href={getAdminDashboardUrl()}
                         className="flex items-center gap-2 text-sm text-gray-700 hover:text-ceylon-tea py-1"
                         onClick={() => setIsMenuOpen(false)}
                       >
