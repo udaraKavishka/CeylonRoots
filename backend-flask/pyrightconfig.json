@@ -1,0 +1,7 @@
+{
+  "pythonVersion": "3.9",
+  "typeCheckingMode": "basic",
+  "exclude": ["migrations/", ".venv/"],
+  "reportMissingImports": false,
+  "reportMissingTypeStubs": false
+}

@@ -1,0 +1,50 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-added-large-files
+        args: ["--maxkb=1000"]
+      - id: check-toml
+      - id: check-yaml
+        args: ["--unsafe"]
+      - id: check-json
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  # Ruff: lint with auto-fix, then format
+  # Runs --fix first so fixable issues are auto-corrected before the commit.
+  # Any remaining unfixable lint errors will block the commit.
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.2.2
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  # Pyright: type checking — blocks commit on type errors
+  - repo: https://github.com/RobertCraigie/pyright-python
+    rev: v1.1.363
+    hooks:
+      - id: pyright
+        args: ["--project", "backend-flask/pyrightconfig.json"]
+
+  # djLint: auto-reformat Jinja2 templates in ceylonroots/templates/
+  - repo: https://github.com/Riverside-Healthcare/djLint
+    rev: v1.35.2
+    hooks:
+      - id: djlint-reformat-jinja
+        files: "ceylonroots/templates/"
+        args:
+          - "--format-js=false"
+          - "--require-newline-eof"
+          - "--remove-trailing-whitespace"
+
+  # Regenerate requirements.txt whenever pyproject.toml changes
+  - repo: local
+    hooks:
+      - id: compile-requirements
+        name: Compile requirements.txt
+        language: system
+        pass_filenames: false
+        entry: bash -lc 'cd backend-flask && uv pip compile pyproject.toml -o requirements.txt'
+        files: backend-flask/pyproject.toml
