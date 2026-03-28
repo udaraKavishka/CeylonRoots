@@ -19,6 +19,7 @@ import HeroSection from "./components/HeroSection";
 import SeoJsonLd from "./components/SeoJsonLd";
 import { useEffect, useState, useRef } from "react";
 import { TravelPackage, DestinationDetails, BlogPost } from "./types/travel";
+import { blogPreviewPosts } from "./data/blogPreviewPosts";
 
 const FeaturedPackages = dynamic(() => import("./components/FeaturedPackages"));
 const Testimonials = dynamic(() => import("./components/Testimonials"));
@@ -129,14 +130,12 @@ export default function HomePage() {
       try {
         setError(null);
 
-        const [packagesRes, destinationsRes, blogRes] =
-          await Promise.allSettled([
-            fetch(`${API_BASE_URL}/packages`, { signal: controller.signal }),
-            fetch(`${API_BASE_URL}/destinationdetail`, {
-              signal: controller.signal,
-            }),
-            fetch(`${API_BASE_URL}/blogpost`, { signal: controller.signal }),
-          ]);
+        const [packagesRes, destinationsRes] = await Promise.allSettled([
+          fetch(`${API_BASE_URL}/packages`, { signal: controller.signal }),
+          fetch(`${API_BASE_URL}/destinationdetail`, {
+            signal: controller.signal,
+          }),
+        ]);
 
         if (packagesRes.status === "fulfilled" && packagesRes.value.ok) {
           const packagesData: TravelPackage[] = await packagesRes.value.json();
@@ -152,15 +151,12 @@ export default function HomePage() {
           setPopularDestinations(destinationsData);
         }
 
-        if (blogRes.status === "fulfilled" && blogRes.value.ok) {
-          const blogData: BlogPost[] = await blogRes.value.json();
-          setLatestBlogPosts(blogData);
-        }
+        setLatestBlogPosts(blogPreviewPosts as BlogPost[]);
 
         if (
           packagesRes.status === "rejected" &&
           destinationsRes.status === "rejected" &&
-          blogRes.status === "rejected"
+          false
         ) {
           setError("Content is taking longer than expected to load.");
         }

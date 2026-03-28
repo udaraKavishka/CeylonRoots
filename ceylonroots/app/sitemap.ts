@@ -1,6 +1,8 @@
 import { MetadataRoute } from "next";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://ceylonroots.com";
+import { getAllBlogPosts } from "./lib/blog";
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -58,10 +60,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const dynamicRoutes: MetadataRoute.Sitemap = [];
 
   try {
-    const [packagesRes, blogsRes] = await Promise.all([
-      fetch(`${API_BASE_URL}/packages`),
-      fetch(`${API_BASE_URL}/blogpost`),
-    ]);
+    const packagesRes = await fetch(`${API_BASE_URL}/packages`);
 
     if (packagesRes.ok) {
       const packages: { id: string; updatedAt?: string }[] =
@@ -75,27 +74,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         });
       });
     }
-
-    if (blogsRes.ok) {
-      const blogs: {
-        id?: string | number;
-        slug?: string;
-        updatedAt?: string;
-      }[] = await blogsRes.json();
-      blogs.forEach((blog) => {
-        const blogPath = blog.slug ?? blog.id;
-        if (!blogPath) return;
-        dynamicRoutes.push({
-          url: `${BASE_URL}/blog/${blogPath}`,
-          lastModified: blog.updatedAt ? new Date(blog.updatedAt) : new Date(),
-          changeFrequency: "monthly",
-          priority: 0.7,
-        });
-      });
-    }
   } catch {
     // Return static routes on API failure
   }
+
+  const blogPosts = getAllBlogPosts();
+  blogPosts.forEach((blog) => {
+    dynamicRoutes.push({
+      url: `${BASE_URL}/blog/${blog.slug}`,
+      lastModified: new Date(blog.date),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    });
+  });
 
   return [...staticRoutes, ...dynamicRoutes];
 }
