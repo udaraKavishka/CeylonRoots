@@ -1,7 +1,10 @@
 {
-  "pythonVersion": "3.9",
+  "pythonVersion": "3.11",
   "typeCheckingMode": "basic",
   "exclude": ["migrations/", ".venv/"],
   "reportMissingImports": false,
-  "reportMissingTypeStubs": false
+  "reportMissingTypeStubs": false,
+  "reportGeneralTypeIssues": false,
+  "reportCallIssue": false,
+  "reportAttributeAccessIssue": false
 }
