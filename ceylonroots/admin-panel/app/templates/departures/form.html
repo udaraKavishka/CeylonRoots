@@ -1,0 +1,13 @@
+{% extends 'base.html' %} {% from '_form_helpers.html' import render_field %} {%
+block title %}{% if departure %}Edit{% else %}New{% endif %} Departure |
+CeylonRoots Admin{% endblock %} {% block content %}
+<section>
+  <h1>{% if departure %}Edit{% else %}New{% endif %} Departure</h1>
+  <form method="post" class="grid-form">
+    {{ form.hidden_tag() }} {{ render_field(form.package_id) }} {{
+    render_field(form.departure_date) }} {{ render_field(form.max_slots) }} {{
+    render_field(form.booked_slots) }} {{ render_field(form.price_override) }}
+    {{ render_field(form.status) }} {{ form.submit(class_='btn btn-primary') }}
+  </form>
+</section>
+{% endblock %}

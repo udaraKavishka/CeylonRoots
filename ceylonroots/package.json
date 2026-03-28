@@ -6,8 +6,9 @@
     "seed": "ts-node --project tsconfig.seed.json prisma/seed.ts"
   },
   "scripts": {
-    "dev": "next dev --port 3003",
-    "dev:admin": "next dev --port 3009",
+    "dev": "next dev",
+    "dev:admin": "python3 admin-panel/run.py",
+    "dev:all": "npm run dev & npm run dev:admin",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",

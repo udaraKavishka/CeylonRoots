@@ -1,0 +1,57 @@
+{% extends 'base.html' %} {% block title %}Departures | CeylonRoots Admin{%
+endblock %} {% block content %}
+<section>
+  <div class="section-head">
+    <h1>Departures</h1>
+    <a class="btn btn-primary" href="{{ url_for('departures.new_departure') }}"
+      >New Departure</a
+    >
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Package</th>
+        <th>Date</th>
+        <th>Slots</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for departure in departures %}
+      <tr>
+        <td>{{ departure.id }}</td>
+        <td>
+          {{ departure.package.title if departure.package else
+          departure.package_id }}
+        </td>
+        <td>{{ departure.departure_date }}</td>
+        <td>{{ departure.booked_slots }}/{{ departure.max_slots }}</td>
+        <td>{{ departure.status }}</td>
+        <td class="actions">
+          <a
+            class="btn btn-small"
+            href="{{ url_for('departures.edit_departure', departure_id=departure.id) }}"
+            >Edit</a
+          >
+          <form
+            method="post"
+            action="{{ url_for('departures.delete_departure', departure_id=departure.id) }}"
+          >
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <button class="btn btn-small btn-danger" type="submit">
+              Delete
+            </button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="6">No departures found.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
