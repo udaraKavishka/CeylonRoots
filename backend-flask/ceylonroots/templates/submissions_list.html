@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Submissions — CeylonRoots Admin{% endblock %}
+
+{% block content %}
+  <h4 class="fw-bold mb-4">Form Submissions</h4>
+
+  <div class="card shadow-sm mb-3">
+    <div class="card-body">
+      <form method="GET" class="row g-2">
+        <div class="col-md-4">
+          <select name="type" class="form-select">
+            <option value="">All types</option>
+            {% for d in definitions %}
+              <option value="{{ d.code }}" {% if type_code == d.code %}selected{% endif %}>{{ d.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-3">
+          <select name="status" class="form-select">
+            <option value="">All statuses</option>
+            {% for val, label in statuses %}
+              <option value="{{ val }}" {% if status == val %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-3">
+          <button type="submit" class="btn btn-outline-secondary w-100">Filter</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Type</th>
+            <th>Summary</th>
+            <th>Status</th>
+            <th>Received</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in items %}
+            <tr>
+              <td>{{ s.id }}</td>
+              <td>
+                <span class="badge bg-secondary">{{ s.type_code }}</span>
+              </td>
+              <td>
+                {% set name = s.data.get('name') or s.data.get('full_name') or s.data.get('author_name') or s.data.get('first_name', '') %}
+                {% set email = s.data.get('email') or s.data.get('author_email', '') %}
+                {{ name }}{% if email %} — {{ email }}{% endif %}
+              </td>
+              <td>
+                {% if s.status == 'NEW' %}
+                  <span class="badge bg-danger">New</span>
+                {% elif s.status == 'REVIEWED' %}
+                  <span class="badge bg-info text-dark">Reviewed</span>
+                {% elif s.status == 'ACTIONED' %}
+                  <span class="badge bg-success">Actioned</span>
+                {% else %}
+                  <span class="badge bg-secondary">{{ s.status }}</span>
+                {% endif %}
+              </td>
+              <td>{{ s.created | strftime }}</td>
+              <td>
+                <a
+                  href="{{ url_for('submissions.view_submission', id=s.id) }}"
+                  class="btn btn-sm btn-outline-secondary"
+                >View</a>
+              </td>
+            </tr>
+          {% else %}
+            <tr>
+              <td colspan="6" class="text-center text-muted py-4">No submissions found.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

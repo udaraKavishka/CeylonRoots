@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Add Gallery Item — CeylonRoots Admin{% endblock %}
+
+{% block content %}
+  <div class="d-flex align-items-center mb-4">
+    <a
+      href="{{ url_for('gallery.list_gallery') }}"
+      class="btn btn-sm btn-outline-secondary me-3"
+    >
+      <i class="bi bi-arrow-left"></i>
+    </a>
+    <h4 class="fw-bold mb-0">Add Gallery Item</h4>
+  </div>
+  <div class="card shadow-sm" style="max-width: 600px">
+    <div class="card-body p-4">
+      <form method="POST" action="{{ url_for('gallery.create_item_post') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Image URL <span class="text-danger">*</span></label>
+          <input type="url" name="url" class="form-control" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Thumbnail URL</label>
+          <input type="url" name="thumbnail_url" class="form-control" />
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Alt text</label>
+            <input type="text" name="alt" class="form-control" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Category</label>
+            <input
+              type="text"
+              name="category"
+              class="form-control"
+              placeholder="nature, culture, food…"
+            />
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Caption</label>
+          <input type="text" name="caption" class="form-control" />
+        </div>
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Media Type</label>
+            <select name="media_type" class="form-select">
+              <option value="image">Image</option>
+              <option value="video">Video</option>
+            </select>
+          </div>
+          <div class="col-md-6 d-flex align-items-end">
+            <div class="form-check">
+              <input
+                type="checkbox"
+                name="featured"
+                class="form-check-input"
+                id="featured"
+              />
+              <label class="form-check-label" for="featured">Featured</label>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">Add to gallery</button>
+          <a href="{{ url_for('gallery.list_gallery') }}" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

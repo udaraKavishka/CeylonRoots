@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Bookings — CeylonRoots Admin{% endblock %}
+
+{% block content %}
+  <h4 class="fw-bold mb-4">Bookings</h4>
+
+  <div class="card shadow-sm mb-3">
+    <div class="card-body">
+      <form method="GET" class="row g-2">
+        <div class="col-md-6">
+          <input
+            type="text"
+            name="q"
+            value="{{ q }}"
+            class="form-control"
+            placeholder="Search by name or email…"
+          />
+        </div>
+        <div class="col-md-3">
+          <select name="status" class="form-select">
+            <option value="">All statuses</option>
+            {% for val, label in statuses %}
+              <option value="{{ val }}" {% if status == val %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-3">
+          <button type="submit" class="btn btn-outline-secondary w-100">Filter</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Package</th>
+            <th>Travelers</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for b in bookings %}
+            <tr>
+              <td>
+                <a href="{{ url_for('bookings.view_booking', booking_id=b.id) }}">
+                  {{ b.id[-8:]|upper }}
+                </a>
+              </td>
+              <td>{{ b.first_name }} {{ b.last_name }}</td>
+              <td>{{ b.email }}</td>
+              <td>{{ b.package.title if b.package else '—' }}</td>
+              <td>{{ b.traveler_count }}</td>
+              <td>{{ b.total_amount | currency_format if b.total_amount else '—' }}</td>
+              <td>
+                {% if b.status == 'CONFIRMED' %}
+                  <span class="badge bg-success">{{ b.status }}</span>
+                {% elif b.status == 'PENDING' %}
+                  <span class="badge bg-warning text-dark">{{ b.status }}</span>
+                {% else %}
+                  <span class="badge bg-secondary">{{ b.status }}</span>
+                {% endif %}
+              </td>
+              <td>{{ b.created | strftime }}</td>
+            </tr>
+          {% else %}
+            <tr>
+              <td colspan="8" class="text-center text-muted py-4">No bookings found.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

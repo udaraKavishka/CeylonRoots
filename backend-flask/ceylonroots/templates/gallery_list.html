@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Gallery — CeylonRoots Admin{% endblock %}
+
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold mb-0">Gallery</h4>
+    <a href="{{ url_for('gallery.create_item') }}" class="btn btn-primary">
+      <i class="bi bi-plus-lg me-1"></i>Add Item
+    </a>
+  </div>
+
+  <div class="card shadow-sm mb-3">
+    <div class="card-body">
+      <form method="GET" class="row g-2">
+        <div class="col-md-4">
+          <select name="category" class="form-select">
+            <option value="">All categories</option>
+            {% for c in categories %}
+              <option value="{{ c }}" {% if category == c %}selected{% endif %}>{{ c }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-outline-secondary w-100">Filter</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    {% for item in items %}
+      <div class="col-md-3">
+        <div class="card shadow-sm h-100">
+          <img
+            src="{{ item.thumbnail_url or item.url }}"
+            alt="{{ item.alt or '' }}"
+            class="card-img-top"
+            style="height: 160px; object-fit: cover"
+          />
+          <div class="card-body p-2">
+            <p class="small mb-1 text-truncate">{{ item.caption or item.alt or item.url }}</p>
+            {% if item.category %}
+              <span class="badge bg-secondary small">{{ item.category }}</span>
+            {% endif %}
+          </div>
+          <div class="card-footer p-2 d-flex justify-content-end">
+            <form
+              method="POST"
+              action="{{ url_for('gallery.delete_item', id=item.id) }}"
+              onsubmit="return confirm('Delete?')"
+            >
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+              <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="col-12 text-center text-muted py-5">No gallery items yet.</div>
+    {% endfor %}
+  </div>
+{% endblock %}
