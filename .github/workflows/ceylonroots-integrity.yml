@@ -5,10 +5,12 @@ on:
     branches: ["**"]
     paths:
       - "ceylonroots/**"
+      - "backend-flask/**"
       - ".github/workflows/ceylonroots-integrity.yml"
   pull_request:
     paths:
       - "ceylonroots/**"
+      - "backend-flask/**"
       - ".github/workflows/ceylonroots-integrity.yml"
 
 concurrency:
@@ -168,7 +170,10 @@ jobs:
 
   backend_flask_precommit:
     name: Backend Flask Pre-commit
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: ./backend-flask
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -176,15 +181,13 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
 
       - name: Install uv
-        run: pip install uv
+        uses: astral-sh/setup-uv@v4
 
-      - name: Install backend-flask dependencies
-        run: uv pip install --system -e backend-flask[dev]
+      - name: Install dependencies
+        run: uv sync --all-extras
 
-      - name: Run pre-commit hooks
-        run: |
-          cd backend-flask
-          pre-commit run --all-files --show-diff-on-failure
+      - name: Run pre-commit
+        run: uv run pre-commit run --all-files
