@@ -30,7 +30,16 @@ def create_app():
     mail.init_app(app)
     cache.init_app(app)
     csrf.init_app(app)
-    CORS(app, supports_credentials=True)
+
+    # Secure CORS configuration with explicit origin allowlist
+    allowed_origins = app.config.get("CORS_ALLOWED_ORIGINS", ["http://localhost:3000"])
+    CORS(
+        app,
+        origins=allowed_origins,
+        supports_credentials=True,
+        allow_private_network=False,
+    )
+
     jwt.init_app(app)
 
     # Exempt JWT routes from CSRF
@@ -75,6 +84,11 @@ def create_app():
         import sentry_sdk
         from sentry_sdk.integrations.flask import FlaskIntegration
 
-        sentry_sdk.init(dsn=sentry_dsn, integrations=[FlaskIntegration()])
+        sentry_sdk.init(
+            dsn=sentry_dsn,
+            integrations=[FlaskIntegration()],
+            send_default_pii=False,
+            environment=app.config.get("FLASK_ENV", "production"),
+        )
 
     return app
