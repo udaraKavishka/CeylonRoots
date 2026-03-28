@@ -34,6 +34,16 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Ceylon brand colors — registered so Tailwind v4 generates all variants
+     (hover:, data-[state=active]:, /opacity, etc.) */
+  --color-ceylon-tea: #2e8b57;
+  --color-ceylon-ocean: #1a5276;
+  --color-ceylon-sand: #e8dacc;
+  --color-ceylon-spice: #cd5c5c;
+  --color-ceylon-gold: #d4af37;
+  --color-ceylon-orchid: #da70d6;
+  --color-ceylon-stone: #696969;
 }
 
 /* Dark mode intentionally disabled - CeylonRoots uses a consistent light theme */
