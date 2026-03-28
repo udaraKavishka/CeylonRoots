@@ -13,8 +13,6 @@
     "start": "next start",
     "lint": "eslint .",
     "postbuild": "next-sitemap",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
     "db:seed": "npx prisma db seed",
     "db:push": "prisma db push",
     "db:generate": "prisma generate"
@@ -96,7 +94,6 @@
     "eslint": "^9",
     "eslint-config-next": "15.3.0",
     "next-sitemap": "^4.2.3",
-    "prettier": "^3.2.5",
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
     "typescript": "^5"
