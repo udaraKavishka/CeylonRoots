@@ -1,51 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CeylonRoots Monorepo (Next.js + Flask Admin)
 
-## Getting Started
+This project has two apps using the same PostgreSQL database:
 
-First, run the development server:
+- Next.js frontend for users: `http://localhost:3000`
+- Flask admin panel: `http://admin.localhost:3001`
+
+## Local Setup
+
+1. Ensure `admin.localhost` resolves to local machine:
+
+```bash
+sudo sh -c 'echo "127.0.0.1 admin.localhost" >> /etc/hosts'
+```
+
+2. Install frontend dependencies:
+
+```bash
+npm install
+```
+
+3. Install Flask admin dependencies:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r admin-panel/requirements.txt
+```
+
+4. Ensure `.env.local` contains valid values for:
+
+- `DATABASE_URL`
+- `NEXT_PUBLIC_SITE_URL=http://localhost:3000`
+- `NEXT_PUBLIC_ADMIN_URL=http://admin.localhost:3001`
+- `FLASK_SECRET_KEY`
+- `ADMIN_SIGNUP_KEY`
+
+## Run Apps
+
+Frontend (Next.js):
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-### Admin Subdomain (Local)
-
-Admin users are redirected to `admin.localhost` after login.
-
-1. Start the app as usual:
+Admin (Flask):
 
 ```bash
-npm run dev
+source .venv/bin/activate
+npm run dev:admin
 ```
 
-2. Open the public app at `http://localhost:3000`.
-3. Admin links and post-login admin redirects use `http://admin.localhost:3000`.
+Optional (both together):
 
-If you need a different admin host, set `NEXT_PUBLIC_ADMIN_URL` in `.env.local`.
+```bash
+npm run dev:all
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Admin Flow
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Visit `http://admin.localhost:3001/auth/login`.
+2. Login with an existing admin user (`role=admin`) from the shared `user` table.
+3. If needed, create an admin via `/auth/signup` with `ADMIN_SIGNUP_KEY`.
+4. Use module pages to manage:
+   - Packages + itinerary
+   - Guides
+   - Destinations
+   - Gallery
+   - Departures
+   - Bookings (status updates)
 
-## Learn More
+All writes update PostgreSQL and are reflected in Next.js frontend pages.
 
-To learn more about Next.js, take a look at the following resources:
+## Frontend-Only Content
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Blog is rendered from `content/blog/*.mdx` and Next.js blog pages.
+- Testimonials are rendered from `app/data/testimonials.ts` and frontend components/pages.
+- Blog and testimonial content is intentionally not managed from Flask admin.
