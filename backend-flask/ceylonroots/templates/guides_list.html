@@ -1,7 +1,5 @@
 {% extends "base.html" %}
-
 {% block title %}Guides — CeylonRoots Admin{% endblock %}
-
 {% block content %}
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h4 class="fw-bold mb-0">Tour Guides</h4>
@@ -25,8 +23,10 @@
         <tbody>
           {% for g in guides %}
             <tr>
-              <td><strong>{{ g.name }}</strong></td>
-              <td>{{ (g.languages or [])|join(', ') }}</td>
+              <td>
+                <strong>{{ g.name }}</strong>
+              </td>
+              <td>{{ (g.languages or [])|join(", ") }}</td>
               <td>{{ g.experience_years }}y</td>
               <td>{{ g.rating or '—' }}</td>
               <td>
@@ -37,21 +37,13 @@
                 {% endif %}
               </td>
               <td class="text-end">
-                <a
-                  href="{{ url_for('guides.edit_guide', id=g.id) }}"
-                  class="btn btn-sm btn-outline-secondary me-1"
-                >Edit</a>
-                <form
-                  method="POST"
-                  action="{{ url_for('guides.delete_guide', id=g.id) }}"
-                  class="d-inline"
-                  onsubmit="return confirm('Delete guide?')"
-                >
-                  <input
-                    type="hidden"
-                    name="csrf_token"
-                    value="{{ csrf_token() }}"
-                  />
+                <a href="{{ url_for('guides.edit_guide', id=g.id) }}"
+                   class="btn btn-sm btn-outline-secondary me-1">Edit</a>
+                <form method="POST"
+                      action="{{ url_for('guides.delete_guide', id=g.id) }}"
+                      class="d-inline"
+                      onsubmit="return confirm('Delete guide?')">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                   <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                 </form>
               </td>

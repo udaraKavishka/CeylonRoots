@@ -1,7 +1,5 @@
 {% extends "base.html" %}
-
 {% block title %}Reviews — CeylonRoots Admin{% endblock %}
-
 {% block content %}
   <h4 class="fw-bold mb-4">Package Reviews</h4>
   <div class="card shadow-sm">
@@ -21,7 +19,9 @@
         <tbody>
           {% for r in reviews %}
             <tr>
-              <td><strong>{{ r.author_name }}</strong></td>
+              <td>
+                <strong>{{ r.author_name }}</strong>
+              </td>
               <td>{{ r.package.title if r.package else '—' }}</td>
               <td>
                 {% for i in range(r.rating) %}★{% endfor %}
@@ -38,32 +38,20 @@
               </td>
               <td>{{ r.created | strftime }}</td>
               <td class="text-end">
-                <form
-                  method="POST"
-                  action="{{ url_for('reviews.verify_review', id=r.id) }}"
-                  class="d-inline"
-                >
-                  <input
-                    type="hidden"
-                    name="csrf_token"
-                    value="{{ csrf_token() }}"
-                  />
-                  <button
-                    type="submit"
-                    class="btn btn-sm btn-outline-{{ 'warning' if r.verified else 'success' }} me-1"
-                  >{{ 'Unverify' if r.verified else 'Verify' }}</button>
+                <form method="POST"
+                      action="{{ url_for('reviews.verify_review', id=r.id) }}"
+                      class="d-inline">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                  <button type="submit"
+                          class="btn btn-sm btn-outline-{{ 'warning' if r.verified else 'success' }} me-1">
+                    {{ 'Unverify' if r.verified else 'Verify' }}
+                  </button>
                 </form>
-                <form
-                  method="POST"
-                  action="{{ url_for('reviews.delete_review', id=r.id) }}"
-                  class="d-inline"
-                  onsubmit="return confirm('Delete review?')"
-                >
-                  <input
-                    type="hidden"
-                    name="csrf_token"
-                    value="{{ csrf_token() }}"
-                  />
+                <form method="POST"
+                      action="{{ url_for('reviews.delete_review', id=r.id) }}"
+                      class="d-inline"
+                      onsubmit="return confirm('Delete review?')">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                   <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                 </form>
               </td>

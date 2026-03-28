@@ -1,13 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{{ definition.name }} — CeylonRoots</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+          rel="stylesheet" />
     <style>
       body {
         background: #f0f4f8;
@@ -35,88 +33,67 @@
           {% if errors %}
             <div class="alert alert-danger">
               <ul class="mb-0 ps-3">
-                {% for e in errors %}
-                  <li>{{ e }}</li>
-                {% endfor %}
+                {% for e in errors %}<li>{{ e }}</li>{% endfor %}
               </ul>
             </div>
           {% endif %}
-
           <form method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-
             {% for field in definition.fields %}
               <div class="mb-3">
                 <label class="form-label fw-semibold">
                   {{ field.name.replace('_', ' ').title() }}
-                  {% if field.required %}
-                    <span class="text-danger">*</span>
-                  {% endif %}
+                  {% if field.required %}<span class="text-danger">*</span>{% endif %}
                 </label>
-
                 {% set ftype = field.type %}
                 {% set current_val = (data or {})[field.name] if data else '' %}
-
                 {% if ftype == 'text' %}
-                  <textarea
-                    name="{{ field.name }}"
-                    class="form-control"
-                    rows="4"
-                    {% if field.required %}required{% endif %}
-                  >{{ current_val }}</textarea>
+                  <textarea name="{{ field.name }}"
+                            class="form-control"
+                            rows="4"
+                            {% if field.required %}required{% endif %}>{{ current_val }}</textarea>
                 {% elif ftype == 'choice' %}
-                  <select
-                    name="{{ field.name }}"
-                    class="form-select"
-                    {% if field.required %}required{% endif %}
-                  >
+                  <select name="{{ field.name }}"
+                          class="form-select"
+                          {% if field.required %}required{% endif %}>
                     <option value="">Select…</option>
                     {% for choice in field.choices %}
-                      <option
-                        value="{{ choice }}"
-                        {% if current_val == choice %}selected{% endif %}
-                      >{{ choice.replace('_', ' ').title() }}</option>
+                      <option value="{{ choice }}"
+                              {% if current_val == choice %}selected{% endif %}>
+                        {{ choice.replace('_', ' ').title() }}
+                      </option>
                     {% endfor %}
                   </select>
                 {% elif ftype == 'integer' %}
-                  <input
-                    type="number"
-                    name="{{ field.name }}"
-                    class="form-control"
-                    value="{{ current_val }}"
-                    {% if field.min is defined %}min="{{ field.min }}"{% endif %}
-                    {% if field.max is defined %}max="{{ field.max }}"{% endif %}
-                    {% if field.required %}required{% endif %}
-                  />
+                  <input type="number"
+                         name="{{ field.name }}"
+                         class="form-control"
+                         value="{{ current_val }}"
+                         {% if field.min is defined %}min="{{ field.min }}"{% endif %}
+                         {% if field.max is defined %}max="{{ field.max }}"{% endif %}
+                         {% if field.required %}required{% endif %} />
                 {% elif ftype == 'email' %}
-                  <input
-                    type="email"
-                    name="{{ field.name }}"
-                    class="form-control"
-                    value="{{ current_val }}"
-                    {% if field.required %}required{% endif %}
-                  />
+                  <input type="email"
+                         name="{{ field.name }}"
+                         class="form-control"
+                         value="{{ current_val }}"
+                         {% if field.required %}required{% endif %} />
                 {% elif ftype == 'phone' %}
-                  <input
-                    type="tel"
-                    name="{{ field.name }}"
-                    class="form-control"
-                    value="{{ current_val }}"
-                    placeholder="+94771234567"
-                    {% if field.required %}required{% endif %}
-                  />
+                  <input type="tel"
+                         name="{{ field.name }}"
+                         class="form-control"
+                         value="{{ current_val }}"
+                         placeholder="+94771234567"
+                         {% if field.required %}required{% endif %} />
                 {% else %}
-                  <input
-                    type="text"
-                    name="{{ field.name }}"
-                    class="form-control"
-                    value="{{ current_val }}"
-                    {% if field.required %}required{% endif %}
-                  />
+                  <input type="text"
+                         name="{{ field.name }}"
+                         class="form-control"
+                         value="{{ current_val }}"
+                         {% if field.required %}required{% endif %} />
                 {% endif %}
               </div>
             {% endfor %}
-
             <button type="submit" class="btn btn-primary w-100 mt-2">Submit</button>
           </form>
         </div>

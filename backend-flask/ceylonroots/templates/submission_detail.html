@@ -1,19 +1,14 @@
 {% extends "base.html" %}
-
 {% block title %}Submission #{{ submission.id }} — CeylonRoots Admin{% endblock %}
-
 {% block content %}
   <div class="d-flex align-items-center mb-4">
-    <a
-      href="{{ url_for('submissions.list_submissions') }}"
-      class="btn btn-sm btn-outline-secondary me-3"
-    >
+    <a href="{{ url_for('submissions.list_submissions') }}"
+       class="btn btn-sm btn-outline-secondary me-3">
       <i class="bi bi-arrow-left"></i>
     </a>
     <h4 class="fw-bold mb-0">Submission #{{ submission.id }}</h4>
     <span class="ms-3 badge bg-secondary">{{ submission.type_code }}</span>
   </div>
-
   <div class="row g-3">
     <div class="col-md-8">
       <div class="card shadow-sm">
@@ -24,7 +19,9 @@
           <dl class="row mb-0">
             {% for key, value in submission.data.items() %}
               <dt class="col-4 text-muted small">{{ key.replace('_', ' ').title() }}</dt>
-              <dd class="col-8">{{ value or '—' }}</dd>
+              <dd class="col-8">
+                {{ value or '—' }}
+              </dd>
             {% endfor %}
           </dl>
         </div>
@@ -32,29 +29,28 @@
     </div>
     <div class="col-md-4">
       <div class="card shadow-sm">
-        <div class="card-header"><strong>Status</strong></div>
+        <div class="card-header">
+          <strong>Status</strong>
+        </div>
         <div class="card-body">
           <p class="mb-1 text-muted small">Received</p>
-          <p class="mb-3">{{ submission.created | strftime('%d %b %Y %H:%M') }}</p>
-          <form
-            method="POST"
-            action="{{ url_for('submissions.update_submission_status', id=submission.id) }}"
-          >
+          <p class="mb-3">{{ submission.created | strftime("%d %b %Y %H:%M") }}</p>
+          <form method="POST"
+                action="{{ url_for('submissions.update_submission_status', id=submission.id) }}">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
             <div class="mb-2">
               <select name="status" class="form-select form-select-sm">
                 {% for val, label in statuses %}
-                  <option value="{{ val }}" {% if submission.status == val %}selected{% endif %}>{{ label }}</option>
+                  <option value="{{ val }}"
+                          {% if submission.status == val %}selected{% endif %}>{{ label }}</option>
                 {% endfor %}
               </select>
             </div>
             <div class="mb-2">
-              <textarea
-                name="notes"
-                class="form-control form-control-sm"
-                placeholder="Internal notes…"
-                rows="3"
-              >{{ submission.notes or '' }}</textarea>
+              <textarea name="notes"
+                        class="form-control form-control-sm"
+                        placeholder="Internal notes…"
+                        rows="3">{{ submission.notes or '' }}</textarea>
             </div>
             <button type="submit" class="btn btn-primary btn-sm w-100">Save</button>
           </form>

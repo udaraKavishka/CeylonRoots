@@ -1,7 +1,5 @@
 {% extends "base.html" %}
-
 {% block title %}Gallery — CeylonRoots Admin{% endblock %}
-
 {% block content %}
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h4 class="fw-bold mb-0">Gallery</h4>
@@ -9,7 +7,6 @@
       <i class="bi bi-plus-lg me-1"></i>Add Item
     </a>
   </div>
-
   <div class="card shadow-sm mb-3">
     <div class="card-body">
       <form method="GET" class="row g-2">
@@ -27,29 +24,23 @@
       </form>
     </div>
   </div>
-
   <div class="row g-3">
     {% for item in items %}
       <div class="col-md-3">
         <div class="card shadow-sm h-100">
-          <img
-            src="{{ item.thumbnail_url or item.url }}"
-            alt="{{ item.alt or '' }}"
-            class="card-img-top"
-            style="height: 160px; object-fit: cover"
-          />
+          <img src="{{ item.thumbnail_url or item.url }}"
+               alt="{{ item.alt or '' }}"
+               class="card-img-top"
+               style="height: 160px;
+                      object-fit: cover" />
           <div class="card-body p-2">
             <p class="small mb-1 text-truncate">{{ item.caption or item.alt or item.url }}</p>
-            {% if item.category %}
-              <span class="badge bg-secondary small">{{ item.category }}</span>
-            {% endif %}
+            {% if item.category %}<span class="badge bg-secondary small">{{ item.category }}</span>{% endif %}
           </div>
           <div class="card-footer p-2 d-flex justify-content-end">
-            <form
-              method="POST"
-              action="{{ url_for('gallery.delete_item', id=item.id) }}"
-              onsubmit="return confirm('Delete?')"
-            >
+            <form method="POST"
+                  action="{{ url_for('gallery.delete_item', id=item.id) }}"
+                  onsubmit="return confirm('Delete?')">
               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
               <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
             </form>

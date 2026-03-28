@@ -1,21 +1,16 @@
 {% extends "base.html" %}
-
 {% block title %}Bookings — CeylonRoots Admin{% endblock %}
-
 {% block content %}
   <h4 class="fw-bold mb-4">Bookings</h4>
-
   <div class="card shadow-sm mb-3">
     <div class="card-body">
       <form method="GET" class="row g-2">
         <div class="col-md-6">
-          <input
-            type="text"
-            name="q"
-            value="{{ q }}"
-            class="form-control"
-            placeholder="Search by name or email…"
-          />
+          <input type="text"
+                 name="q"
+                 value="{{ q }}"
+                 class="form-control"
+                 placeholder="Search by name or email…" />
         </div>
         <div class="col-md-3">
           <select name="status" class="form-select">
@@ -31,7 +26,6 @@
       </form>
     </div>
   </div>
-
   <div class="card shadow-sm">
     <div class="table-responsive">
       <table class="table table-hover mb-0">
@@ -51,9 +45,7 @@
           {% for b in bookings %}
             <tr>
               <td>
-                <a href="{{ url_for('bookings.view_booking', booking_id=b.id) }}">
-                  {{ b.id[-8:]|upper }}
-                </a>
+                <a href="{{ url_for('bookings.view_booking', booking_id=b.id) }}">{{ b.id[-8:]|upper }}</a>
               </td>
               <td>{{ b.first_name }} {{ b.last_name }}</td>
               <td>{{ b.email }}</td>

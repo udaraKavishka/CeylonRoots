@@ -1,15 +1,13 @@
 {% extends "base.html" %}
-
 {% block title %}Destinations — CeylonRoots Admin{% endblock %}
-
 {% block content %}
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h4 class="fw-bold mb-0">Destinations & Components</h4>
-    <a href="{{ url_for('destinations.create_destination') }}" class="btn btn-primary">
+    <a href="{{ url_for('destinations.create_destination') }}"
+       class="btn btn-primary">
       <i class="bi bi-plus-lg me-1"></i>New
     </a>
   </div>
-
   <div class="card shadow-sm mb-3">
     <div class="card-body">
       <form method="GET" class="row g-2">
@@ -27,7 +25,6 @@
       </form>
     </div>
   </div>
-
   <div class="card shadow-sm">
     <div class="table-responsive">
       <table class="table table-hover mb-0">
@@ -42,27 +39,21 @@
         <tbody>
           {% for item in items %}
             <tr>
-              <td><strong>{{ item.name }}</strong></td>
+              <td>
+                <strong>{{ item.name }}</strong>
+              </td>
               <td>
                 <span class="badge bg-secondary">{{ item.component_type }}</span>
               </td>
               <td>{{ item.location or '—' }}</td>
               <td class="text-end">
-                <a
-                  href="{{ url_for('destinations.edit_destination', id=item.id) }}"
-                  class="btn btn-sm btn-outline-secondary me-1"
-                >Edit</a>
-                <form
-                  method="POST"
-                  action="{{ url_for('destinations.delete_destination', id=item.id) }}"
-                  class="d-inline"
-                  onsubmit="return confirm('Delete?')"
-                >
-                  <input
-                    type="hidden"
-                    name="csrf_token"
-                    value="{{ csrf_token() }}"
-                  />
+                <a href="{{ url_for('destinations.edit_destination', id=item.id) }}"
+                   class="btn btn-sm btn-outline-secondary me-1">Edit</a>
+                <form method="POST"
+                      action="{{ url_for('destinations.delete_destination', id=item.id) }}"
+                      class="d-inline"
+                      onsubmit="return confirm('Delete?')">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                   <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                 </form>
               </td>

@@ -1,33 +1,27 @@
 {% extends "base.html" %}
-
 {% block title %}{{ 'Edit' if guide else 'New' }} Guide — CeylonRoots Admin{% endblock %}
-
 {% block content %}
   <div class="d-flex align-items-center mb-4">
-    <a
-      href="{{ url_for('guides.list_guides') }}"
-      class="btn btn-sm btn-outline-secondary me-3"
-    >
+    <a href="{{ url_for('guides.list_guides') }}"
+       class="btn btn-sm btn-outline-secondary me-3">
       <i class="bi bi-arrow-left"></i>
     </a>
     <h4 class="fw-bold mb-0">{{ 'Edit Guide' if guide else 'New Guide' }}</h4>
   </div>
   <div class="card shadow-sm" style="max-width: 640px">
     <div class="card-body p-4">
-      <form
-        method="POST"
-        action="{{ url_for('guides.edit_guide_post', id=guide.id) if guide else url_for('guides.create_guide_post') }}"
-      >
+      <form method="POST"
+            action="{{ url_for('guides.edit_guide_post', id=guide.id) if guide else url_for('guides.create_guide_post') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
         <div class="mb-3">
-          <label class="form-label fw-semibold">Name <span class="text-danger">*</span></label>
-          <input
-            type="text"
-            name="name"
-            class="form-control"
-            value="{{ guide.name if guide else '' }}"
-            required
-          />
+          <label class="form-label fw-semibold">
+            Name <span class="text-danger">*</span>
+          </label>
+          <input type="text"
+                 name="name"
+                 class="form-control"
+                 value="{{ guide.name if guide else '' }}"
+                 required />
         </div>
         <div class="mb-3">
           <label class="form-label fw-semibold">Bio</label>
@@ -36,63 +30,52 @@
         <div class="row g-3 mb-3">
           <div class="col-md-6">
             <label class="form-label fw-semibold">Languages (comma-separated)</label>
-            <input
-              type="text"
-              name="languages"
-              class="form-control"
-              value="{{ (guide.languages or [])|join(', ') if guide else '' }}"
-              placeholder="English, Sinhala, Tamil"
-            />
+            <input type="text"
+                   name="languages"
+                   class="form-control"
+                   value="{{ (guide.languages or [])|join(', ') if guide else '' }}"
+                   placeholder="English, Sinhala, Tamil" />
           </div>
           <div class="col-md-6">
             <label class="form-label fw-semibold">Expertise (comma-separated)</label>
-            <input
-              type="text"
-              name="expertise"
-              class="form-control"
-              value="{{ (guide.expertise or [])|join(', ') if guide else '' }}"
-              placeholder="Wildlife, History, Culture"
-            />
+            <input type="text"
+                   name="expertise"
+                   class="form-control"
+                   value="{{ (guide.expertise or [])|join(', ') if guide else '' }}"
+                   placeholder="Wildlife, History, Culture" />
           </div>
         </div>
         <div class="row g-3 mb-3">
           <div class="col-md-6">
             <label class="form-label fw-semibold">Years of Experience</label>
-            <input
-              type="number"
-              name="experience_years"
-              class="form-control"
-              value="{{ guide.experience_years if guide else 0 }}"
-              min="0"
-            />
+            <input type="number"
+                   name="experience_years"
+                   class="form-control"
+                   value="{{ guide.experience_years if guide else 0 }}"
+                   min="0" />
           </div>
           <div class="col-md-6">
             <label class="form-label fw-semibold">Profile Image URL</label>
-            <input
-              type="url"
-              name="image_url"
-              class="form-control"
-              value="{{ guide.image_url if guide else '' }}"
-            />
+            <input type="url"
+                   name="image_url"
+                   class="form-control"
+                   value="{{ guide.image_url if guide else '' }}" />
           </div>
         </div>
         {% if guide %}
           <div class="mb-3 form-check">
-            <input
-              type="checkbox"
-              name="active"
-              class="form-check-input"
-              id="active"
-              {% if guide.active %}checked{% endif %}
-            />
+            <input type="checkbox"
+                   name="active"
+                   class="form-check-input"
+                   id="active"
+                   {% if guide.active %}checked{% endif %} />
             <label class="form-check-label" for="active">Active</label>
           </div>
         {% endif %}
         <div class="d-flex gap-2">
-          <button type="submit" class="btn btn-primary">
-            {{ 'Save changes' if guide else 'Create guide' }}
-          </button>
-          <a href="{{ url_for('guides.list_guides') }}" class="btn btn-outline-secondary">Cancel</a>
+          <button type="submit" class="btn btn-primary">{{ 'Save changes' if guide else 'Create guide' }}</button>
+          <a href="{{ url_for('guides.list_guides') }}"
+             class="btn btn-outline-secondary">Cancel</a>
         </div>
       </form>
     </div>

@@ -1,43 +1,35 @@
 {% extends "base.html" %}
-
 {% block title %}{{ 'Edit' if item else 'New' }} Component — CeylonRoots Admin{% endblock %}
-
 {% block content %}
   <div class="d-flex align-items-center mb-4">
-    <a
-      href="{{ url_for('destinations.list_destinations') }}"
-      class="btn btn-sm btn-outline-secondary me-3"
-    >
+    <a href="{{ url_for('destinations.list_destinations') }}"
+       class="btn btn-sm btn-outline-secondary me-3">
       <i class="bi bi-arrow-left"></i>
     </a>
     <h4 class="fw-bold mb-0">{{ 'Edit' if item else 'New' }} Component</h4>
   </div>
   <div class="card shadow-sm" style="max-width: 640px">
     <div class="card-body p-4">
-      <form
-        method="POST"
-        action="{{ url_for('destinations.edit_destination_post', id=item.id) if item else url_for('destinations.create_destination_post') }}"
-      >
+      <form method="POST"
+            action="{{ url_for('destinations.edit_destination_post', id=item.id) if item else url_for('destinations.create_destination_post') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
         <div class="row g-3 mb-3">
           <div class="col-md-8">
-            <label class="form-label fw-semibold">Name <span class="text-danger">*</span></label>
-            <input
-              type="text"
-              name="name"
-              class="form-control"
-              value="{{ item.name if item else '' }}"
-              required
-            />
+            <label class="form-label fw-semibold">
+              Name <span class="text-danger">*</span>
+            </label>
+            <input type="text"
+                   name="name"
+                   class="form-control"
+                   value="{{ item.name if item else '' }}"
+                   required />
           </div>
           <div class="col-md-4">
             <label class="form-label fw-semibold">Type</label>
             <select name="component_type" class="form-select">
               {% for val, label in types %}
-                <option
-                  value="{{ val }}"
-                  {% if item and item.component_type == val %}selected{% endif %}
-                >{{ label }}</option>
+                <option value="{{ val }}"
+                        {% if item and item.component_type == val %}selected{% endif %}>{{ label }}</option>
               {% endfor %}
             </select>
           </div>
@@ -49,28 +41,23 @@
         <div class="row g-3 mb-4">
           <div class="col-md-6">
             <label class="form-label fw-semibold">Location</label>
-            <input
-              type="text"
-              name="location"
-              class="form-control"
-              value="{{ item.location if item else '' }}"
-            />
+            <input type="text"
+                   name="location"
+                   class="form-control"
+                   value="{{ item.location if item else '' }}" />
           </div>
           <div class="col-md-6">
             <label class="form-label fw-semibold">Image URL</label>
-            <input
-              type="url"
-              name="image_url"
-              class="form-control"
-              value="{{ item.image_url if item else '' }}"
-            />
+            <input type="url"
+                   name="image_url"
+                   class="form-control"
+                   value="{{ item.image_url if item else '' }}" />
           </div>
         </div>
         <div class="d-flex gap-2">
-          <button type="submit" class="btn btn-primary">
-            {{ 'Save changes' if item else 'Create' }}
-          </button>
-          <a href="{{ url_for('destinations.list_destinations') }}" class="btn btn-outline-secondary">Cancel</a>
+          <button type="submit" class="btn btn-primary">{{ 'Save changes' if item else 'Create' }}</button>
+          <a href="{{ url_for('destinations.list_destinations') }}"
+             class="btn btn-outline-secondary">Cancel</a>
         </div>
       </form>
     </div>
