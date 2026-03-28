@@ -1,0 +1,15 @@
+{% extends 'base.html' %} {% from '_form_helpers.html' import render_field %} {%
+block title %}{% if guide %}Edit{% else %}New{% endif %} Guide | CeylonRoots
+Admin{% endblock %} {% block content %}
+<section>
+  <h1>{% if guide %}Edit{% else %}New{% endif %} Guide</h1>
+  <form method="post" class="grid-form">
+    {{ form.hidden_tag() }} {{ render_field(form.name) }} {{
+    render_field(form.photo) }} {{ render_field(form.bio) }} {{
+    render_field(form.expertise_csv) }} {{ render_field(form.languages_csv) }}
+    {{ render_field(form.experience) }} {{ render_field(form.rating) }} {{
+    render_field(form.review_count) }} {{ render_field(form.response_time) }} {{
+    render_field(form.featured) }} {{ form.submit(class_='btn btn-primary') }}
+  </form>
+</section>
+{% endblock %}

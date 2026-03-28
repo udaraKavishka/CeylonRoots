@@ -1,0 +1,14 @@
+{% extends 'base.html' %} {% from '_form_helpers.html' import render_field %} {%
+block title %}{% if item %}Edit{% else %}New{% endif %} Gallery Item |
+CeylonRoots Admin{% endblock %} {% block content %}
+<section>
+  <h1>{% if item %}Edit{% else %}New{% endif %} Gallery Item</h1>
+  <form method="post" class="grid-form">
+    {{ form.hidden_tag() }} {{ render_field(form.type) }} {{
+    render_field(form.url) }} {{ render_field(form.thumbnail_url) }} {{
+    render_field(form.caption) }} {{ render_field(form.location) }} {{
+    render_field(form.description) }} {{ render_field(form.featured) }} {{
+    render_field(form.date_added) }} {{ form.submit(class_='btn btn-primary') }}
+  </form>
+</section>
+{% endblock %}

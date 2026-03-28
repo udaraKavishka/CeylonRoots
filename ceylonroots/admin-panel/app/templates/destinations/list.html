@@ -1,0 +1,54 @@
+{% extends 'base.html' %} {% block title %}Destinations | CeylonRoots Admin{%
+endblock %} {% block content %}
+<section>
+  <div class="section-head">
+    <h1>Destinations</h1>
+    <a
+      class="btn btn-primary"
+      href="{{ url_for('destinations.new_destination') }}"
+      >New Destination</a
+    >
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Region</th>
+        <th>Top Attraction</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for destination in destinations %}
+      <tr>
+        <td>{{ destination.id }}</td>
+        <td>{{ destination.name }}</td>
+        <td>{{ destination.region or '-' }}</td>
+        <td>{{ destination.top_attraction or '-' }}</td>
+        <td class="actions">
+          <a
+            class="btn btn-small"
+            href="{{ url_for('destinations.edit_destination', destination_id=destination.id) }}"
+            >Edit</a
+          >
+          <form
+            method="post"
+            action="{{ url_for('destinations.delete_destination', destination_id=destination.id) }}"
+          >
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <button class="btn btn-small btn-danger" type="submit">
+              Delete
+            </button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="5">No destinations found.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

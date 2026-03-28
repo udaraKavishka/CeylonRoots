@@ -1,0 +1,70 @@
+{% extends 'base.html' %} {% from '_form_helpers.html' import render_field %} {%
+block title %}{% if package %}Edit{% else %}New{% endif %} Package | CeylonRoots
+Admin{% endblock %} {% block content %}
+<section>
+  <h1>{% if package %}Edit{% else %}New{% endif %} Package</h1>
+  <form method="post" class="grid-form">
+    {{ form.hidden_tag() }} {{ render_field(form.title) }} {{
+    render_field(form.description) }} {{ render_field(form.image_url) }} {{
+    render_field(form.duration_days) }} {{ render_field(form.price) }} {{
+    render_field(form.rating) }} {{ render_field(form.review_count) }} {{
+    render_field(form.destinations_csv) }} {{ render_field(form.highlights_csv)
+    }} {{ render_field(form.includes_csv) }} {{ render_field(form.excludes_csv)
+    }} {{ render_field(form.gallery_csv) }} {{ form.submit(class_='btn
+    btn-primary') }}
+  </form>
+</section>
+
+{% if package %}
+<section class="card mt-24">
+  <h2>Itinerary Flow</h2>
+  <p class="muted">Add day-by-day itinerary details for this package.</p>
+  <form
+    method="post"
+    action="{{ url_for('packages.add_itinerary_day', package_id=package.id) }}"
+    class="grid-form"
+  >
+    {{ day_form.hidden_tag() }} {{ render_field(day_form.day_number) }} {{
+    render_field(day_form.title) }} {{ render_field(day_form.main_town) }} {{
+    render_field(day_form.description) }} {{
+    render_field(day_form.accommodations_csv) }} {{
+    render_field(day_form.meals_csv) }} {{ render_field(day_form.activities_csv)
+    }} {{ day_form.submit(class_='btn btn-primary') }}
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Day</th>
+        <th>Title</th>
+        <th>Main Town</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for day in itinerary_days %}
+      <tr>
+        <td>{{ day.day_number }}</td>
+        <td>{{ day.title or '-' }}</td>
+        <td>{{ day.main_town or '-' }}</td>
+        <td>
+          <form
+            method="post"
+            action="{{ url_for('packages.delete_itinerary_day', package_id=package.id, day_id=day.id) }}"
+          >
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <button class="btn btn-small btn-danger" type="submit">
+              Delete
+            </button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="4">No itinerary days yet.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %} {% endblock %}

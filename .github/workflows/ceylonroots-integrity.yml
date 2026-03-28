@@ -110,7 +110,7 @@ jobs:
       NEXTAUTH_URL: http://localhost:3000
       NEXT_PUBLIC_API_BASE_URL: /api
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
-      NEXT_PUBLIC_ADMIN_URL: http://admin.localhost:3000
+      NEXT_PUBLIC_ADMIN_URL: http://admin.localhost:3001
       API_BASE_URL: /api
       RESEND_API_KEY: re_ci_test_key
       RESEND_FROM_EMAIL: noreply@test.com
@@ -188,3 +188,24 @@ jobs:
       - name: Run npm security audit
         run: npm audit --audit-level=high
         continue-on-error: true
+
+  flask_admin:
+    name: Flask Admin Compile Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ceylonroots
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Flask admin dependencies
+        run: pip install -r admin-panel/requirements.txt
+
+      - name: Compile Flask admin source
+        run: python -m compileall admin-panel

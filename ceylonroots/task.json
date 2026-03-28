@@ -1,0 +1,112 @@
+{
+  "project": "CeylonRoots Platform Split",
+  "roles": {
+    "frontend": {
+      "name": "Next.js",
+      "host": "localhost",
+      "port": 3000,
+      "purpose": "user-facing travel frontend"
+    },
+    "admin": {
+      "name": "Flask",
+      "host": "admin.localhost",
+      "port": 3001,
+      "purpose": "admin dashboard + content operations"
+    },
+    "database": {
+      "name": "PostgreSQL",
+      "shared": true,
+      "source": "DATABASE_URL"
+    }
+  },
+  "data_flow": {
+    "write": "Flask forms -> shared PostgreSQL (except blog/testimonials)",
+    "read": "Next.js frontend -> /api routes + frontend content modules",
+    "sync_expectation": "real-time visibility of admin updates on frontend"
+  },
+  "auth": {
+    "admin_auth_provider": "Flask-Login",
+    "user_source_of_truth": "user table",
+    "admin_rule": "role == 'admin'",
+    "pages": ["signin", "signup (invite-key protected)", "logout"]
+  },
+  "modules": [
+    {
+      "key": "dashboard",
+      "features": [
+        "kpi cards",
+        "top packages",
+        "review distribution",
+        "latest bookings"
+      ]
+    },
+    {
+      "key": "packages",
+      "flow": ["list", "create/edit", "itinerary add/remove", "confirm"],
+      "fields": [
+        "title",
+        "description",
+        "image_url",
+        "duration_days",
+        "price",
+        "rating",
+        "review_count",
+        "destinations[]",
+        "highlights[]",
+        "includes[]",
+        "excludes[]",
+        "gallery[]"
+      ]
+    },
+    {
+      "key": "guides",
+      "flow": ["list", "create/edit", "confirm"]
+    },
+    {
+      "key": "destinations",
+      "flow": ["list", "create/edit", "confirm"]
+    },
+    {
+      "key": "blog",
+      "flow": ["frontend content", "mdx driven", "visual editorial layout"]
+    },
+    {
+      "key": "testimonials",
+      "flow": [
+        "frontend content",
+        "static data module",
+        "component + page render"
+      ]
+    },
+    {
+      "key": "gallery",
+      "flow": ["list", "create/edit", "confirm"]
+    },
+    {
+      "key": "departures",
+      "flow": ["list", "create/edit", "confirm"]
+    },
+    {
+      "key": "bookings",
+      "flow": ["list", "status update", "confirm"]
+    }
+  ],
+  "execution_order": [
+    "bootstrap_flask_admin",
+    "admin_auth",
+    "dashboard_analytics",
+    "packages_and_itinerary",
+    "other_content_modules",
+    "routing_and_ports",
+    "e2e_validation"
+  ],
+  "qa_checklist": [
+    "Next frontend runs on localhost:3000",
+    "Flask admin runs on admin.localhost:3001",
+    "Admin login works for role=admin users",
+    "Each module supports create/update/delete or status update",
+    "Data created in Flask is visible in Next frontend pages for managed modules",
+    "Blog and testimonials are rendered from frontend-only content",
+    "Admin links from Next redirect to Flask admin"
+  ]
+}

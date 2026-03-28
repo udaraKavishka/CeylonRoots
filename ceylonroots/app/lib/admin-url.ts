@@ -1,5 +1,5 @@
 const DEFAULT_ADMIN_HOST = "admin.localhost";
-const DEFAULT_DEV_PORT = "3000";
+const DEFAULT_ADMIN_PORT = "3001";
 
 const trimTrailingSlash = (value: string) => value.replace(/\/$/, "");
 
@@ -11,11 +11,10 @@ export const getAdminDashboardUrl = () => {
   }
 
   if (typeof window === "undefined") {
-    return `http://${DEFAULT_ADMIN_HOST}:${DEFAULT_DEV_PORT}`;
+    return `http://${DEFAULT_ADMIN_HOST}:${DEFAULT_ADMIN_PORT}`;
   }
 
-  const { protocol, port } = window.location;
-  const resolvedPort = port || DEFAULT_DEV_PORT;
+  const { protocol } = window.location;
 
-  return `${protocol}//${DEFAULT_ADMIN_HOST}:${resolvedPort}`;
+  return `${protocol}//${DEFAULT_ADMIN_HOST}:${DEFAULT_ADMIN_PORT}`;
 };

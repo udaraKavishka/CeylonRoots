@@ -1,0 +1,15 @@
+{% extends 'base.html' %} {% from '_form_helpers.html' import render_field %} {%
+block title %}Update Booking | CeylonRoots Admin{% endblock %} {% block content
+%}
+<section>
+  <h1>Update Booking {{ booking.id[:8] }}</h1>
+  <p class="muted">
+    {{ booking.first_name }} {{ booking.last_name }} - {{ booking.email }}
+  </p>
+  <form method="post" class="grid-form">
+    {{ form.hidden_tag() }} {{ render_field(form.status) }} {{
+    render_field(form.payment_method) }} {{ form.submit(class_='btn
+    btn-primary') }}
+  </form>
+</section>
+{% endblock %}

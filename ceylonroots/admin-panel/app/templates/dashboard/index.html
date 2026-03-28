@@ -1,0 +1,98 @@
+{% extends 'base.html' %} {% block title %}Dashboard | CeylonRoots Admin{%
+endblock %} {% block content %}
+<section>
+  <h1>Dashboard Analytics</h1>
+  <p class="muted">Live content and booking performance overview.</p>
+
+  <div class="kpi-grid">
+    {% for key, value in counts.items() %}
+    <article class="kpi">
+      <div class="kpi-value">{{ value }}</div>
+      <div class="kpi-label">{{ key|replace('_', ' ')|title }}</div>
+    </article>
+    {% endfor %}
+  </div>
+
+  <div class="cards-2">
+    <article class="card">
+      <h2>Top Packages</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Rating</th>
+            <th>Reviews</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for pkg in top_packages %}
+          <tr>
+            <td>{{ pkg.title }}</td>
+            <td>{{ pkg.rating or '-' }}</td>
+            <td>{{ pkg.review_count or 0 }}</td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="3">No packages yet.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </article>
+
+    <article class="card">
+      <h2>Review Distribution</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Rating</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in review_distribution %}
+          <tr>
+            <td>{{ row.rating }}</td>
+            <td>{{ row.count }}</td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="2">No reviews yet.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </article>
+  </div>
+
+  <article class="card">
+    <h2>Latest Bookings</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Customer</th>
+          <th>Package</th>
+          <th>Status</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for booking in latest_bookings %}
+        <tr>
+          <td>{{ booking.id[:8] }}</td>
+          <td>{{ booking.first_name }} {{ booking.last_name }}</td>
+          <td>{{ booking.package.title if booking.package else '-' }}</td>
+          <td>{{ booking.status }}</td>
+          <td>{{ booking.total_amount }}</td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="5">No bookings yet.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </article>
+</section>
+{% endblock %}

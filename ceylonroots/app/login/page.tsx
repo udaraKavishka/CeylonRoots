@@ -38,9 +38,12 @@ export default function LoginPage() {
         return;
       }
 
-      const isAdmin = email === "admin@email.com";
+      const sessionRes = await fetch("/api/auth/session");
+      const sessionData = await sessionRes.json();
+      const isAdmin =
+        (sessionData?.user as { role?: string } | undefined)?.role === "admin";
       login({
-        firstName: isAdmin ? "Admin" : email.split("@")[0],
+        firstName: sessionData?.user?.name || email.split("@")[0],
         lastName: "",
         email,
         role: isAdmin ? "admin" : "user",

@@ -1,0 +1,18 @@
+{% extends 'base.html' %} {% from '_form_helpers.html' import render_field %} {%
+block title %}{% if destination %}Edit{% else %}New{% endif %} Destination |
+CeylonRoots Admin{% endblock %} {% block content %}
+<section>
+  <h1>{% if destination %}Edit{% else %}New{% endif %} Destination</h1>
+  <form method="post" class="grid-form">
+    {{ form.hidden_tag() }} {{ render_field(form.name) }} {{
+    render_field(form.description) }} {{ render_field(form.region) }} {{
+    render_field(form.top_attraction) }} {{
+    render_field(form.best_time_to_visit) }} {{
+    render_field(form.recommended_duration) }} {{
+    render_field(form.cultural_tips) }} {{ render_field(form.image) }} {{
+    render_field(form.latitude) }} {{ render_field(form.longitude) }} {{
+    render_field(form.attractions_csv) }} {{ form.submit(class_='btn
+    btn-primary') }}
+  </form>
+</section>
+{% endblock %}

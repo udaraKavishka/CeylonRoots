@@ -1,0 +1,40 @@
+{% extends 'base.html' %} {% block title %}Bookings | CeylonRoots Admin{%
+endblock %} {% block content %}
+<section>
+  <h1>Bookings</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Customer</th>
+        <th>Package</th>
+        <th>Status</th>
+        <th>Total</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for booking in bookings %}
+      <tr>
+        <td>{{ booking.id[:8] }}</td>
+        <td>{{ booking.first_name }} {{ booking.last_name }}</td>
+        <td>{{ booking.package.title if booking.package else '-' }}</td>
+        <td>{{ booking.status }}</td>
+        <td>{{ booking.total_amount }}</td>
+        <td class="actions">
+          <a
+            class="btn btn-small"
+            href="{{ url_for('bookings.edit_booking', booking_id=booking.id) }}"
+            >Update</a
+          >
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="6">No bookings found.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
