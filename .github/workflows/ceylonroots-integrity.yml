@@ -171,12 +171,11 @@ jobs:
   backend_flask_precommit:
     name: Backend Flask Pre-commit
     runs-on: ubuntu-24.04
-    defaults:
-      run:
-        working-directory: ./backend-flask
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -188,6 +187,18 @@ jobs:
 
       - name: Install dependencies
         run: uv sync --all-extras
+        working-directory: ./backend-flask
 
       - name: Run pre-commit
-        run: uv run pre-commit run --all-files
+        run: |
+          git fetch origin main --depth=1
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            FROM_REF="${{ github.event.pull_request.base.sha }}"
+          else
+            FROM_REF="${{ github.event.before }}"
+          fi
+          TO_REF="${{ github.sha }}"
+          if [ -z "$FROM_REF" ] || [ "$FROM_REF" = "0000000000000000000000000000000000000000" ]; then
+            FROM_REF="$(git merge-base HEAD origin/main)"
+          fi
+          uv run --project backend-flask pre-commit run --config backend-flask/.pre-commit-config.yaml --from-ref "$FROM_REF" --to-ref "$TO_REF" --show-diff-on-failure
