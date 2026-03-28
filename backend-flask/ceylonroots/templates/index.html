@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — CeylonRoots Admin{% endblock %}
+
+{% block content %}
+  <h4 class="mb-4 fw-bold">Dashboard</h4>
+
+  <!-- Stat cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card stat-card h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <p class="text-muted small mb-1">Packages</p>
+              <h3 class="fw-bold mb-0">{{ stats.packages }}</h3>
+            </div>
+            <span class="fs-2 text-primary opacity-50">
+              <i class="bi bi-map"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card stat-card h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <p class="text-muted small mb-1">Pending Bookings</p>
+              <h3 class="fw-bold mb-0">{{ stats.bookings_pending }}</h3>
+            </div>
+            <span class="fs-2 text-warning opacity-75">
+              <i class="bi bi-hourglass-split"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card stat-card h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <p class="text-muted small mb-1">Confirmed Bookings</p>
+              <h3 class="fw-bold mb-0">{{ stats.bookings_confirmed }}</h3>
+            </div>
+            <span class="fs-2 text-success opacity-75">
+              <i class="bi bi-calendar-check"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card stat-card h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <p class="text-muted small mb-1">New Submissions</p>
+              <h3 class="fw-bold mb-0">{{ stats.submissions_new }}</h3>
+            </div>
+            <span class="fs-2 text-danger opacity-75">
+              <i class="bi bi-inbox-fill"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Second row -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card stat-card h-100">
+        <div class="card-body">
+          <p class="text-muted small mb-1">Active Guides</p>
+          <h3 class="fw-bold mb-0">{{ stats.guides }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card stat-card h-100">
+        <div class="card-body">
+          <p class="text-muted small mb-1">Total Reviews</p>
+          <h3 class="fw-bold mb-0">{{ stats.reviews }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card stat-card h-100">
+        <div class="card-body">
+          <p class="text-muted small mb-1">Total Bookings</p>
+          <h3 class="fw-bold mb-0">{{ stats.bookings_total }}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent bookings -->
+  <div class="card shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <strong>Recent Bookings</strong>
+      <a href="{{ url_for('bookings.list_bookings') }}" class="btn btn-sm btn-outline-primary">View all</a>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Package</th>
+            <th>Travelers</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for b in recent_bookings %}
+            <tr>
+              <td>
+                <a href="{{ url_for('bookings.view_booking', booking_id=b.id) }}">
+                  {{ b.id[-8:]|upper }}
+                </a>
+              </td>
+              <td>{{ b.first_name }} {{ b.last_name }}</td>
+              <td>{{ b.email }}</td>
+              <td>{{ b.package.title if b.package else '—' }}</td>
+              <td>{{ b.traveler_count }}</td>
+              <td>
+                {% if b.status == 'CONFIRMED' %}
+                  <span class="badge bg-success">{{ b.status }}</span>
+                {% elif b.status == 'PENDING' %}
+                  <span class="badge bg-warning text-dark">{{ b.status }}</span>
+                {% else %}
+                  <span class="badge bg-secondary">{{ b.status }}</span>
+                {% endif %}
+              </td>
+              <td>{{ b.created | strftime }}</td>
+            </tr>
+          {% else %}
+            <tr>
+              <td colspan="7" class="text-center text-muted py-4">No bookings yet.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

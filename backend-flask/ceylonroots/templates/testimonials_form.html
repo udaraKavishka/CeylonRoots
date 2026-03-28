@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Edit' if item else 'New' }} Testimonial — CeylonRoots Admin{% endblock %}
+
+{% block content %}
+  <div class="d-flex align-items-center mb-4">
+    <a
+      href="{{ url_for('testimonials.list_testimonials') }}"
+      class="btn btn-sm btn-outline-secondary me-3"
+    >
+      <i class="bi bi-arrow-left"></i>
+    </a>
+    <h4 class="fw-bold mb-0">{{ 'Edit' if item else 'New' }} Testimonial</h4>
+  </div>
+  <div class="card shadow-sm" style="max-width: 600px">
+    <div class="card-body p-4">
+      <form
+        method="POST"
+        action="{{ url_for('testimonials.edit_testimonial_post', id=item.id) if item else url_for('testimonials.create_testimonial_post') }}"
+      >
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Author Name <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              name="author_name"
+              class="form-control"
+              value="{{ item.author_name if item else '' }}"
+              required
+            />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Location</label>
+            <input
+              type="text"
+              name="author_location"
+              class="form-control"
+              value="{{ item.author_location if item else '' }}"
+            />
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Testimonial Text <span class="text-danger">*</span></label>
+          <textarea name="text" class="form-control" rows="5" required>{{ item.text if item else '' }}</textarea>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Rating</label>
+            <select name="rating" class="form-select">
+              {% for i in range(1, 6) %}
+                <option
+                  value="{{ i }}"
+                  {% if item and item.rating == i %}selected{% elif not item and i == 5 %}selected{% endif %}
+                >{{ i }} ★</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-8">
+            <label class="form-label fw-semibold">Author Image URL</label>
+            <input
+              type="url"
+              name="author_image"
+              class="form-control"
+              value="{{ item.author_image if item else '' }}"
+            />
+          </div>
+        </div>
+        <div class="mb-4 form-check">
+          <input
+            type="checkbox"
+            name="featured"
+            class="form-check-input"
+            id="featured"
+            {% if item and item.featured %}checked{% endif %}
+          />
+          <label class="form-check-label" for="featured">Featured on homepage</label>
+        </div>
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">
+            {{ 'Save changes' if item else 'Create' }}
+          </button>
+          <a href="{{ url_for('testimonials.list_testimonials') }}" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

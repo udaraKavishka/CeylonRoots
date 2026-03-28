@@ -1,0 +1,106 @@
+[
+  {
+    "code": "contact_inquiry",
+    "name": "Contact Inquiry",
+    "fields": [
+      { "name": "name", "type": "string", "required": true, "min": 2 },
+      { "name": "email", "type": "email", "required": true },
+      { "name": "phone", "type": "phone", "required": false },
+      { "name": "subject", "type": "string", "required": true, "min": 5 },
+      { "name": "message", "type": "text", "required": true, "min": 10 }
+    ],
+    "notify_admin": true
+  },
+  {
+    "code": "tour_booking",
+    "name": "Tour Booking",
+    "fields": [
+      { "name": "first_name", "type": "string", "required": true, "min": 1 },
+      { "name": "last_name", "type": "string", "required": true, "min": 1 },
+      { "name": "email", "type": "email", "required": true },
+      { "name": "phone", "type": "phone", "required": true },
+      { "name": "package_id", "type": "integer", "required": true },
+      {
+        "name": "traveler_count",
+        "type": "integer",
+        "required": true,
+        "min": 1,
+        "max": 20
+      },
+      { "name": "special_requests", "type": "text", "required": false },
+      {
+        "name": "payment_method",
+        "type": "choice",
+        "required": true,
+        "choices": ["credit_card", "paypal", "bank_transfer"]
+      }
+    ],
+    "notify_admin": true,
+    "notify_user_field": "email"
+  },
+  {
+    "code": "review_submission",
+    "name": "Package Review",
+    "fields": [
+      { "name": "package_id", "type": "integer", "required": true },
+      { "name": "author_name", "type": "string", "required": true, "min": 1 },
+      { "name": "author_email", "type": "email", "required": true },
+      {
+        "name": "rating",
+        "type": "integer",
+        "required": true,
+        "min": 1,
+        "max": 5
+      },
+      { "name": "comment", "type": "text", "required": true, "min": 10 },
+      {
+        "name": "guide_rating",
+        "type": "integer",
+        "required": false,
+        "min": 1,
+        "max": 5
+      },
+      {
+        "name": "value_rating",
+        "type": "integer",
+        "required": false,
+        "min": 1,
+        "max": 5
+      },
+      {
+        "name": "travel_type",
+        "type": "choice",
+        "required": false,
+        "choices": ["solo", "couple", "family", "group", "business"]
+      }
+    ],
+    "notify_admin": false
+  },
+  {
+    "code": "newsletter_signup",
+    "name": "Newsletter Signup",
+    "fields": [
+      { "name": "email", "type": "email", "required": true },
+      { "name": "name", "type": "string", "required": false }
+    ],
+    "notify_admin": false
+  },
+  {
+    "code": "guide_application",
+    "name": "Tour Guide Application",
+    "fields": [
+      { "name": "full_name", "type": "string", "required": true, "min": 2 },
+      { "name": "email", "type": "email", "required": true },
+      { "name": "phone", "type": "phone", "required": true },
+      {
+        "name": "experience",
+        "type": "integer",
+        "required": true,
+        "min": 1
+      },
+      { "name": "languages", "type": "text", "required": true, "min": 2 },
+      { "name": "bio", "type": "text", "required": true, "min": 50 }
+    ],
+    "notify_admin": true
+  }
+]

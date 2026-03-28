@@ -1,0 +1,24 @@
+DEBUG = True
+SECRET_KEY = "replace-with-a-random-secret"
+SQLALCHEMY_DATABASE_URI = "postgresql://udara:udara@localhost:5432/ceylonrootsdb"
+SERVER_NAME = "localhost:5001"
+APP_URL = "http://localhost:5001"
+
+JWT_SECRET_KEY = "replace-with-jwt-secret"
+
+MAIL_SERVER = "localhost"
+MAIL_PORT = 1025
+MAIL_USE_TLS = False
+MAIL_DEFAULT_SENDER = "CeylonRoots <system@ceylonroots.com>"
+ADMIN_EMAIL = "admin@ceylonroots.com"
+
+ADMIN_API_KEY = "dev-api-key-replace-me"
+
+# File storage — set to GCLOUD for production
+OBJ_CDN_TYPE = "LOCAL"
+# GS_OBJ_BUCKET_NAME = ""
+# GS_OBJ_ACCESS_KEY_ID = ""
+# GS_OBJ_SECRET_ACCESS_KEY = ""
+
+# Sentry (optional)
+# SENTRY_DSN = ""
