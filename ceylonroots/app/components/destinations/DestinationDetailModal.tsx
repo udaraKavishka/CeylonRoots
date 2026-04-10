@@ -16,8 +16,7 @@ import {
   X,
 } from "lucide-react";
 import { DestinationDetails } from "../../types/travel";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import api from "../../service/api";
 
 interface MiniPackage {
   id: number | string;
@@ -65,10 +64,7 @@ export default function DestinationDetailModal({
   useEffect(() => {
     if (!destination || activeTab !== "packages") return;
     setPkgLoading(true);
-    fetch(
-      `${API_BASE_URL}/packages?destination=${encodeURIComponent(destination.name)}`
-    )
-      .then((res) => res.json())
+    api.get<MiniPackage[]>(`/packages?destination=${encodeURIComponent(destination.name)}`)
       .then((data) => setPackages(Array.isArray(data) ? data : []))
       .catch(() => setPackages([]))
       .finally(() => setPkgLoading(false));

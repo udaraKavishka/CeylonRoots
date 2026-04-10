@@ -20,12 +20,11 @@ import SeoJsonLd from "./components/SeoJsonLd";
 import { useEffect, useState, useRef } from "react";
 import { TravelPackage, DestinationDetails, BlogPost } from "./types/travel";
 import { blogPreviewPosts } from "./data/blogPreviewPosts";
+import api from "./service/api";
 
 const FeaturedPackages = dynamic(() => import("./components/FeaturedPackages"));
 const Testimonials = dynamic(() => import("./components/Testimonials"));
 const BlogPreview = dynamic(() => import("./components/BlogPreview"));
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 // Animated counter hook
 function useCountUp(
@@ -131,24 +130,18 @@ export default function HomePage() {
         setError(null);
 
         const [packagesRes, destinationsRes] = await Promise.allSettled([
-          fetch(`${API_BASE_URL}/packages`, { signal: controller.signal }),
-          fetch(`${API_BASE_URL}/destinationdetail`, {
+          api.get<TravelPackage[]>("/packages", { signal: controller.signal }),
+          api.get<DestinationDetails[]>("/destinationdetail", {
             signal: controller.signal,
           }),
         ]);
 
-        if (packagesRes.status === "fulfilled" && packagesRes.value.ok) {
-          const packagesData: TravelPackage[] = await packagesRes.value.json();
-          setFeaturedPackages(packagesData);
+        if (packagesRes.status === "fulfilled") {
+          setFeaturedPackages(packagesRes.value);
         }
 
-        if (
-          destinationsRes.status === "fulfilled" &&
-          destinationsRes.value.ok
-        ) {
-          const destinationsData: DestinationDetails[] =
-            await destinationsRes.value.json();
-          setPopularDestinations(destinationsData);
+        if (destinationsRes.status === "fulfilled") {
+          setPopularDestinations(destinationsRes.value);
         }
 
         setLatestBlogPosts(blogPreviewPosts as BlogPost[]);

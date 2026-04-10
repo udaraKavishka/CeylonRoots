@@ -10,6 +10,28 @@ import PackageCard from "../components/packages/PackageCard";
 import PackageDetailModal from "../components/packages/PackageDetailModal";
 import { TravelPackage } from "../types/travel";
 import { packageGalleries } from "../data/packageImageMap";
+import api from "../service/api";
+
+interface BackendPackage {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  durationDays: number;
+  price: number;
+  rating: number;
+  reviewCount: number;
+  destinations: string[];
+  highlights: string[];
+  includes?: string[];
+  excludes?: string[];
+  itineraryDays?: {
+    dayNumber: number;
+    title: string;
+    description: string;
+    activities?: { name?: string }[] | string[];
+  }[];
+}
 
 const regions = [
   "All Regions",
@@ -63,40 +85,12 @@ const TravelPackagesContent = () => {
   const [selectedTheme, setSelectedTheme] = useState("All Themes");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
   // Fetch packages from backend API
   useEffect(() => {
     const fetchPackages = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${API_BASE_URL}/packages`);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch packages: ${response.status}`);
-        }
-        const data = await response.json();
-
-        // Map backend data to frontend structure
-        interface BackendPackage {
-          id: string;
-          title: string;
-          description: string;
-          imageUrl: string;
-          durationDays: number;
-          price: number;
-          rating: number;
-          reviewCount: number;
-          destinations: string[];
-          highlights: string[];
-          includes?: string[];
-          excludes?: string[];
-          itineraryDays?: {
-            dayNumber: number;
-            title: string;
-            description: string;
-            activities?: { name?: string }[] | string[];
-          }[];
-        }
+        const data = await api.get<BackendPackage[]>("/packages");
 
         const mappedPackages = data.map((pkg: BackendPackage) => {
           const gallery = packageGalleries[pkg.id] || [];
@@ -155,7 +149,7 @@ const TravelPackagesContent = () => {
     };
 
     fetchPackages();
-  }, [API_BASE_URL]);
+  }, []);
 
   // Initialize filters from URL params
   useEffect(() => {

@@ -39,6 +39,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../components/ui/select";
+import api from "../../service/api";
 
 interface Activity {
   name: string;
@@ -95,8 +96,6 @@ const ItineraryManager = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
   const [formData, setFormData] = useState<Itinerary>({
     id: "",
     title: "",
@@ -120,13 +119,10 @@ const ItineraryManager = () => {
     const fetchPackages = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(`${API_BASE_URL}/packages`);
-        if (!response.ok) throw new Error("Failed to fetch packages");
-
-        const data = await response.json();
+        const data = await api.get<TravelPackage[] | { data?: TravelPackage[]; packages?: TravelPackage[] }>("/packages");
         const packagesArray = Array.isArray(data)
           ? data
-          : data.data || data.packages || [];
+          : (data as { data?: TravelPackage[]; packages?: TravelPackage[] }).data || (data as { data?: TravelPackage[]; packages?: TravelPackage[] }).packages || [];
 
         setPackages(
           packagesArray.map((pkg: TravelPackage) => ({
@@ -147,7 +143,7 @@ const ItineraryManager = () => {
     };
 
     fetchPackages();
-  }, [API_BASE_URL, toast]);
+  }, [toast]);
 
   useEffect(() => {
     if (!selectedPackageId) return;
@@ -155,12 +151,9 @@ const ItineraryManager = () => {
     const fetchItineraries = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(
-          `${API_BASE_URL}/travel-packages/${selectedPackageId}/itinerary`
+        const days = await api.get<ItineraryDay[]>(
+          `/travel-packages/${selectedPackageId}/itinerary`
         );
-        if (!response.ok) throw new Error("Failed to fetch itinerary days");
-
-        const days = await response.json();
 
         const itinerary: Itinerary = {
           id: selectedPackageId,
@@ -196,7 +189,7 @@ const ItineraryManager = () => {
     };
 
     fetchItineraries();
-  }, [selectedPackageId, API_BASE_URL, toast, packages]);
+  }, [selectedPackageId, toast, packages]);
 
   const resetForm = () => {
     setFormData({
@@ -223,43 +216,16 @@ const ItineraryManager = () => {
     setEditingDayIndex(null);
   };
 
-  const createItineraryDay = async (day: Omit<ItineraryDay, "id">) => {
-    const response = await fetch(
-      `${API_BASE_URL}/travel-packages/${selectedPackageId}/itinerary`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(day),
-      }
-    );
-    if (!response.ok) throw new Error("Failed to create itinerary day");
-    return await response.json();
-  };
+  const createItineraryDay = (day: Omit<ItineraryDay, "id">) =>
+    api.post<ItineraryDay>(`/travel-packages/${selectedPackageId}/itinerary`, day);
 
-  const updateItineraryDay = async (day: ItineraryDay) => {
+  const updateItineraryDay = (day: ItineraryDay) => {
     if (!day.id) throw new Error("Day ID is required for update");
-
-    const response = await fetch(
-      `${API_BASE_URL}/travel-packages/${selectedPackageId}/itinerary/${day.id}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(day),
-      }
-    );
-    if (!response.ok) throw new Error("Failed to update itinerary day");
-    return await response.json();
+    return api.put<ItineraryDay>(`/travel-packages/${selectedPackageId}/itinerary/${day.id}`, day);
   };
 
-  const deleteItineraryDay = async (dayId: number) => {
-    const response = await fetch(
-      `${API_BASE_URL}/travel-packages/${selectedPackageId}/itinerary/${dayId}`,
-      {
-        method: "DELETE",
-      }
-    );
-    if (!response.ok) throw new Error("Failed to delete itinerary day");
-  };
+  const deleteItineraryDay = (dayId: number) =>
+    api.delete(`/travel-packages/${selectedPackageId}/itinerary/${dayId}`);
 
   // Add/Edit Day (inline, not saved to DB until main form submit)
   const handleDayFormSubmit = () => {

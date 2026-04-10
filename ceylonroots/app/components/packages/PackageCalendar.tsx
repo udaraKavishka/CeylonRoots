@@ -5,6 +5,7 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { Button } from "../ui/button";
 import { Users, DollarSign, Calendar } from "lucide-react";
+import api from "../../service/api";
 
 interface Departure {
   id: number;
@@ -39,8 +40,7 @@ const PackageCalendar: React.FC<PackageCalendarProps> = ({
   );
 
   useEffect(() => {
-    fetch(`/api/departures?packageId=${packageId}`)
-      .then((r) => r.json())
+    api.get<Departure[]>(`/departures?packageId=${packageId}`)
       .then((data) => {
         setDepartures(Array.isArray(data) ? data : []);
         setLoading(false);

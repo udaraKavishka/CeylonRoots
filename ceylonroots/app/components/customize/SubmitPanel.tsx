@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "../../components/ui/button";
 
 interface SubmitPanelProps {
-  onSave: () => Promise<void>;
+  onSave: () => Promise<unknown>;
   onRequestQuotation: () => void;
   isEmpty: boolean;
   isSaving: boolean;

@@ -22,6 +22,7 @@ import {
 import { Badge } from "../../components/ui/badge";
 import { Plus, Edit, Trash2, Save } from "lucide-react";
 import { useToast } from "../../components/ui/use-toast";
+import api from "../../service/api";
 
 type BlogPost = {
   id: string;
@@ -34,8 +35,6 @@ type BlogPost = {
   category: string;
   commentCount: number;
 };
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const BlogManager = () => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
@@ -66,15 +65,7 @@ const BlogManager = () => {
   const fetchBlogPosts = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_BASE_URL}/blogpost`);
-
-      if (!response.ok) {
-        throw new Error(
-          `Failed to fetch: ${response.status} ${response.statusText}`
-        );
-      }
-
-      const data = await response.json();
+      const data = await api.get("/blogpost");
       setBlogPosts(Array.isArray(data) ? data : []);
     } catch {
       toast({
@@ -92,35 +83,13 @@ const BlogManager = () => {
     fetchBlogPosts();
   }, [fetchBlogPosts]);
 
-  const createBlogPost = async (postData: Partial<BlogPost>) => {
-    const response = await fetch(`${API_BASE_URL}/blogpost`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(postData),
-    });
-    if (!response.ok)
-      throw new Error(`Failed to create post: ${response.status}`);
-    return response.json();
-  };
+  const createBlogPost = (postData: Partial<BlogPost>) =>
+    api.post<BlogPost>("/blogpost", postData);
 
-  const updateBlogPost = async (id: string, postData: Partial<BlogPost>) => {
-    const response = await fetch(`${API_BASE_URL}/blogpost/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(postData),
-    });
-    if (!response.ok)
-      throw new Error(`Failed to update post: ${response.status}`);
-    return response.json();
-  };
+  const updateBlogPost = (id: string, postData: Partial<BlogPost>) =>
+    api.put<BlogPost>(`/blogpost/${id}`, postData);
 
-  const deleteBlogPost = async (id: string) => {
-    const response = await fetch(`${API_BASE_URL}/blogpost/${id}`, {
-      method: "DELETE",
-    });
-    if (!response.ok)
-      throw new Error(`Failed to delete post: ${response.status}`);
-  };
+  const deleteBlogPost = (id: string) => api.delete(`/blogpost/${id}`);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

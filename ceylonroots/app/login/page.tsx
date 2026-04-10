@@ -8,6 +8,7 @@ import { signIn } from "next-auth/react";
 import { Eye, EyeOff, Mail, Lock, Star, Award, Globe } from "lucide-react";
 import { useUser } from "../contexts/UserContext";
 import { getAdminDashboardUrl } from "../lib/admin-url";
+import api from "../service/api";
 
 const COUNTRY_FLAGS = ["🇺🇸", "🇬🇧", "🇩🇪", "🇦🇺", "🇫🇷", "🇯🇵"];
 
@@ -38,8 +39,7 @@ export default function LoginPage() {
         return;
       }
 
-      const sessionRes = await fetch("/api/auth/session");
-      const sessionData = await sessionRes.json();
+      const sessionData = await api.get<{ user?: { role?: string; name?: string } }>("/auth/session");
       const isAdmin =
         (sessionData?.user as { role?: string } | undefined)?.role === "admin";
       login({

@@ -8,8 +8,7 @@ import PackageCard from "../components/packages/PackageCard";
 import PackageDetailModal from "../components/packages/PackageDetailModal";
 import { TravelPackage } from "../types/travel";
 import { useRouter } from "next/navigation";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import api from "../service/api";
 
 export default function WishlistPage() {
   const router = useRouter();
@@ -32,9 +31,7 @@ export default function WishlistPage() {
           return;
         }
 
-        const res = await fetch(`${API_BASE_URL}/packages`);
-        if (!res.ok) throw new Error("Failed to fetch packages");
-        const allPackages: TravelPackage[] = await res.json();
+        const allPackages = await api.get<TravelPackage[]>("/packages");
 
         const wishlisted = allPackages.filter((pkg) =>
           wishlistIds.includes(String(pkg.id))

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Users, Search } from "lucide-react";
 import GuideCard from "../components/guides/GuideCard";
 import GuideDetailModal from "../components/guides/GuideDetailModal";
+import api from "../service/api";
 
 interface Guide {
   id: number;
@@ -18,8 +19,6 @@ interface Guide {
   responseTime?: string | null;
   featured: boolean;
 }
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const ALL_EXPERTISE = [
   "Wildlife",
@@ -42,8 +41,7 @@ export default function GuidesPage() {
   const [selectedGuide, setSelectedGuide] = useState<Guide | null>(null);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/guides`)
-      .then((res) => res.json())
+    api.get<Guide[]>("/guides")
       .then((data) => setGuides(data))
       .catch(() => setGuides([]))
       .finally(() => setLoading(false));

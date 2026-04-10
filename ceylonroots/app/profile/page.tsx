@@ -30,6 +30,7 @@ import {
 import { TravelPackage } from "../types/travel";
 import { useCurrency } from "../contexts/CurrencyContext";
 import { getAdminDashboardUrl } from "../lib/admin-url";
+import api from "../service/api";
 
 interface Booking {
   id: string;
@@ -59,8 +60,6 @@ const statusColors: Record<string, string> = {
   completed: "bg-blue-100 text-blue-800 border-blue-200",
   cancelled: "bg-red-100 text-red-800 border-red-200",
 };
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function ProfilePage() {
   const { data: session, status } = useSession();
@@ -110,9 +109,7 @@ export default function ProfilePage() {
         setWishlistPackages([]);
         return;
       }
-      const res = await fetch(`${API_BASE_URL}/packages`);
-      if (!res.ok) throw new Error("Failed");
-      const all: TravelPackage[] = await res.json();
+      const all = await api.get<TravelPackage[]>("/packages");
       setWishlistPackages(all.filter((p) => ids.includes(String(p.id))));
     } catch {
       setWishlistPackages([]);

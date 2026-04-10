@@ -16,6 +16,7 @@ import { Textarea } from "../../components/ui/textarea";
 import { Badge } from "../../components/ui/badge";
 import { Plus, Edit, Trash2, Save } from "lucide-react";
 import { useToast } from "../../components/ui/use-toast";
+import api from "../../service/api";
 
 type Coordinates = {
   latitude: number;
@@ -52,8 +53,6 @@ const initialFormState = {
   lng: "",
 };
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
 const DestinationManager = () => {
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [loading, setLoading] = useState(true);
@@ -69,15 +68,7 @@ const DestinationManager = () => {
   const fetchDestinations = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_BASE_URL}/destinationdetail`);
-
-      if (!response.ok) {
-        throw new Error(
-          `Failed to fetch: ${response.status} ${response.statusText}`
-        );
-      }
-
-      const data = await response.json();
+      const data = await api.get("/destinationdetail");
       setDestinations(Array.isArray(data) ? data : []);
     } catch {
       toast({
@@ -103,38 +94,14 @@ const DestinationManager = () => {
     }
   }, [formData.image]);
 
-  const createDestination = async (destinationData: Partial<Destination>) => {
-    const response = await fetch(`${API_BASE_URL}/destinationdetail`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(destinationData),
-    });
-    if (!response.ok)
-      throw new Error(`Failed to create destination: ${response.status}`);
-    return response.json();
-  };
+  const createDestination = (destinationData: Partial<Destination>) =>
+    api.post<Destination>("/destinationdetail", destinationData);
 
-  const updateDestination = async (
-    id: string,
-    destinationData: Partial<Destination>
-  ) => {
-    const response = await fetch(`${API_BASE_URL}/destinationdetail/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(destinationData),
-    });
-    if (!response.ok)
-      throw new Error(`Failed to update destination: ${response.status}`);
-    return response.json();
-  };
+  const updateDestination = (id: string, destinationData: Partial<Destination>) =>
+    api.put<Destination>(`/destinationdetail/${id}`, destinationData);
 
-  const deleteDestination = async (id: string) => {
-    const response = await fetch(`${API_BASE_URL}/destinationdetail/${id}`, {
-      method: "DELETE",
-    });
-    if (!response.ok)
-      throw new Error(`Failed to delete destination: ${response.status}`);
-  };
+  const deleteDestination = (id: string) =>
+    api.delete(`/destinationdetail/${id}`);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

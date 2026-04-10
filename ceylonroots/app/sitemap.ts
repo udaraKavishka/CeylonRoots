@@ -2,8 +2,7 @@ import { MetadataRoute } from "next";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://ceylonroots.com";
 import { getAllBlogPosts } from "./lib/blog";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import api from "./service/api";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -60,20 +59,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const dynamicRoutes: MetadataRoute.Sitemap = [];
 
   try {
-    const packagesRes = await fetch(`${API_BASE_URL}/packages`);
-
-    if (packagesRes.ok) {
-      const packages: { id: string; updatedAt?: string }[] =
-        await packagesRes.json();
-      packages.forEach((pkg) => {
-        dynamicRoutes.push({
-          url: `${BASE_URL}/packages?package=${pkg.id}`,
-          lastModified: pkg.updatedAt ? new Date(pkg.updatedAt) : new Date(),
-          changeFrequency: "weekly",
-          priority: 0.8,
-        });
+    const packages = await api.get<{ id: string; updatedAt?: string }[]>("/packages");
+    packages.forEach((pkg) => {
+      dynamicRoutes.push({
+        url: `${BASE_URL}/packages?package=${pkg.id}`,
+        lastModified: pkg.updatedAt ? new Date(pkg.updatedAt) : new Date(),
+        changeFrequency: "weekly",
+        priority: 0.8,
       });
-    }
+    });
   } catch {
     // Return static routes on API failure
   }

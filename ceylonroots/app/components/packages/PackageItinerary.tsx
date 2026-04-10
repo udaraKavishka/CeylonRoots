@@ -9,12 +9,11 @@ import {
   Loader,
 } from "lucide-react";
 import { Button } from "../ui/button";
+import api from "../../service/api";
 
 interface PackageItineraryProps {
   packageId: string;
 }
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const PackageItinerary: React.FC<PackageItineraryProps> = ({ packageId }) => {
   const [itinerary, setItinerary] = useState<ItineraryDay[]>([]);
@@ -26,21 +25,15 @@ const PackageItinerary: React.FC<PackageItineraryProps> = ({ packageId }) => {
     const fetchItinerary = async () => {
       try {
         setLoading(true);
-        const response = await fetch(
-          `${API_BASE_URL}/travel-packages/${packageId}/itinerary`
+        const data = await api.get<ItineraryDay[]>(
+          `/travel-packages/${packageId}/itinerary`
         );
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch itinerary: ${response.status}`);
-        }
-
-        const data = await response.json();
         setItinerary(data);
         setError(null);
 
         // Expand first day by default
         if (data.length > 0) {
-          setExpandedDays({ [data[0].dayNumber]: true });
+          setExpandedDays({ [data[0].dayNumber ?? 1]: true });
         }
       } catch (err: unknown) {
         if (err instanceof Error) {

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Star, Send, X, Calendar } from "lucide-react";
 import { Button } from "../ui/button";
+import api from "../../service/api";
 
 interface ReviewFormProps {
   packageId: string | number;
@@ -107,15 +108,7 @@ export default function ReviewForm({
     };
 
     try {
-      const res = await fetch("/api/reviews", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || "Failed to submit");
-      }
+      await api.post("/reviews", payload);
       onSubmitSuccess();
     } catch (err: unknown) {
       setError(

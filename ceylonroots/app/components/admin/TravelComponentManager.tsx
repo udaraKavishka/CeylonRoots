@@ -57,8 +57,7 @@ import {
   TransportMode,
   ActivityDifficulty,
 } from "../../types/travel";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import api from "../../service/api";
 
 const TravelComponentManager = () => {
   const [components, setComponents] = useState<TravelComponent[]>([]);
@@ -126,17 +125,15 @@ const TravelComponentManager = () => {
     async (type: ComponentType) => {
       setIsLoading((prev) => ({ ...prev, [type]: true }));
       try {
-        const response = await fetch(`${API_BASE_URL}/${type}`);
-        if (!response.ok) throw new Error("Failed to fetch data");
-        const data = await response.json();
+        const data = await api.get<TravelComponent[] | Record<string, TravelComponent[]>>(`/${type}`);
         const items = Array.isArray(data)
           ? data
-          : data.data || data[type] || [];
+          : (data as Record<string, TravelComponent[]>)[type] || [];
         // Normalize type for filtering
         const normalizedItems = items.map((item: TravelComponent) => ({
           ...item,
           type, // force type to match tab
-        }));
+        })) as TravelComponent[];
         setComponents((prev) => [
           ...prev.filter((c) => c.type !== type),
           ...normalizedItems,
@@ -192,15 +189,9 @@ const TravelComponentManager = () => {
     setIsDialogOpen(false);
 
     try {
-      let url = `${API_BASE_URL}/${formData.type}`;
-      let method = "POST";
-      let successMessage = "Component created successfully";
-
-      if (editingComponent) {
-        url += `/${editingComponent.id}`;
-        method = "PUT";
-        successMessage = "Component updated successfully";
-      }
+      const successMessage = editingComponent
+        ? "Component updated successfully"
+        : "Component created successfully";
 
       // Create payload with cleaned values
       const payload = {
@@ -221,17 +212,10 @@ const TravelComponentManager = () => {
             : null,
       };
 
-      const response = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(
-          errorData.message || `HTTP error! status: ${response.status}`
-        );
+      if (editingComponent) {
+        await api.put(`/${formData.type}/${editingComponent.id}`, payload);
+      } else {
+        await api.post(`/${formData.type}`, payload);
       }
 
       toast({
@@ -275,11 +259,7 @@ const TravelComponentManager = () => {
 
   const handleDelete = async (id: string, type: ComponentType) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/${type}/${id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) throw new Error("Delete failed");
+      await api.delete(`/${type}/${id}`);
 
       toast({
         title: "Deleted",

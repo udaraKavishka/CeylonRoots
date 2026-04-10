@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { MessageSquare, Send, User, CheckCircle } from "lucide-react";
+import api, { ApiError } from "../../service/api";
 
 type Comment = {
   id: number;
@@ -31,25 +32,18 @@ export default function BlogCommentForm({ postId, onCommentAdded }: Props) {
     setError("");
 
     try {
-      const res = await fetch(`/api/blogpost/${postId}/comments`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ author: author.trim(), text: text.trim() }),
+      const newComment = await api.post<Comment>(`/blogpost/${postId}/comments`, {
+        author: author.trim(),
+        text: text.trim(),
       });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        setError(data.error || "Failed to post comment. Please try again.");
-        return;
-      }
-
-      const newComment: Comment = await res.json();
       onCommentAdded?.(newComment);
       setAuthor("");
       setText("");
       setSubmitted(true);
-    } catch {
-      setError("An error occurred. Please try again.");
+    } catch (err) {
+      setError(
+        err instanceof ApiError ? err.message : "An error occurred. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }

@@ -37,6 +37,7 @@ import ReviewSummary from "../reviews/ReviewSummary";
 import ReviewForm from "../reviews/ReviewForm";
 import PackageCalendar from "./PackageCalendar";
 import dynamic from "next/dynamic";
+import api from "../../service/api";
 const PackageRouteMap = dynamic(() => import("./PackageRouteMap"), {
   ssr: false,
   loading: () => <div className="h-64 bg-gray-100 rounded-xl animate-pulse" />,
@@ -82,10 +83,7 @@ const PackageDetailModal = ({
   useEffect(() => {
     if (activeTab === "reviews" && travelPackage.id) {
       setReviewsLoading(true);
-      fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/reviews?packageId=${travelPackage.id}`
-      )
-        .then((r) => r.json())
+      api.get<typeof reviews>(`/reviews?packageId=${travelPackage.id}`)
         .then((data) => setReviews(Array.isArray(data) ? data : []))
         .catch(() => setReviews([]))
         .finally(() => setReviewsLoading(false));
@@ -310,10 +308,7 @@ const PackageDetailModal = ({
                       onSubmitSuccess={() => {
                         setShowReviewForm(false);
                         // Re-fetch reviews
-                        fetch(
-                          `${process.env.NEXT_PUBLIC_API_BASE_URL}/reviews?packageId=${travelPackage.id}`
-                        )
-                          .then((r) => r.json())
+                        api.get<typeof reviews>(`/reviews?packageId=${travelPackage.id}`)
                           .then((data) =>
                             setReviews(Array.isArray(data) ? data : [])
                           );

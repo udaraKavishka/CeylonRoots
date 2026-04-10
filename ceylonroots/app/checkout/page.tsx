@@ -15,6 +15,7 @@ import { useToast } from "../components/ui/use-toast";
 import BookingSummary from "../components/checkout/BookingSummary";
 import CheckoutForm from "../components/checkout/CheckoutForm";
 import { TravelPackage } from "../types/travel";
+import api, { ApiError } from "../service/api";
 
 const Checkout = () => {
   const { toast } = useToast();
@@ -62,34 +63,17 @@ const Checkout = () => {
           : Number(bookingPackage?.price ?? 0);
       const totalAmount = price * Number(formData.travelerCount);
 
-      const res = await fetch("/api/bookings", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          packageId: bookingPackage?.id,
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          phone: formData.phone,
-          travelerCount: formData.travelerCount,
-          totalAmount,
-          paymentMethod: formData.paymentMethod,
-          specialRequests: formData.specialRequests,
-        }),
+      const bookingData = await api.post<{ id: number }>("/bookings", {
+        packageId: bookingPackage?.id,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        travelerCount: formData.travelerCount,
+        totalAmount,
+        paymentMethod: formData.paymentMethod,
+        specialRequests: formData.specialRequests,
       });
-
-      if (!res.ok) {
-        const err = await res.json();
-        toast({
-          title: "Booking failed",
-          description: err.error || "Please try again.",
-          variant: "destructive",
-        });
-        setIsProcessing(false);
-        return;
-      }
-
-      const bookingData = await res.json();
 
       if (typeof window !== "undefined") {
         localStorage.removeItem("bookingPackage");
@@ -97,10 +81,11 @@ const Checkout = () => {
       }
 
       router.push(`/payment?bookingId=${bookingData.id}`);
-    } catch {
+    } catch (err) {
       toast({
-        title: "An error occurred",
-        description: "Please try again.",
+        title: err instanceof ApiError ? "Booking failed" : "An error occurred",
+        description:
+          err instanceof ApiError ? err.message : "Please try again.",
         variant: "destructive",
       });
       setIsProcessing(false);

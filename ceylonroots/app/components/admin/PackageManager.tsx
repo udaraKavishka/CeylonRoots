@@ -16,6 +16,7 @@ import { Badge } from "../../components/ui/badge";
 import { Plus, Edit, Trash2, Save } from "lucide-react";
 import { useToast } from "../../components/ui/use-toast";
 import Image from "next/image";
+import api from "../../service/api";
 
 type ItineraryActivity = { name: string };
 type ItineraryDay = {
@@ -72,26 +73,19 @@ const PackageManager = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState(initialFormState);
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
   const fetchPackages = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_BASE_URL}/packages`);
-      if (!response.ok)
-        throw new Error(
-          `Failed to fetch: ${response.status} ${response.statusText}`
-        );
-      const data = await response.json();
+      const data = await api.get<TravelPackage[] | { data?: TravelPackage[]; packages?: TravelPackage[] } | TravelPackage>("/packages");
       let packagesArray: TravelPackage[] = [];
       if (Array.isArray(data)) {
         packagesArray = data;
-      } else if (data && Array.isArray(data.data)) {
-        packagesArray = data.data;
-      } else if (data && Array.isArray(data.packages)) {
-        packagesArray = data.packages;
-      } else if (data && data.id) {
-        packagesArray = [data];
+      } else if (data && !Array.isArray(data) && "data" in data && Array.isArray(data.data)) {
+        packagesArray = data.data!;
+      } else if (data && !Array.isArray(data) && "packages" in data && Array.isArray(data.packages)) {
+        packagesArray = data.packages!;
+      } else if (data && !Array.isArray(data) && "id" in data) {
+        packagesArray = [data as TravelPackage];
       }
       setPackages(Array.isArray(packagesArray) ? packagesArray : []);
     } catch {
@@ -104,44 +98,19 @@ const PackageManager = () => {
     } finally {
       setLoading(false);
     }
-  }, [API_BASE_URL, toast]);
+  }, [toast]);
 
   useEffect(() => {
     fetchPackages();
   }, [fetchPackages]);
 
-  const createPackage = async (packageData: Partial<TravelPackage>) => {
-    const response = await fetch(`${API_BASE_URL}/packages`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(packageData),
-    });
-    if (!response.ok)
-      throw new Error(`Failed to create package: ${response.status}`);
-    return response.json();
-  };
+  const createPackage = (packageData: Partial<TravelPackage>) =>
+    api.post<TravelPackage>("/packages", packageData);
 
-  const updatePackage = async (
-    id: number,
-    packageData: Partial<TravelPackage>
-  ) => {
-    const response = await fetch(`${API_BASE_URL}/packages/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(packageData),
-    });
-    if (!response.ok)
-      throw new Error(`Failed to update package: ${response.status}`);
-    return response.json();
-  };
+  const updatePackage = (id: number, packageData: Partial<TravelPackage>) =>
+    api.put<TravelPackage>(`/packages/${id}`, packageData);
 
-  const deletePackage = async (id: number) => {
-    const response = await fetch(`${API_BASE_URL}/packages/${id}`, {
-      method: "DELETE",
-    });
-    if (!response.ok)
-      throw new Error(`Failed to delete package: ${response.status}`);
-  };
+  const deletePackage = (id: number) => api.delete(`/packages/${id}`);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

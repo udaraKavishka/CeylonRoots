@@ -25,8 +25,7 @@ import CostEstimator from "../components/customize/CostEstimator";
 import SubmitPanel from "../components/customize/SubmitPanel";
 import EmailRequestModal from "../components/customize/EmailRequestModal";
 import { TravelComponent } from "../types/travel";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import api from "../service/api";
 
 const CustomizePage = () => {
   const { toast } = useToast();
@@ -100,23 +99,11 @@ const CustomizePage = () => {
   const handleSaveItinerary = async () => {
     setIsSaving(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/itineraries`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          components: selectedComponents,
-          duration,
-          totalCost,
-        }),
+      const data = await api.post<SavedItinerary>("/itineraries", {
+        components: selectedComponents,
+        duration,
+        totalCost,
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to save itinerary");
-      }
-
-      const data = await response.json();
       setSavedItinerary(data);
 
       toast({
@@ -154,22 +141,12 @@ const CustomizePage = () => {
       if (!itineraryData) return;
 
       // Then submit quotation request
-      const response = await fetch(`${API_BASE_URL}/quotations`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          itineraryId: itineraryData.id,
-          totalCost,
-          duration,
-          email,
-        }),
+      await api.post("/quotations", {
+        itineraryId: itineraryData.id,
+        totalCost,
+        duration,
+        email,
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to submit quotation");
-      }
 
       setShowEmailModal(false);
       toast({

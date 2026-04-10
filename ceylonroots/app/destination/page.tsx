@@ -8,8 +8,7 @@ import DestinationDetailModal from "../components/destinations/DestinationDetail
 import { Button } from "../components/ui/button";
 import { ArrowUpRight } from "lucide-react";
 import { DestinationDetails } from "../types/travel";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import api from "../service/api";
 
 const regions = [
   "All Regions",
@@ -45,13 +44,7 @@ const Destinations = () => {
     const fetchDestinations = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${API_BASE_URL}/destinationdetail`);
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch destinations: ${response.status}`);
-        }
-
-        const data = await response.json();
+        const data = await api.get<DestinationDetails[]>("/destinationdetail");
         setDestinations(data);
         setError(null);
       } catch (err: unknown) {
@@ -71,9 +64,8 @@ const Destinations = () => {
 
   // Fetch all packages and count per destination name
   useEffect(() => {
-    fetch(`${API_BASE_URL}/packages`)
-      .then((res) => res.json())
-      .then((pkgs: PackageForCount[]) => {
+    api.get<PackageForCount[]>("/packages")
+      .then((pkgs) => {
         if (!Array.isArray(pkgs)) return;
         const countMap: Record<string, number> = {};
         pkgs.forEach((pkg) => {

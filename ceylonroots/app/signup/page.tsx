@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Eye, EyeOff, Mail, Lock, User, CheckCircle2 } from "lucide-react";
 import { useUser } from "../contexts/UserContext";
+import api, { ApiError } from "../service/api";
 
 const HIGHLIGHTS = [
   "Access to 50+ handcrafted Sri Lanka itineraries",
@@ -31,18 +32,7 @@ export default function SignupPage() {
     setError("");
 
     try {
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: fullName, email, password }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error || "Registration failed. Please try again.");
-        setIsLoading(false);
-        return;
-      }
+      await api.post("/auth/register", { name: fullName, email, password });
 
       const result = await signIn("credentials", {
         email,
@@ -64,8 +54,12 @@ export default function SignupPage() {
       });
 
       router.push("/");
-    } catch {
-      setError("An error occurred. Please try again.");
+    } catch (err) {
+      setError(
+        err instanceof ApiError
+          ? err.message
+          : "An error occurred. Please try again."
+      );
       setIsLoading(false);
     }
   };

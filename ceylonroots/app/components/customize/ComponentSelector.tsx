@@ -16,12 +16,11 @@ import {
   ActivityComponent,
 } from "../../types/travel";
 import { Bed, Map, Activity, Car, Star } from "lucide-react";
+import api from "../../service/api";
 
 interface ComponentSelectorProps {
   onAddComponent: (component: TravelComponent) => void;
 }
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const ComponentSelector: React.FC<ComponentSelectorProps> = ({
   onAddComponent,
@@ -38,28 +37,24 @@ const ComponentSelector: React.FC<ComponentSelectorProps> = ({
         setError(null);
 
         const endpoints: Record<ComponentType, string> = {
-          accommodations: `${API_BASE_URL}/accommodations`,
-          destination: `${API_BASE_URL}/destination`,
-          activities: `${API_BASE_URL}/activities`,
-          transport: `${API_BASE_URL}/transport`,
+          accommodations: "/accommodations",
+          destination: "/destination",
+          activities: "/activities",
+          transport: "/transport",
         };
 
         const responses = await Promise.allSettled(
-          Object.values(endpoints).map((url) =>
-            fetch(url).then((res) => res.json())
-          )
+          Object.values(endpoints).map((path) => api.get<TravelComponent[]>(path))
         );
 
         const allComponents: TravelComponent[] = [];
         responses.forEach((response, index) => {
           if (response.status === "fulfilled") {
             const type = Object.keys(endpoints)[index] as ComponentType;
-            const typedComponents = response.value.map(
-              (item: TravelComponent) => ({
-                ...item,
-                type,
-              })
-            );
+            const typedComponents = response.value.map((item: TravelComponent) => ({
+              ...item,
+              type,
+            })) as TravelComponent[];
             allComponents.push(...typedComponents);
           }
         });
