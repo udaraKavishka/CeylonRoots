@@ -156,7 +156,7 @@ pyjwt==2.12.1
     # via flask-jwt-extended
 pyright==1.1.363
     # via ceylonroots-backend (backend-flask/pyproject.toml)
-pytest==6.2.4
+pytest==9.0.3
     # via
     #   ceylonroots-backend (backend-flask/pyproject.toml)
     #   pytest-cov
